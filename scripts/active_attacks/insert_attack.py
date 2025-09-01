@@ -1,0 +1,47 @@
+import re
+from docx import Document
+from pathlib import Path
+from docx.oxml.shared import qn
+
+def insert_word_at_every_nth_word(run, n, word_index) -> int:
+    text = run.text
+    text_pattern = re.compile(r'(\s+)')
+    tokens = text_pattern.split(text)
+    #print(tokens)
+    #print("".join(tokens))
+    text_list = []
+
+    for token in tokens:
+        if token.strip() == "":
+            text_list.append(token)
+            continue
+        else:
+            word_index += 1
+            if word_index == (n - 1):
+                text_list.append("[[[INSERTED]]]")
+                text_list.append(" ")
+                text_list.append(token)
+                word_index = 0
+            else:
+                text_list.append(token)
+    #print(text_list)
+    run.text = "".join(text_list)
+    #print(text)
+    return word_index
+
+base = "data_set/stego-files"
+for directories in Path(base).iterdir():
+    for file in directories.iterdir():
+        docPath = f"{base}/{directories.name}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
+        document = Document(docPath)
+        every_nth_word = 10
+        word_index = 0
+        for paragraph in document.paragraphs:
+            for run in paragraph.runs:
+                run_element = run._r
+                if run_element.find(qn('w:t')) != None:
+                    word_index = insert_word_at_every_nth_word(run, every_nth_word, word_index)
+
+        stegoDocPath = Path(f"data_set/attacked_stego-files/1_insert_attack/{directories.name}/{file.name}")
+        document.save(stegoDocPath)
+        print("Saved:", stegoDocPath)
