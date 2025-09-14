@@ -28,6 +28,7 @@ def extract_text(document) -> str:
     for paragraph in document.paragraphs:
         text.append(paragraph.text.replace('\xa0', '\x20')) # NBSP -> space
     text = "\n".join(text)
+    text = ''.join(text)
     #print("Teksts no dokumenta:\n", text)
     return text
 
@@ -49,11 +50,11 @@ def choose_random_paragraph(document, stegoMessage_size_bits) -> int | None:
         char_count = count_chars_in_paragraphs(document, random_paragraph_index)
         is_valid = is_capacity_enough_for_message(char_count, stegoMessage_size_bits)
         if is_valid:
-            print("Random paragraph start:", random_paragraph.text)
+            #print("Random paragraph start:", random_paragraph.text)
             return random_paragraph_index
 
 # Create a new run
-def insert_in_run(previous_run, char, stego_bits, base_run) -> Run:
+def insert_in_run(previous_run, char, stego_bits, base_run) -> Run|None:
     current_run_element = previous_run._r
     base_run_element = base_run._r
 
@@ -93,6 +94,8 @@ def insert_in_run(previous_run, char, stego_bits, base_run) -> Run:
             rgb_string = f"{r_bit:02x}{g_bit:02x}{b_bit:02x}"
             color_element.set(qn('w:val'), rgb_string)
             #run_properties.append(color_element)
+        else:
+            return None
     
     current_run_element.addnext(new_run_element)
     new_run = Run(new_run_element, previous_run._parent)
@@ -104,6 +107,11 @@ def slipt_run_for_embedding(run, byte) -> Run | None:
     cover_chars = re.search("\S", text, flags=re.UNICODE)
     if cover_chars is None:
         return None
+    
+    #embedded_text = ''
+    #right_text = text
+    #for _ in range(len(cover_chars)):
+    #    cover_chars = re.search("\S", right_text, flags=re.UNICODE)
 
     cover_symbol_index = cover_chars.start()
     single_cover_char = text[cover_symbol_index]
@@ -112,13 +120,32 @@ def slipt_run_for_embedding(run, byte) -> Run | None:
 
     stego_byte_to_binary_string = f"{byte:08b}"
 
-    # left text
+    stego_char_run = insert_in_run(run, single_cover_char, stego_byte_to_binary_string, run)
+    if stego_char_run == None:
+        return None
+            # left_text += single_cover_char
+            # single_cover_char = right_text[0]
+            # right_text = right_text[cover_symbol_index + 1:] # text after the first whitespace
+        # else:
+        #     run.text = left_text
+        #     remaining_run = insert_in_run(stego_char_run, right_text, None, run)
+        #     break
+
+
+        # left text
     run.text = left_text
 
-    # stego character
-    stego_char_run = insert_in_run(run, single_cover_char, stego_byte_to_binary_string, run)
+        # stego character
+        # embedded = False
+        # while not embedded:
+        #     stego_char_run = insert_in_run(run, single_cover_char, stego_byte_to_binary_string, run)
+        #     if stego_char_run != None:
+        #         remaining_run = insert_in_run(stego_char_run, right_text, None, run)
 
-    # right text
+        #         remaining_run = insert_in_run(run, right_text, None, run)
+
+
+        # right text
     remaining_run = insert_in_run(stego_char_run, right_text, None, run)
     return remaining_run
 
@@ -152,9 +179,9 @@ def stego_message_extraction(document) -> str:
                 if color_element != None:
                     color_element_value = color_element.get(qn('w:val'))
                     if color_element_value.lower() not in ('000000', 'auto'):
-                        r_bit = int(color_element_value[0:2])
-                        g_bit = int(color_element_value[2:4])
-                        b_bit = int(color_element_value[4:6])
+                        r_bit = int(color_element_value[0:2], 16)
+                        g_bit = int(color_element_value[2:4], 16)
+                        b_bit = int(color_element_value[4:6], 16)
                         if r_bit <= 7 and g_bit <= 7 and b_bit <= 3:
                             stego_bit_string = f"{r_bit:03b}{g_bit:03b}{b_bit:02b}"
                             stego_byte = int(stego_bit_string, 2).to_bytes(1, 'big')
@@ -166,62 +193,69 @@ def stego_message_extraction(document) -> str:
     return stegoMessage
             
 # DOCX file
-docPath = Path("data_set/clean_files/TEST_0.docx")
-document = Document(docPath)
-text = extract_text(document)
-char_count = count_chars_in_paragraphs(document, 0)
+base = "data_set/clean_files"
+for file in Path(base).iterdir():
+    docPath = f"{base}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
+    #docPath = Path("data_set/clean_files/TEST_0.docx")
+    print(docPath)
+    document = Document(docPath)
+    text = extract_text(document)
+    char_count = count_chars_in_paragraphs(document, 0)
 
-stego_message_text, stegoMessage_bytes = stego_message()
-stegoMessage_size_bytes = len(stegoMessage_bytes)
-stegoMessage_size_bits = 8 * stegoMessage_size_bytes
-#print("Regular bytes:", stegoMessage_size_bytes)
-#print("Regular bites:", stegoMessage_size_bits)
+    stego_message_text, stegoMessage_bytes = stego_message()
+    stegoMessage_size_bytes = len(stegoMessage_bytes)
+    stegoMessage_size_bits = 8 * stegoMessage_size_bytes
+    #print("Regular bytes:", stegoMessage_size_bytes)
+    #print("Regular bites:", stegoMessage_size_bits)
 
-# Main
+    # Main
 
-embedded = False
-while not embedded:
-    # Check if the paragraph has enough runs to embed the message
-    is_valid = is_capacity_enough_for_message(char_count, stegoMessage_size_bits)
-    print("The cover object is valid:", is_valid)
-    if not is_valid:
-        print("Not enough capacity in the document to embed the message.")
-        break
+    embedded = False
+    while not embedded:
+        # Check if the paragraph has enough runs to embed the message
+        is_valid = is_capacity_enough_for_message(char_count, stegoMessage_size_bits)
+        #print("The cover object is valid:", is_valid)
+        if not is_valid:
+            print("Not enough capacity in the document to embed the message.")
+            break
 
-    random_paragraph_index = choose_random_paragraph(document, stegoMessage_size_bits)
-    if random_paragraph_index is None:
-        print("No paragraphs available for embedding.")
-        break
+        random_paragraph_index = choose_random_paragraph(document, stegoMessage_size_bits)
+        if random_paragraph_index is None:
+            print("No paragraphs available for embedding.")
+            break
 
-    # Embed stego-message in DOCX
-    print("Embedding stego-message...")
-    payload = stegoMessage_size_bytes
-    stego_index = 0
-    #while payload < stego_index:
-    for paragraph in document.paragraphs [random_paragraph_index:]:
-            if stego_index < payload:
-                original_run_amount = list(paragraph.runs)
-                for run in original_run_amount:
-                    run_element = run._r
-                    if run_element.find(qn('w:t')) != None:
-                        if stego_index < payload:
-                            stego_index = embedding_in_run(run, stegoMessage_bytes, stego_index, payload)
-                        else:
-                            break
-            else:
-                break
-    print("Embedding successful!")
+        # Embed stego-message in DOCX
+        #print("Embedding stego-message...")
+        payload = stegoMessage_size_bytes
+        stego_index = 0
+        #while payload < stego_index:
+        for paragraph in document.paragraphs [random_paragraph_index:]:
+                if stego_index < payload:
+                    original_run_amount = list(paragraph.runs)
+                    for run in original_run_amount:
+                        run_element = run._r
+                        if run_element.find(qn('w:t')) != None:
+                            if stego_index < payload:
+                                stego_index = embedding_in_run(run, stegoMessage_bytes, stego_index, payload)
+                            else:
+                                break
+                else:
+                    break
+        #print("Embedding successful!")
 
-    print("Extracting stego-message...")
-    if stego_message_text != stego_message_extraction(document):
-        print("Extracted message is not equal to stego-message!")
-        break
-    print("Extraction successful!")     
-    embedded = True
+        #print("Extracting stego-message...")
+        extracted_stego_message = stego_message_extraction(document)
+        if stego_message_text != extracted_stego_message:
+            print(extracted_stego_message)
+            print("Extracted message is not equal to stego-message!")
+            break
+        #print("Extraction successful!")     
+        embedded = True
 
-if embedded:
-    stegoDocPath = Path(f"data_set/stego-files/stego-method_4/{docPath.name}")
-    document.save(stegoDocPath)
-    print("Saved:", stegoDocPath)
-else:
-    print("Embedding not possible.")
+    if embedded:
+        stegoDocPath = Path(f"data_set/stego-files/stego-method_4/{file.name}")
+        document.save(stegoDocPath)
+        print("Saved:", stegoDocPath)
+    else:
+        print("Embedding not possible.")
+    print()
