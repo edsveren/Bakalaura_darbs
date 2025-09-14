@@ -28,9 +28,9 @@ def stego_message_extraction(document) -> str:
                 if color_element != None:
                     color_element_value = color_element.get(qn('w:val'))
                     if color_element_value.lower() not in ('000000', 'auto'):
-                        r_bit = int(color_element_value[0:2])
-                        g_bit = int(color_element_value[2:4])
-                        b_bit = int(color_element_value[4:6])
+                        r_bit = int(color_element_value[0:2], 16)
+                        g_bit = int(color_element_value[2:4], 16)
+                        b_bit = int(color_element_value[4:6], 16)
                         if r_bit <= 7 and g_bit <= 7 and b_bit <= 3:
                             stego_bit_string = f"{r_bit:03b}{g_bit:03b}{b_bit:02b}"
                             stego_byte = int(stego_bit_string, 2).to_bytes(1, 'big')
@@ -42,21 +42,26 @@ def stego_message_extraction(document) -> str:
     return stegoMessage
             
 # DOCX file
-docPath = Path("data_set/attacked_stego-files/stego-method_1/TEST_0.docx")
-document = Document(docPath)
-text = extract_text(document)
+base = "data_set/attacked_stego-files/stego-method_4"
+base = "data_set/stego-files/stego-method_4"
+for file in Path(base).iterdir():
+    docPath = f"{base}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
+    #docPath = Path("data_set/attacked_stego-files/stego-method_1/TEST_0.docx")
+    document = Document(docPath)
+    text = extract_text(document)
 
-stego_message_text = stego_message()
+    stego_message_text = stego_message()
 
-# Main
+    # Main
 
-print("Extracting stego-message...")
-stego_message_extracted = stego_message_extraction(document)
-if stego_message_extracted != '':
-    print(f"The extracted stego-message: {stego_message_extracted}")
-    if stego_message_text == stego_message_extracted:
-        print("Extraction successful!")
+    print("Extracting stego-message...")
+    stego_message_extracted = stego_message_extraction(document)
+    if stego_message_extracted != '':
+        print(f"The extracted stego-message: {stego_message_extracted}")
+        if stego_message_text == stego_message_extracted:
+            print("Extraction successful!")
+        else:
+            print("Extracted message is not equal to stego-message!")
     else:
-        print("Extracted message is not equal to stego-message!")
-else:
-    print(f"The extracted stego-message: {None}")
+        print(f"The extracted stego-message: {None}")
+    print()
