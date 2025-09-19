@@ -1,9 +1,7 @@
 import re
 import random
-from copy import deepcopy
 from pathlib import Path
 from docx import Document
-from docx.text.run import Run
 from docx.oxml.shared import OxmlElement, qn
 
 zero = '\u2009' # Thin space
@@ -172,6 +170,7 @@ def stego_message_extraction(document) -> str:
                     unispace_combination = ''
     return stegoMessage
             
+### Main ###            
 # DOCX file
 base = "data_set/clean_files"
 for file in Path(base).iterdir():
@@ -191,13 +190,11 @@ for file in Path(base).iterdir():
     stegoMessageInWhiteSpaceUnicode_size_bytes = len(stegoMessageInWhiteSpaceUnicode)
     stegoMessageInWhiteSpaceUnicode_size_bits = 8 * stegoMessageInWhiteSpaceUnicode_size_bytes
 
-    ### Main
-
     embedded = False
     while not embedded:
         # Check if the paragraph has enough runs to embed the message
         is_valid = is_capacity_enough_for_message(word_count, stegoMessageInWhiteSpaceUnicode_size_bits)
-        #print("The cover object is valid:", is_valid)
+        print("The cover object is valid:", is_valid)
         if not is_valid:
             print("Not enough capacity in the document to embed the message.")
             break
@@ -210,7 +207,7 @@ for file in Path(base).iterdir():
         stegoMessageInWhiteSpaceUnicode = '\x20' + stegoMessageInWhiteSpaceUnicode + '\x20'
 
         # Embed stego-message in DOCX
-        #print("Embedding stego-message...")
+        print("Embedding stego-message...")
         payload = stegoMessageInWhiteSpaceUnicode_size_bytes + 2
         stego_index = 0
         #while payload < stego_index:
@@ -226,13 +223,13 @@ for file in Path(base).iterdir():
                                 break
                 else:
                     break
-        #print("Embedding successful!")
 
         #print("Extracting stego-message...")
         if stegoMessageInWhiteSpaceUnicode != stego_message_extraction(document):
             print("Extracted message is not equal to stego-message!")
             break
-        #print("Extraction successful!")     
+        #print("Extraction successful!")
+        print("Embedding successful!")   
         embedded = True
 
     if embedded:

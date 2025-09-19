@@ -104,15 +104,24 @@ def insert_in_run(previous_run, char, type, base_run) -> Run:
             text_element.set(qn('xml:space'), 'preserve')
         case 'stego_char': # len(char) == 1 and char != ('\x20', '\xa0')
             text_element.text = char
-            color_element = OxmlElement('w:color')
-            font_size_element = OxmlElement('w:sz')
-            vanish_element = OxmlElement('w:vanish')
+
+            color_element = run_properties.find(qn('w:color'))
+            if color_element is None:
+                color_element = OxmlElement('w:color')
+                run_properties.append(color_element)
             color_element.set(qn('w:val'), 'FFFFFF')
+
+            font_size_element = run_properties.find(qn('w:sz'))
+            if font_size_element is None:
+                font_size_element = OxmlElement('w:sz')
+                run_properties.append(font_size_element)
             font_size_element.set(qn('w:val'), '2')
+
+            vanish_element = run_properties.find(qn('w:vanish'))
+            if vanish_element is None:
+                vanish_element = OxmlElement('w:vanish')
+                run_properties.append(vanish_element)
             vanish_element.set(qn('w:val'), 'true')
-            run_properties.append(color_element)
-            run_properties.append(font_size_element)
-            run_properties.append(vanish_element)
         case _:
             text_element.text = char           
     
@@ -186,9 +195,10 @@ def stego_message_extraction(document) -> str:
                             stegoMessage_as_base64 += run.text
     #print(stegoMessage_as_base64)
     stegoMessage = base64.b64decode(stegoMessage_as_base64).decode('utf-8')
-    print(stegoMessage)
+    #print(stegoMessage)
     return stegoMessage
-            
+
+### Main ###      
 # DOCX file
 base = "data_set/clean_files"
 for file in Path(base).iterdir():
@@ -209,8 +219,6 @@ for file in Path(base).iterdir():
     stegoMessage_toBase64_size_bits = 8 * stegoMessage_toBase64_size_bytes
     #print("Stego-message Base64 bytes:", stegoMessage_toBase64_size_bytes)
     #print("Stego-message Base64 bits:", stegoMessage_toBase64_size_bits)
-
-    ### Main
 
     embedded = False
     while not embedded:
@@ -244,14 +252,14 @@ for file in Path(base).iterdir():
                             break
             else:
                 break
-        if stego_index == payload:
-            #print("Extracting stego-message...")
-            if stego_message_text != stego_message_extraction(document):
-                print("Extracted message is not equal to stego-message!")
-                break
-            #print("Extraction successful!")
-            print("Embedding successful!")
-            embedded = True
+        
+        #print("Extracting stego-message...")
+        if stego_message_text != stego_message_extraction(document):
+            print("Extracted message is not equal to stego-message!")
+            break
+        #print("Extraction successful!")
+        print("Embedding successful!")
+        embedded = True
 
     if embedded:
         stegoDocPath = Path(f"data_set/stego-files/stego-method_1/{file.name}")

@@ -107,11 +107,6 @@ def slipt_run_for_embedding(run, byte) -> Run | None:
     cover_chars = re.search("\S", text, flags=re.UNICODE)
     if cover_chars is None:
         return None
-    
-    #embedded_text = ''
-    #right_text = text
-    #for _ in range(len(cover_chars)):
-    #    cover_chars = re.search("\S", right_text, flags=re.UNICODE)
 
     cover_symbol_index = cover_chars.start()
     single_cover_char = text[cover_symbol_index]
@@ -123,29 +118,11 @@ def slipt_run_for_embedding(run, byte) -> Run | None:
     stego_char_run = insert_in_run(run, single_cover_char, stego_byte_to_binary_string, run)
     if stego_char_run == None:
         return None
-            # left_text += single_cover_char
-            # single_cover_char = right_text[0]
-            # right_text = right_text[cover_symbol_index + 1:] # text after the first whitespace
-        # else:
-        #     run.text = left_text
-        #     remaining_run = insert_in_run(stego_char_run, right_text, None, run)
-        #     break
-
-
-        # left text
+    
+    # left text
     run.text = left_text
 
-        # stego character
-        # embedded = False
-        # while not embedded:
-        #     stego_char_run = insert_in_run(run, single_cover_char, stego_byte_to_binary_string, run)
-        #     if stego_char_run != None:
-        #         remaining_run = insert_in_run(stego_char_run, right_text, None, run)
-
-        #         remaining_run = insert_in_run(run, right_text, None, run)
-
-
-        # right text
+    # right text
     remaining_run = insert_in_run(stego_char_run, right_text, None, run)
     return remaining_run
 
@@ -191,7 +168,8 @@ def stego_message_extraction(document) -> str:
     stegoMessage = stegoMessage_bytes.decode('utf-8')
     #print(stegoMessage)
     return stegoMessage
-            
+
+### Main ###    
 # DOCX file
 base = "data_set/clean_files"
 for file in Path(base).iterdir():
@@ -208,13 +186,11 @@ for file in Path(base).iterdir():
     #print("Regular bytes:", stegoMessage_size_bytes)
     #print("Regular bites:", stegoMessage_size_bits)
 
-    # Main
-
     embedded = False
     while not embedded:
         # Check if the paragraph has enough runs to embed the message
         is_valid = is_capacity_enough_for_message(char_count, stegoMessage_size_bits)
-        #print("The cover object is valid:", is_valid)
+        print("The cover object is valid:", is_valid)
         if not is_valid:
             print("Not enough capacity in the document to embed the message.")
             break
@@ -225,7 +201,7 @@ for file in Path(base).iterdir():
             break
 
         # Embed stego-message in DOCX
-        #print("Embedding stego-message...")
+        print("Embedding stego-message...")
         payload = stegoMessage_size_bytes
         stego_index = 0
         #while payload < stego_index:
@@ -241,7 +217,6 @@ for file in Path(base).iterdir():
                                 break
                 else:
                     break
-        #print("Embedding successful!")
 
         #print("Extracting stego-message...")
         extracted_stego_message = stego_message_extraction(document)
@@ -249,7 +224,8 @@ for file in Path(base).iterdir():
             print(extracted_stego_message)
             print("Extracted message is not equal to stego-message!")
             break
-        #print("Extraction successful!")     
+        #print("Extraction successful!")
+        print("Embedding successful!")     
         embedded = True
 
     if embedded:

@@ -1,9 +1,7 @@
 import re
 import random
-from copy import deepcopy
 from pathlib import Path
 from docx import Document
-from docx.text.run import Run
 from docx.oxml.shared import OxmlElement, qn
 
 unicode_dictionary = {
@@ -169,6 +167,8 @@ def stego_message_extraction(document) -> str:
     #print(stegoMessage)
     return stegoMessage
 
+### Main ###
+# DOCX file
 base = "data_set/clean_files"
 for file in Path(base).iterdir():
     docPath = f"{base}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
@@ -185,8 +185,6 @@ for file in Path(base).iterdir():
 
     stegoMessage_bytes_to_binary_string = stego_message_to_bit_string(stegoMessage_bytes)
     stegoMessage_bytes_to_binary_string = '1' + stegoMessage_bytes_to_binary_string
-
-    ### Main
 
     embedded = False
     while not embedded:
@@ -208,25 +206,24 @@ for file in Path(base).iterdir():
         stego_index = 0
         #while payload < stego_index:
         for paragraph in document.paragraphs [random_paragraph_index:]:
-                if stego_index >= payload:
-                    break               
-                else:
+                if stego_index < payload:            
                     #original_run_amount = list(paragraph.runs)
                     for run in paragraph.runs:
                         run_element = run._r
                         if run_element.find(qn('w:t')) != None:
-                            if stego_index >= payload:
-                                break
-                            else:
+                            if stego_index < payload:
                                 stego_index = embedding_in_run(run, stegoMessage_bytes_to_binary_string, stego_index, payload)
-
-        print("Embedding successful!")
+                            else:
+                                break
+                else:
+                    break
 
         #print("Extracting stego-message...")
         if stego_message_text != stego_message_extraction(document):
             print("Extracted message is not equal to stego-message!")
             break
-        #print("Extraction successful!")     
+        #print("Extraction successful!")
+        print("Embedding successful!")     
         embedded = True
 
     if embedded:
