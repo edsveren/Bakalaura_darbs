@@ -3,9 +3,9 @@ from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Pt, RGBColor
 
-def change_text_style_for_auto_text(document):
+def change_text_style_for_auto_text(document: Document):
     styles = document.styles
-    new_style = styles.add_style('stego-style', WD_STYLE_TYPE.CHARACTER)
+    new_style = styles.add_style('stego_style', WD_STYLE_TYPE.CHARACTER)
 
     new_style_font = new_style.font
     new_style_font.name = 'Britannic Bold'
@@ -29,12 +29,17 @@ def change_text_style_for_auto_text(document):
             if pStyle == None and rStyle == None:
                 run.style = new_style
 
-base = "data_set/stego-files"
+base = "data_set/stego_files"
 for directories in Path(base).iterdir():
     for file in directories.iterdir():
+        print()
+        if file.name.startswith('~$'):
+            continue
         docPath = f"{base}/{directories.name}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
+        print("Opened:", docPath)
+        print("Attacking:", docPath)
         document = Document(docPath)
         change_text_style_for_auto_text(document)
-        stegoDocPath = Path(f"data_set/attacked_stego-files/4_format_attack/{directories.name}/{file.name}")
+        stegoDocPath = Path(f"data_set/attacked_stego_files/4_format_attack/{directories.name}/{file.name}")
         document.save(stegoDocPath)
         print("Saved:", stegoDocPath)
