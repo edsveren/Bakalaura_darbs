@@ -49,7 +49,7 @@ def extract_text(doc) -> str:
 
 # Stego-message
 def stego_message() -> tuple[list[str], bytes]:
-    stegoMessagePath = Path("stego-message.txt")
+    stegoMessagePath = Path("stego_message.txt")
     stegoMessage_bytes = stegoMessagePath.read_bytes()
     stegoMessageText = []
     with open(stegoMessagePath, encoding="utf-8") as input:
