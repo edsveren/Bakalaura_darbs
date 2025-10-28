@@ -13,7 +13,7 @@ def extract_text(document) -> str:
 
 # Stego-message
 def stego_message() -> list[str]:
-    stegoMessageText = Path("stego-messages/stego-message.txt").read_text(encoding="utf-8")
+    stegoMessageText = Path("stego_messages/stego_message.txt").read_text(encoding="utf-8")
     #print("Stego-message data:", stegoMessageText)
     return stegoMessageText
 
@@ -42,11 +42,11 @@ def stego_message_extraction(document) -> str:
     return stegoMessage
             
 # DOCX file
-base = "data_set/attacked_stego-files/stego-method_4"
-base = "data_set/stego-files/stego-method_4"
+base = "data_set/attacked_stego_files/stego_method_4"
+base = "data_set/stego_files/stego_method_4"
 for file in Path(base).iterdir():
     docPath = f"{base}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
-    #docPath = Path("data_set/attacked_stego-files/stego-method_1/TEST_0.docx")
+    #docPath = Path("data_set/attacked_stego_files/stego_method_1/TEST_0.docx")
     document = Document(docPath)
     text = extract_text(document)
 
