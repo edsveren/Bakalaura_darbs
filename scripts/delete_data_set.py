@@ -16,10 +16,10 @@ def delete_attacked_data_set():
         for stego_directories in attack_directories.iterdir():
             for file in stego_directories.iterdir():
                 docPath = f"{attacked_stego_files}/{stego_directories.name}/{file.name}"
-                if Path(docPath).is_file():
-                    os.remove(Path(docPath))
-                    print(f"Deleted: {docPath} in {stego_directories.name}")
+                if file.is_file():
+                    os.remove(file)
+                    print(f"Deleted: {file} in {stego_directories}")
 
 if __name__ == "__main__":
     delete_stego_data_set()
-    #delete_attacked_data_set()
+    delete_attacked_data_set()
