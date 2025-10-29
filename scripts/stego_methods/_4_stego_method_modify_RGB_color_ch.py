@@ -4,10 +4,12 @@ from copy import deepcopy
 from pathlib import Path
 from docx import Document
 from docx.text.run import Run
-from docx.oxml.shared import OxmlElement, qn
+from docx.oxml.parser import OxmlElement
+from docx.oxml.ns import qn
+from docx.document import Document as DocumentObject
 
 # Count (black coloured) chars in paragraphs starting from index
-def count_black_chars_in_paragraphs(document: Document, index: int) -> int:
+def count_black_chars_in_paragraphs(document: DocumentObject, index: int) -> int:
     black_char_count = 0
     for paragraph in document.paragraphs[index:]:
         for run in paragraph.runs:
@@ -41,7 +43,7 @@ def is_capacity_enough_for_message(black_char_count: int, stegoMessage_size_bits
     return is_valid
 
 # Extract text from the document
-def extract_text(document: Document) -> str:
+def extract_text(document: DocumentObject) -> str:
     text = []
     for paragraph in document.paragraphs:
         text.append(paragraph.text.replace('\xa0', '\x20')) # NBSP -> space
@@ -51,14 +53,14 @@ def extract_text(document: Document) -> str:
     return text
 
 # Stego-message
-def stego_message() -> tuple[list[str], bytes]:
+def stego_message() -> tuple[str, bytes]:
     stegoMessageText = Path("stego_messages\stego_message.txt").read_text(encoding="utf-8")
     stegoMessage_bytes = stegoMessageText.encode("utf-8")
     #print("Stego-message data:", stegoMessageText)
     return stegoMessageText, stegoMessage_bytes
 
 # Choose random paragraph
-def choose_random_paragraph(document: Document, stegoMessage_size_bits: int) -> int | None:
+def choose_random_paragraph(document: DocumentObject, stegoMessage_size_bits: int) -> int | None:
     paragraphs = document.paragraphs
     if not paragraphs:
         return None
@@ -72,7 +74,7 @@ def choose_random_paragraph(document: Document, stegoMessage_size_bits: int) -> 
             return random_paragraph_index
 
 # Create a new run
-def insert_in_run(previous_run: Run, char:str, stego_bits: str, base_run: Run) -> Run|None:
+def insert_in_run(previous_run: Run, base_run: Run, char: str, stego_bits: str | None) -> Run|None:
     current_run_element = previous_run._r
     base_run_element = base_run._r
 
@@ -120,7 +122,7 @@ def insert_in_run(previous_run: Run, char:str, stego_bits: str, base_run: Run) -
     return new_run
 
 # Splitting the existing runs into before, current and after
-def slipt_run_for_embedding(run: Run, byte: bytes) -> Run | None:
+def slipt_run_for_embedding(run: Run, byte: int) -> Run | None:
     text = run.text
     cover_chars = re.search(r'\S', text, flags=re.UNICODE)
     if cover_chars is None:
@@ -133,7 +135,7 @@ def slipt_run_for_embedding(run: Run, byte: bytes) -> Run | None:
 
     stego_byte_to_binary_string = f"{byte:08b}"
 
-    stego_char_run = insert_in_run(run, single_cover_char, stego_byte_to_binary_string, run)
+    stego_char_run = insert_in_run(run, run, single_cover_char, stego_byte_to_binary_string)
     if stego_char_run == None:
         return None
     
@@ -148,7 +150,7 @@ def slipt_run_for_embedding(run: Run, byte: bytes) -> Run | None:
         run.text = left_text
 
     # right text
-    remaining_run = insert_in_run(stego_char_run, right_text, None, run)
+    remaining_run = insert_in_run(stego_char_run, run, right_text, None)
 
     # Clean up
     if left_text == '':
@@ -176,7 +178,7 @@ def embedding_in_run(run: Run, stegoMessage_bytes: bytes, stego_index: int, payl
     return stego_index
 
 # Extraction algorithm
-def stego_message_extraction(document: Document) -> str:
+def stego_message_extraction(document: DocumentObject) -> str:
     stegoMessage_bytes = b''
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
@@ -262,7 +264,7 @@ for file in Path(base).iterdir():
         embedded = True
 
     if embedded:
-        stegoDocPath = Path(f"data_set/stego_files/stego_method_4/{file.name}")
+        stegoDocPath = str(Path(f"data_set/stego_files/stego_method_4/{file.name}"))
         document.save(stegoDocPath)
         print("Saved:", stegoDocPath)
     else:

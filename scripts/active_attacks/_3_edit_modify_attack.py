@@ -2,7 +2,7 @@ import re
 from docx import Document
 from pathlib import Path
 from docx.text.run import Run
-from docx.oxml.shared import qn
+from docx.oxml.ns import qn
 
 def change_every_nth_word(run: Run, n: int, word_index: int) -> int:
     text = run.text
@@ -47,5 +47,5 @@ for directories in Path(base).iterdir():
                     word_index = change_every_nth_word(run, every_nth_word, word_index)
 
         stegoDocPath = Path(f"data_set/attacked_stego_files/3_edit-modify_attack/{directories.name}/{file.name}")
-        document.save(stegoDocPath)
+        document.save(str(stegoDocPath))
         print("Saved:", stegoDocPath)

@@ -3,7 +3,9 @@ import random
 from pathlib import Path
 from docx import Document
 from docx.text.run import Run
-from docx.oxml.shared import OxmlElement, qn
+from docx.oxml.parser import OxmlElement
+from docx.oxml.ns import qn
+from docx.document import Document as DocumentObject
 
 zero = '\u2009' # Thin space
 one = '\u200A'  # Hair space
@@ -42,7 +44,7 @@ unispace_dictionary = {
 reverse_unispace_dictionary = {value: key for key, value in unispace_dictionary.items()}
 
 # Count words in paragraphs
-def count_words_in_paragraphs(document: Document, index: int) -> int:
+def count_words_in_paragraphs(document: DocumentObject, index: int) -> int:
     word_count = 0
     for paragraph in document.paragraphs[index:]:
         text = paragraph.text.replace('\xa0', '\x20')  # NBSP -> space
@@ -58,7 +60,7 @@ def is_capacity_enough_for_message(word_count: int, stegoMessage_size_bits: int)
     return is_valid
 
 # Extract text from the document
-def extract_text(document: Document) -> str:
+def extract_text(document: DocumentObject) -> str:
     text = []
     for paragraph in document.paragraphs:
         text.append(paragraph.text.replace('\xa0', '\x20')) # NBSP -> space
@@ -68,7 +70,7 @@ def extract_text(document: Document) -> str:
     return text
 
 # Stego-message
-def stego_message() -> tuple[list[str], bytes]:
+def stego_message() -> tuple[str, bytes]:
     stegoMessageText = Path("stego_messages\stego_message.txt").read_text(encoding="utf-8")
     stegoMessage_bytes = stegoMessageText.encode("utf-8")
     #print("Stego-message data:", stegoMessageText)
@@ -85,7 +87,7 @@ def stego_message_standarization_to_unispace_method(stegoMessageText: str) -> st
     return stegoMessageInWhiteSpaceUnicode
 
 # Choose random paragraph
-def choose_random_paragraph(document: Document, stegoMessage_toBase64_size_bits: int) -> int | None:
+def choose_random_paragraph(document: DocumentObject, stegoMessage_toBase64_size_bits: int) -> int | None:
     paragraphs = document.paragraphs
     if not paragraphs:
         return None
@@ -145,7 +147,7 @@ def embedding_in_run(run: Run, stego_message_text: str, stego_index: int, payloa
     return stego_index
 
 # Extraction algorithm
-def stego_message_extraction(document: Document) -> str:
+def stego_message_extraction(document: DocumentObject) -> str:
     text = extract_text(document)
     unispace_combination_as_string_dictionary = {''.join(key): value for key, value in unispace_dictionary.items()}
     stegoMessage = ''
@@ -237,7 +239,7 @@ for file in Path(base).iterdir():
         embedded = True
 
     if embedded:
-        stegoDocPath = Path(f"data_set/stego_files/stego_method_5/{file.name}")
+        stegoDocPath = str(Path(f"data_set/stego_files/stego_method_5/{file.name}"))
         document.save(stegoDocPath)
         print("Saved:", stegoDocPath)
     else:

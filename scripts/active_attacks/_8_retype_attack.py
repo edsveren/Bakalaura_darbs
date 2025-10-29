@@ -1,9 +1,10 @@
-from docx import Document
 from pathlib import Path
-from docx.oxml.shared import OxmlElement
 from copy import deepcopy
+from docx import Document
+from docx.oxml.parser import OxmlElement
+from docx.document import Document as DocumentObject
 
-def retype_in_new_document(document: Document, new_document: Document):
+def retype_in_new_document(document: DocumentObject, new_document: DocumentObject):
     for paragraph in document.paragraphs:
         new_paragraph_element = OxmlElement('w:p')
         for run in paragraph.runs:
@@ -27,5 +28,5 @@ for directories in Path(base).iterdir():
         new_document = Document()
         retype_in_new_document(document, new_document)
         stegoDocPath = Path(f"data_set/attacked_stego_files/8_retype_attack/{directories.name}/{file.name}")
-        new_document.save(stegoDocPath)
+        new_document.save(str(stegoDocPath))
         print("Saved:", stegoDocPath)

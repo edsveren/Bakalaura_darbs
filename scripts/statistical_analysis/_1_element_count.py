@@ -1,23 +1,24 @@
-from docx import Document
-from pathlib import Path
-from docx.oxml.ns import qn
-import csv
 import os
+import csv
+from pathlib import Path
+from docx import Document
+from docx.oxml.ns import qn
+from docx.document import Document as DocumentObject
 
-def count_total_paragraphs(document: Document) -> int:
+def count_total_paragraphs(document: DocumentObject) -> int:
     count = 0
     for _ in document.paragraphs:
         count += 1
     return count
 
-def count_total_runs_elements(document: Document) -> int:
+def count_total_runs_elements(document: DocumentObject) -> int:
     count = 0
     for paragraph in document.paragraphs:
         for _ in paragraph.runs:
             count += 1
     return count
 
-def count_total_text_elements(document: Document) -> int:
+def count_total_text_elements(document: DocumentObject) -> int:
     text_element_count = 0
     text_element = f".//{qn('w:t')}"
     #root = document.part.element
@@ -28,7 +29,7 @@ def count_total_text_elements(document: Document) -> int:
             text_element_count += text_element_in_run_count
     return text_element_count
 
-def count_text_elements_per_paragraph(document: Document) -> list[int]:
+def count_text_elements_per_paragraph(document: DocumentObject) -> list[int]:
     text_element_per_paragraph = []
     text_element = f".//{qn('w:t')}"
     for paragraph in document.paragraphs:
@@ -36,7 +37,7 @@ def count_text_elements_per_paragraph(document: Document) -> list[int]:
         text_element_per_paragraph.append(text_element_in_run_count)
     return text_element_per_paragraph
 
-def count_text_elements_per_run(document: Document) -> list[int]:
+def count_text_elements_per_run(document: DocumentObject) -> list[int]:
     text_element_per_run = []
     text_element = f".//{qn('w:t')}"
     for paragraph in document.paragraphs:
@@ -45,9 +46,9 @@ def count_text_elements_per_run(document: Document) -> list[int]:
             text_element_per_run.append(text_element_in_run_count)
     return text_element_per_run
 
-def to_csv(docPath: Path, data_set: str, total_paragraph_count: int=None, 
-           total_run_element_count: int=None, total_text_elements: int=None, 
-           text_element_per_paragraph_list: list[int]=None, text_element_per_run_list: list[int]=None) -> None:
+def to_csv(docPath: Path, data_set: str, total_paragraph_count: int|None, 
+           total_run_element_count: int|None, total_text_elements: int|None, 
+           text_element_per_paragraph_list: list[int]|None, text_element_per_run_list: list[int]|None) -> None:
     file_name = docPath.stem
     result_file = f"results/1_element_count/{file_name}.csv"
 
@@ -90,18 +91,23 @@ if __name__ == "__main__":
         os.remove(Path(f"results/1_element_count/TEST_0.csv"))
     docPath_0 = Path("data_set/clean_files/TEST_0.docx")
     docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
+    docPath_2 = Path("data_set/stego_files/stego_method_2/TEST_0.docx")
     docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
     docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
     docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
     docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
 
-    paths = [docPath_0, docPath_1, docPath_3, docPath_4, docPath_5, docPath_6]
-    data_set = ["clean", "hide_in_text", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
+    paths = [docPath_0, docPath_1, docPath_2, docPath_3, docPath_4, docPath_5, docPath_6]
+    data_set = ["clean", "hide_in_text", "multilayer_hybrid", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
+
     i = 0
     for path in paths:
         print("")
+        if not Path(path).is_file():
+            print(f"File doesn't exist: {path}")
+            continue
         print(f"Opened: {path}")
-        document = Document(path)
+        document = Document(str(path))
         total_paragraph_count = count_total_paragraphs(document)
         total_run_element_count = count_total_runs_elements(document)
         total_text_elements = count_total_text_elements(document)
@@ -114,5 +120,5 @@ if __name__ == "__main__":
         print(f"Text elements per paragraph: {text_element_per_paragraph_list}")
         print(f"Text elements per run: {text_element_per_run_list}")
         # print(get_font_size_value_from_each_run(document, i, 0, path, "clean"))
-        to_csv(path, data_set[i], total_paragraph_count, total_run_element_count, total_text_elements, text_element_per_paragraph_list, )
+        to_csv(path, data_set[i], total_paragraph_count, total_run_element_count, total_text_elements, text_element_per_paragraph_list, None)
         i += 1

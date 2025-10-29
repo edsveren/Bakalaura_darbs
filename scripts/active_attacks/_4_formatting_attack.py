@@ -2,8 +2,9 @@ from pathlib import Path
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Pt, RGBColor
+from docx.document import Document as DocumentObject
 
-def change_text_style_for_auto_text(document: Document):
+def change_text_style_for_auto_text(document: DocumentObject) -> None:
     styles = document.styles
     new_style = styles.add_style('stego_style', WD_STYLE_TYPE.CHARACTER)
 
@@ -41,5 +42,5 @@ for directories in Path(base).iterdir():
         document = Document(docPath)
         change_text_style_for_auto_text(document)
         stegoDocPath = Path(f"data_set/attacked_stego_files/4_format_attack/{directories.name}/{file.name}")
-        document.save(stegoDocPath)
+        document.save(str(stegoDocPath))
         print("Saved:", stegoDocPath)

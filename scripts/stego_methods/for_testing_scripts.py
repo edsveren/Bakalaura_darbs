@@ -100,36 +100,32 @@ import csv
 
 
 from docx import Document
-from docx.oxml.ns import qn
+# from docx.oxml.ns import qn
 
-def paragraph_default_font_size_value(styles_element) -> str | None:
-    all_styles = styles_element.findall(f".//{qn('w:style')}")
-    for style in all_styles:
-        if style.get(qn('w:type')) == 'paragraph' and style.get(qn('w:default')) == '1':
-            sz = style.find(f".//{qn('w:sz')}'")
-            if sz != None:
-                sz_value = sz.get(qn('w:val'))
-                if sz_value != None:
-                    return sz_value
-    # If no default paragraph style found
-    return None
+# def paragraph_default_font_size_value(styles_element) -> str | None:
+#     all_styles = styles_element.findall(f".//{qn('w:style')}")
+#     for style in all_styles:
+#         if style.get(qn('w:type')) == 'paragraph' and style.get(qn('w:default')) == '1':
+#             sz = style.find(f".//{qn('w:sz')}'")
+#             if sz != None:
+#                 sz_value = sz.get(qn('w:val'))
+#                 if sz_value != None:
+#                     return sz_value
+#     # If no default paragraph style found
+#     return None
 
-def document_default_font_size_value(styles_element) -> str | None:
-    run_properties_style = styles_element.find(f".//{qn('w:docDefaults')}/{qn('w:rPrDefault')}/{qn('w:rPr')}")
-    if run_properties_style != None:
-        sz = run_properties_style.find(qn('w:sz'))
-        if sz != None:
-            sz_value = sz.get(qn('w:val'))
-            if sz_value != None:
-                return sz_value
-    else: # If no default document style found
-        return None
+# def document_default_font_size_value(styles_element) -> str | None:
+#     run_properties_style = styles_element.find(f".//{qn('w:docDefaults')}/{qn('w:rPrDefault')}/{qn('w:rPr')}")
+#     if run_properties_style != None:
+#         sz = run_properties_style.find(qn('w:sz'))
+#         if sz != None:
+#             sz_value = sz.get(qn('w:val'))
+#             if sz_value != None:
+#                 return sz_value
+#     else: # If no default document style found
+#         return None
 
-docPath = Path("data_set/clean_files/TEST_0.docx")
+docPath = str(Path("data_set/clean_files/TEST_0.docx"))
+print(type(docPath))
 document = Document(docPath)
-styles_element = document.styles.element
-print(type(paragraph_default_font_size_value(styles_element)))
-print(type(document_default_font_size_value(styles_element)))
-
-print(paragraph_default_font_size_value(styles_element))
-print(document_default_font_size_value(styles_element))
+print(type(document.styles.element))

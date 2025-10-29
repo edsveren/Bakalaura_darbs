@@ -1,11 +1,12 @@
-from docx import Document
+import os
+import csv
 from pathlib import Path
 from collections import Counter
 import _1_element_count
-import os
-import csv
+from docx import Document
+from docx.document import Document as DocumentObject
 
-def number_of_runs_with_a_single_character(document: Document) -> int:
+def number_of_runs_with_a_single_character(document: DocumentObject) -> int:
     count = 0
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
@@ -13,7 +14,7 @@ def number_of_runs_with_a_single_character(document: Document) -> int:
                 count += 1
     return count
 
-def run_text_with_single_character(document: Document) -> list:
+def run_text_with_single_character(document: DocumentObject) -> list:
     runs = []
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
@@ -60,25 +61,29 @@ def to_csv(docPath: Path, data_set: str, chars: list, char_frequencies: list,
             writer.writerow(["Char frequencies (total runs, %)", *frequency_percentages_total_runs])
             writer.writerow('')
 
-docPath_0 = Path("data_set/clean_files/TEST_0.docx")
-docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
-docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
-docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
-docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
-docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
-
-paths = [docPath_0, docPath_1, docPath_3, docPath_4, docPath_5, docPath_6]
-data_set = ["clean", "hide_in_text", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
-
 if __name__ == "__main__":
     if Path(f"results/4_single_char/TEST_0.csv").is_file():
         os.remove(Path(f"results/4_single_char/TEST_0.csv"))
 
+    docPath_0 = Path("data_set/clean_files/TEST_0.docx")
+    docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
+    docPath_2 = Path("data_set/stego_files/stego_method_2/TEST_0.docx")
+    docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
+    docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
+    docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
+    docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
+
+    paths = [docPath_0, docPath_1, docPath_2, docPath_3, docPath_4, docPath_5, docPath_6]
+    data_set = ["clean", "hide_in_text", "multilayer_hybrid", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
+    
     i = 0
     for path in paths:
         print("")
+        if not Path(path).is_file():
+            print(f"File doesn't exist: {path}")
+            continue
         print(f"Opened: {path}")
-        document = Document(path)
+        document = Document(str(path))
         total_run_element_count = _1_element_count.count_total_runs_elements(document)
         single_char_run_count = number_of_runs_with_a_single_character(document)
         run_percentages = str(round((single_char_run_count / total_run_element_count) * 100, 2)).replace(".", ",")

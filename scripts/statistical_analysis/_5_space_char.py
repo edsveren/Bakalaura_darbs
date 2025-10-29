@@ -1,10 +1,11 @@
 import re
 import os
-from docx import Document
-from pathlib import Path
 import csv
+from pathlib import Path
+from docx import Document
+from docx.document import Document as DocumentObject
 
-def count_words_in_paragraphs(document: Document) -> int:
+def count_words_in_paragraphs(document: DocumentObject) -> int:
     word_count = 0
     for paragraph in document.paragraphs:
         text = paragraph.text.replace('\xa0', '\x20')  # NBSP -> space
@@ -12,7 +13,7 @@ def count_words_in_paragraphs(document: Document) -> int:
         word_count += len(words)
     return word_count
 
-def count_whitespace_characters_in_each_paragraph(document: Document) -> list:
+def count_whitespace_characters_in_each_paragraph(document: DocumentObject) -> list:
     whitespace_counts = []
     for paragraph in document.paragraphs:
         whitespace_count = sum(1 for char in paragraph.text if char.isspace())
@@ -22,7 +23,7 @@ def count_whitespace_characters_in_each_paragraph(document: Document) -> list:
             file.write(str(count) + "\n")
     return whitespace_counts
 
-def count_whitespace_characters_in_each_run(document: Document) -> list:
+def count_whitespace_characters_in_each_run(document: DocumentObject) -> list:
     whitespace_counts = []
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
@@ -59,25 +60,29 @@ def to_csv(docPath: Path, data_set: str, total_word_count: int, total_whitespace
             writer.writerow(["Whitespace counts per paragraph", *whitespace_counts_per_paragraph])
             writer.writerow('')
 
-docPath_0 = Path("data_set/clean_files/TEST_0.docx")
-docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
-docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
-docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
-docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
-docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
-
-paths = [docPath_0, docPath_1, docPath_3, docPath_4, docPath_5, docPath_6]
-data_set = ["clean", "hide_in_text", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
-
 if __name__ == "__main__":
     if Path(f"results/5_space_char/TEST_0.csv").is_file():
         os.remove(Path(f"results/5_space_char/TEST_0.csv"))
 
+    docPath_0 = Path("data_set/clean_files/TEST_0.docx")
+    docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
+    docPath_2 = Path("data_set/stego_files/stego_method_2/TEST_0.docx")
+    docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
+    docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
+    docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
+    docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
+
+    paths = [docPath_0, docPath_1, docPath_2, docPath_3, docPath_4, docPath_5, docPath_6]
+    data_set = ["clean", "hide_in_text", "multilayer_hybrid", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
+    
     i = 0
     for path in paths:
         print("")
+        if not Path(path).is_file():
+            print(f"File doesn't exist: {path}")
+            continue
         print(f"Opened: {path}")
-        document = Document(path)
+        document = Document(str(path))
         total_word_count = count_words_in_paragraphs(document)
         whitespace_counts_per_paragraph = count_whitespace_characters_in_each_paragraph(document)
         whitespace_counts_per_run = count_whitespace_characters_in_each_run(document)

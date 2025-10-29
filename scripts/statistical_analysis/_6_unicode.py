@@ -1,10 +1,11 @@
 import re
 import os
-from docx import Document
-from pathlib import Path
 import csv
+from pathlib import Path
+from docx import Document
+from docx.document import Document as DocumentObject
 
-def count_chars_in_paragraphs(document: Document) -> int:
+def count_chars_in_paragraphs(document: DocumentObject) -> int:
     char_count = 0
     for paragraph in document.paragraphs:
         text = paragraph.text.replace('\xa0', '\x20')  # NBSP -> space
@@ -12,7 +13,7 @@ def count_chars_in_paragraphs(document: Document) -> int:
         char_count += len(chars)
     return char_count
 
-def count_non_ascii_chars_in_paragraphs(document: Document) -> tuple[int, list[int]]:
+def count_non_ascii_chars_in_paragraphs(document: DocumentObject) -> tuple[int, list[int]]:
     char_count_total = 0
     char_count_paragraph = []
     for paragraph in document.paragraphs:
@@ -29,7 +30,7 @@ def count_non_ascii_chars_in_paragraphs(document: Document) -> tuple[int, list[i
         #     char_count_total += run_chars_count
     return char_count_total, char_count_paragraph
 
-def count_non_ascii_chars_in_runs(document: Document) -> list[int]:
+def count_non_ascii_chars_in_runs(document: DocumentObject) -> list[int]:
     char_count_run = []
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
@@ -64,24 +65,29 @@ def to_csv(docPath: Path, data_set: str, total_char_count: int, non_ascii_char_c
             writer.writerow(["Non-ASCII counts per paragraph", *non_ascii_char_count_paragraphs])
             writer.writerow('')
 
-docPath_0 = Path("data_set/clean_files/TEST_0.docx")
-docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
-docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
-docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
-docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
-docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
-
-paths = [docPath_0, docPath_1, docPath_3, docPath_4, docPath_5, docPath_6]
-data_set = ["clean", "hide_in_text", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
-
 if __name__ == "__main__":
     if Path(f"results/6_unicode/TEST_0.csv").is_file():
         os.remove(Path(f"results/6_unicode/TEST_0.csv"))
+
+    docPath_0 = Path("data_set/clean_files/TEST_0.docx")
+    docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
+    docPath_2 = Path("data_set/stego_files/stego_method_2/TEST_0.docx")
+    docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
+    docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
+    docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
+    docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
+
+    paths = [docPath_0, docPath_1, docPath_2, docPath_3, docPath_4, docPath_5, docPath_6]
+    data_set = ["clean", "hide_in_text", "multilayer_hybrid", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
+    
     i = 0
     for path in paths:
         print("")
+        if not Path(path).is_file():
+            print(f"File doesn't exist: {path}")
+            continue
         print(f"Opened: {path}")
-        document = Document(path)
+        document = Document(str(path))
         total_char_count = count_chars_in_paragraphs(document)
         total_non_ascii_char_count, non_ascii_char_count_paragraphs = count_non_ascii_chars_in_paragraphs(document)
         total_char_to_non_ascii_char_ratio = round((total_non_ascii_char_count/total_char_count) * 100, 2)
