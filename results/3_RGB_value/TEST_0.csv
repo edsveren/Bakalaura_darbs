@@ -1,0 +1,30 @@
+Document Name;TEST_0
+Data set;clean
+RGB colours;black;white;other
+RGB colours frequencies;27;0;0
+RGB colours frequencies (%);100.0;0.0;0.0
+
+Document Name;TEST_0
+Data set;hide_in_text
+RGB colours;black;white;other
+RGB colours frequencies;747;240;0
+RGB colours frequencies (%);75.68;24.32;0.0
+
+Document Name;TEST_0
+Data set;multilayer_hybrid
+RGB colours;black;white;other
+RGB colours frequencies;64;0;178
+RGB colours frequencies (%);26.45;0.0;73.55
+
+Document Name;TEST_0
+Data set;two_bit_transformation
+RGB colours;black;white;other
+RGB colours frequencies;27;0;0
+RGB colours frequencies (%);100.0;0.0;0.0
+
+Document Name;TEST_0
+Data set;modify_RGB_color_ch
+RGB colours;black;white;other
+RGB colours frequencies;27;0;0
+RGB colours frequencies (%);100.0;0.0;0.0
+

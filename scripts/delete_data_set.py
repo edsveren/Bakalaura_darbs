@@ -21,6 +21,15 @@ def delete_attacked_data_set():
                     os.remove(file)
                     print(f"Deleted: {file} in {stego_directories}")
 
+def delete_results():
+    results_folder = "results"
+    for directory in Path(results_folder).iterdir():
+        for file in directory.iterdir():
+            if file.is_file() and not file.name.startswith("."):
+                os.remove(file)
+                print(f"Deleted: {file} in {directory.name}")
+
 if __name__ == "__main__":
-    delete_stego_data_set()
-    delete_attacked_data_set()
+    #delete_stego_data_set()
+    #delete_attacked_data_set()
+    print("DELETED")

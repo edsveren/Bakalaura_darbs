@@ -1,0 +1,35 @@
+Document Name;TEST_0
+Data set;clean
+Total Paragraph Count;17
+Total Run Element Count;27
+Total Text Element Count;26
+Text Elements Per Paragraph;1;5;1;7;0;1;1;1;1;1;1;1;1;1;1;1;1
+
+Document Name;TEST_0
+Data set;hide_in_text
+Total Paragraph Count;17
+Total Run Element Count;987
+Total Text Element Count;986
+Text Elements Per Paragraph;1;5;1;7;0;1;1;1;389;177;65;193;141;1;1;1;1
+
+Document Name;TEST_0
+Data set;multilayer_hybrid
+Total Paragraph Count;17
+Total Run Element Count;242
+Total Text Element Count;241
+Text Elements Per Paragraph;1;5;1;7;0;1;1;216;1;1;1;1;1;1;1;1;1
+
+Document Name;TEST_0
+Data set;two_bit_transformation
+Total Paragraph Count;17
+Total Run Element Count;27
+Total Text Element Count;26
+Text Elements Per Paragraph;1;5;1;7;0;1;1;1;1;1;1;1;1;1;1;1;1
+
+Document Name;TEST_0
+Data set;modify_RGB_color_ch
+Total Paragraph Count;17
+Total Run Element Count;27
+Total Text Element Count;26
+Text Elements Per Paragraph;1;5;1;7;0;1;1;1;1;1;1;1;1;1;1;1;1
+

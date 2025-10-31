@@ -10,31 +10,24 @@ Data set;hide_in_text
 Total word count;1586
 Total whitespace count;1571
 Word to Whitespace ratio (%);99.05
-Whitespace counts per paragraph;2;110;307;180;0;0;125;42;97;44;16;96;106;180;108;51;107
+Whitespace counts per paragraph;2;110;307;180;0;0;125;42;194;88;32;96;88;90;59;51;107
+
+Document Name;TEST_0
+Data set;multilayer_hybrid
+Total word count;1346
+Total whitespace count;1331
+Word to Whitespace ratio (%);98.89
+Whitespace counts per paragraph;2;110;307;180;0;0;125;42;97;44;16;48;53;90;59;51;107
 
 Document Name;TEST_0
 Data set;two_bit_transformation
-Total word count;1346
-Total whitespace count;1331
-Word to Whitespace ratio (%);98.89
-Whitespace counts per paragraph;2;110;307;180;0;0;125;42;97;44;16;48;53;90;59;51;107
-
-Document Name;TEST_0
-Data set;modify_RGB_color_ch
-Total word count;1346
-Total whitespace count;1331
-Word to Whitespace ratio (%);98.89
-Whitespace counts per paragraph;2;110;307;180;0;0;125;42;97;44;16;48;53;90;59;51;107
-
-Document Name;TEST_0
-Data set;unispace
 Total word count;1335
 Total whitespace count;1478
 Word to Whitespace ratio (%);110.71
-Whitespace counts per paragraph;2;110;454;180;0;0;125;42;97;44;16;48;53;90;59;51;107
+Whitespace counts per paragraph;2;110;307;180;0;0;125;42;97;76;31;92;100;99;59;51;107
 
 Document Name;TEST_0
-Data set;unicode_homoglyphs
+Data set;modify_RGB_color_ch
 Total word count;1346
 Total whitespace count;1331
 Word to Whitespace ratio (%);98.89

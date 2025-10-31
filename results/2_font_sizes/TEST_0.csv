@@ -1,0 +1,25 @@
+Document Name;TEST_0
+Data set;clean
+Font Sizes (pt);28.0;11.0
+Font Sizes Count;2;25
+
+Document Name;TEST_0
+Data set;hide_in_text
+Font Sizes (pt);28.0;11.0;1.0
+Font Sizes Count;2;745;240
+
+Document Name;TEST_0
+Data set;multilayer_hybrid
+Font Sizes (pt);28.0;11.0
+Font Sizes Count;2;240
+
+Document Name;TEST_0
+Data set;two_bit_transformation
+Font Sizes (pt);28.0;11.0
+Font Sizes Count;2;25
+
+Document Name;TEST_0
+Data set;modify_RGB_color_ch
+Font Sizes (pt);28.0;11.0
+Font Sizes Count;2;25
+

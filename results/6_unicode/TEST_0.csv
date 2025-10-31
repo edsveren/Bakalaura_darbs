@@ -13,30 +13,23 @@ Total char to ASCII char ratio (%);0.0
 Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 
 Document Name;TEST_0
-Data set;two_bit_transformation
+Data set;multilayer_hybrid
 Total char count;7875
 Total ASCII char count;0
 Total char to ASCII char ratio (%);0.0
 Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
+
+Document Name;TEST_0
+Data set;two_bit_transformation
+Total char count;8219
+Total ASCII char count;516
+Total char to ASCII char ratio (%);6.28
+Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;132;48;144;159;33;0;0;0
 
 Document Name;TEST_0
 Data set;modify_RGB_color_ch
 Total char count;7875
-Total ASCII char count;0
-Total char to ASCII char ratio (%);0.0
-Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
-
-Document Name;TEST_0
-Data set;unispace
-Total char count;8219
-Total ASCII char count;516
-Total char to ASCII char ratio (%);6.28
-Non-ASCII counts per paragraph;0;0;516;0;0;0;0;0;0;0;0;0;0;0;0;0;0
-
-Document Name;TEST_0
-Data set;unicode_homoglyphs
-Total char count;7875
 Total ASCII char count;666
 Total char to ASCII char ratio (%);8.46
-Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;0;0;125;207;121;113;100
+Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;36;119;129;201;124;57;0
 
