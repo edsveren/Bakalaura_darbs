@@ -1,6 +1,6 @@
 # Bakalaura_darbs
 
-== Requires ==
+## Requires
 The following libraries are required:
 * lxml
 * python-docx
