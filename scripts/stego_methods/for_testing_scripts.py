@@ -100,7 +100,8 @@ import csv
 
 
 from docx import Document
-# from docx.oxml.ns import qn
+from docx.oxml.ns import qn
+from docx.enum.style import WD_STYLE_TYPE
 
 # def paragraph_default_font_size_value(styles_element) -> str | None:
 #     all_styles = styles_element.findall(f".//{qn('w:style')}")
@@ -128,4 +129,7 @@ from docx import Document
 docPath = str(Path("data_set/clean_files/TEST_0.docx"))
 print(type(docPath))
 document = Document(docPath)
-print(type(document.styles.element))
+styles = document.styles
+new_style = styles.add_style('stego_style', WD_STYLE_TYPE.CHARACTER)
+
+print(type(new_style))
