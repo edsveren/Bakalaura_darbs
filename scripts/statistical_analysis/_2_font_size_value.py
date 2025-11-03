@@ -57,7 +57,11 @@ def get_font_size_value_from_each_run(document: DocumentObject) -> list:
     default_pt = document_default_font_size_pt(document)
     font_sizes = []
     for paragraph in document.paragraphs:
-        paragraph_font_style_size = paragraph.style.font.size
+        if paragraph.style != None:
+            paragraph_font_style_size = paragraph.style.font.size
+        else:
+            paragraph_font_style_size = None
+            
         for run in paragraph.runs:
             run_font_size = run.font.size
             run_font_style_size = run.style.font.size
