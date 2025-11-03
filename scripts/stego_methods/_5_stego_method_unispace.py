@@ -71,7 +71,7 @@ def extract_text(document: DocumentObject) -> str:
 
 # Stego-message
 def stego_message() -> tuple[str, bytes]:
-    stegoMessageText = Path("stego_messages\stego_message.txt").read_text(encoding="utf-8")
+    stegoMessageText = Path("stego_messages/stego_message.txt").read_text(encoding="utf-8")
     stegoMessage_bytes = stegoMessageText.encode("utf-8")
     #print("Stego-message data:", stegoMessageText)
     return stegoMessageText, stegoMessage_bytes
@@ -173,75 +173,79 @@ def stego_message_extraction(document: DocumentObject) -> str:
                     unispace_combination = ''
     return stegoMessage
             
-### Main ###            
-# DOCX file
-base = "data_set/clean_files"
-for file in Path(base).iterdir():
-    docPath = f"{base}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
-    print(f"DOCX file: {docPath}")
-    print("Beginning the embedding process...")
-    document = Document(docPath)
-    text = extract_text(document)
-    word_count = count_words_in_paragraphs(document, 0)
+### Main ###   
+def main() -> None:          
+    # DOCX file
+    base = "data_set/clean_files"
+    for file in Path(base).iterdir():
+        docPath = f"{base}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
+        print(f"DOCX file: {docPath}")
+        print("Beginning the embedding process...")
+        document = Document(docPath)
+        text = extract_text(document)
+        word_count = count_words_in_paragraphs(document, 0)
 
-    stego_message_text, stegoMessage_bytes = stego_message()
-    stegoMessage_size_bytes = len(stegoMessage_bytes)
-    stegoMessage_size_bits = 8 * stegoMessage_size_bytes
-    #print("Regular bytes:", stegoMessage_size_bytes)
-    #print("Regular bites:", stegoMessage_size_bits)
+        stego_message_text, stegoMessage_bytes = stego_message()
+        stegoMessage_size_bytes = len(stegoMessage_bytes)
+        stegoMessage_size_bits = 8 * stegoMessage_size_bytes
+        #print("Regular bytes:", stegoMessage_size_bytes)
+        #print("Regular bites:", stegoMessage_size_bits)
 
-    stegoMessageInWhiteSpaceUnicode = stego_message_standarization_to_unispace_method(stego_message_text)
-    stegoMessageInWhiteSpaceUnicode_size_bytes = len(stegoMessageInWhiteSpaceUnicode)
-    stegoMessageInWhiteSpaceUnicode_size_bits = 8 * stegoMessageInWhiteSpaceUnicode_size_bytes
+        stegoMessageInWhiteSpaceUnicode = stego_message_standarization_to_unispace_method(stego_message_text)
+        stegoMessageInWhiteSpaceUnicode_size_bytes = len(stegoMessageInWhiteSpaceUnicode)
+        stegoMessageInWhiteSpaceUnicode_size_bits = 8 * stegoMessageInWhiteSpaceUnicode_size_bytes
 
-    embedded = False
-    while not embedded:
-        # Check if the paragraph has enough runs to embed the message
-        print("Checking if the cover object is valid for embedding...")
-        is_valid = is_capacity_enough_for_message(word_count, stegoMessageInWhiteSpaceUnicode_size_bits)
-        print("The cover object is valid:", is_valid)
-        if not is_valid:
-            print("Not enough capacity in the document to embed the message.")
-            break
-
-        random_paragraph_index = choose_random_paragraph(document, stegoMessageInWhiteSpaceUnicode_size_bits)
-        if random_paragraph_index is None:
-            print("No paragraphs available for embedding.")
-            break
-
-        stegoMessageInWhiteSpaceUnicode = '\x20' + stegoMessageInWhiteSpaceUnicode + '\x20'
-
-        # Embed stego-message in DOCX
-        print("Embedding stego-message...")
-        payload = stegoMessageInWhiteSpaceUnicode_size_bytes + 2
-        stego_index = 0
-        #while payload < stego_index:
-        for paragraph in document.paragraphs [random_paragraph_index:]:
-            if stego_index < payload:
-                original_run_amount = list(paragraph.runs)
-                for run in original_run_amount:
-                    run_element = run._r
-                    # Only process runs that contain text
-                    if run_element.find(qn('w:t')) != None:
-                        if stego_index < payload:
-                            stego_index = embedding_in_run(run, stegoMessageInWhiteSpaceUnicode, stego_index, payload)
-                        else:
-                            break
-            else:
+        embedded = False
+        while not embedded:
+            # Check if the paragraph has enough runs to embed the message
+            print("Checking if the cover object is valid for embedding...")
+            is_valid = is_capacity_enough_for_message(word_count, stegoMessageInWhiteSpaceUnicode_size_bits)
+            print("The cover object is valid:", is_valid)
+            if not is_valid:
+                print("Not enough capacity in the document to embed the message.")
                 break
 
-        #print("Extracting stego-message...")
-        if stegoMessageInWhiteSpaceUnicode != stego_message_extraction(document):
-            print("Extracted message is not equal to stego-message!")
-            break
-        #print("Extraction successful!")
-        print("Embedding successful!")   
-        embedded = True
+            random_paragraph_index = choose_random_paragraph(document, stegoMessageInWhiteSpaceUnicode_size_bits)
+            if random_paragraph_index is None:
+                print("No paragraphs available for embedding.")
+                break
 
-    if embedded:
-        stegoDocPath = str(Path(f"data_set/stego_files/stego_method_5/{file.name}"))
-        document.save(stegoDocPath)
-        print("Saved:", stegoDocPath)
-    else:
-        print("Embedding not possible.")
-    print()
+            stegoMessageInWhiteSpaceUnicode = '\x20' + stegoMessageInWhiteSpaceUnicode + '\x20'
+
+            # Embed stego-message in DOCX
+            print("Embedding stego-message...")
+            payload = stegoMessageInWhiteSpaceUnicode_size_bytes + 2
+            stego_index = 0
+            #while payload < stego_index:
+            for paragraph in document.paragraphs [random_paragraph_index:]:
+                if stego_index < payload:
+                    original_run_amount = list(paragraph.runs)
+                    for run in original_run_amount:
+                        run_element = run._r
+                        # Only process runs that contain text
+                        if run_element.find(qn('w:t')) != None:
+                            if stego_index < payload:
+                                stego_index = embedding_in_run(run, stegoMessageInWhiteSpaceUnicode, stego_index, payload)
+                            else:
+                                break
+                else:
+                    break
+
+            #print("Extracting stego-message...")
+            if stegoMessageInWhiteSpaceUnicode != stego_message_extraction(document):
+                print("Extracted message is not equal to stego-message!")
+                break
+            #print("Extraction successful!")
+            print("Embedding successful!")   
+            embedded = True
+
+        if embedded:
+            stegoDocPath = str(Path(f"data_set/stego_files/stego_method_5/{file.name}"))
+            document.save(stegoDocPath)
+            print(f"Saved: {stegoDocPath}")
+        else:
+            print("Embedding not possible.")
+        print()
+
+if __name__ == "__main__":
+    main()

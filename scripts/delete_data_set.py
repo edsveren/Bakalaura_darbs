@@ -12,7 +12,6 @@ def delete_stego_data_set():
 
 def delete_attacked_data_set():
     attacked_stego_files = "data_set/attacked_stego_files"
-    #folder_ensurer = ".gitkeep"
     for attack_directories in Path(attacked_stego_files).iterdir():
         for stego_directories in attack_directories.iterdir():
             for file in stego_directories.iterdir():
