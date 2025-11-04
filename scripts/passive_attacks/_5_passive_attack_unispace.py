@@ -91,13 +91,14 @@ def stego_message_extraction(document: DocumentObject) -> str:
                     stegoMessage += stego_char
                     unispace_combination_length = 0
                     unispace_combination = ''
+    stegoMessage = stegoMessage[1:-1]
     return stegoMessage
 
 def check_for_stego_message(file_name: str, document: DocumentObject, stego_message_text: str) -> str:
     stego_message_extracted = stego_message_extraction(document)
     if stego_message_extracted != '':
-        print(f"Should be: {stego_message_text}")
-        print(f"But is: {stego_message_extracted}")
+        #print(f"Should be: {stego_message_text}")
+        #print(f"But is: {stego_message_extracted}")
         if stego_message_text == stego_message_extracted:
             #print(f"{file_name}'s extracted stego-message: {stego_message_extracted}. EQUAL!")
             return "SAFE" # STEGO-MESSAGE GOOD

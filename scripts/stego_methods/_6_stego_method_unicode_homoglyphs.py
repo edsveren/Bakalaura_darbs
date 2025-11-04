@@ -188,8 +188,7 @@ def main() -> None:
         #print("Regular bytes:", stegoMessage_size_bytes)
         #print("Regular bites:", stegoMessage_size_bits)
 
-        stegoMessage_bytes_to_binary_string = stego_message_to_bit_string(stegoMessage_bytes)
-        stegoMessage_bytes_to_binary_string = '1' + stegoMessage_bytes_to_binary_string
+        stegoMessage_bytes_to_binary_string = '1' + stego_message_to_bit_string(stegoMessage_bytes)
 
         embedded = False
         while not embedded:

@@ -171,6 +171,8 @@ def stego_message_extraction(document: DocumentObject) -> str:
                     stegoMessage += stego_char
                     unispace_combination_length = 0
                     unispace_combination = ''
+    #print(stegoMessage)
+    stegoMessage = stegoMessage[1:-1]
     return stegoMessage
             
 ### Main ###   
@@ -192,6 +194,8 @@ def main() -> None:
         #print("Regular bites:", stegoMessage_size_bits)
 
         stegoMessageInWhiteSpaceUnicode = stego_message_standarization_to_unispace_method(stego_message_text)
+        stegoMessageInWhiteSpaceUnicode_embedding_ready_format = '\x20' + stegoMessageInWhiteSpaceUnicode + '\x20'
+
         stegoMessageInWhiteSpaceUnicode_size_bytes = len(stegoMessageInWhiteSpaceUnicode)
         stegoMessageInWhiteSpaceUnicode_size_bits = 8 * stegoMessageInWhiteSpaceUnicode_size_bytes
 
@@ -210,8 +214,6 @@ def main() -> None:
                 print("No paragraphs available for embedding.")
                 break
 
-            stegoMessageInWhiteSpaceUnicode = '\x20' + stegoMessageInWhiteSpaceUnicode + '\x20'
-
             # Embed stego-message in DOCX
             print("Embedding stego-message...")
             payload = stegoMessageInWhiteSpaceUnicode_size_bytes + 2
@@ -225,7 +227,7 @@ def main() -> None:
                         # Only process runs that contain text
                         if run_element.find(qn('w:t')) != None:
                             if stego_index < payload:
-                                stego_index = embedding_in_run(run, stegoMessageInWhiteSpaceUnicode, stego_index, payload)
+                                stego_index = embedding_in_run(run, stegoMessageInWhiteSpaceUnicode_embedding_ready_format, stego_index, payload)
                             else:
                                 break
                 else:
