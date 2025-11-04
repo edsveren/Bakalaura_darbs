@@ -14,9 +14,6 @@ def get_RGB_value_from_each_run(document: DocumentObject) -> list:
                 rgb_values.append(f"#{font_color.rgb}")
             else:
                 rgb_values.append("#000000")
-    # with open("results/rgb_values.txt", "w", encoding="utf-8") as file:
-    #     for rgb in rgb_values:
-    #         file.write(str(rgb) + "\n")
     return rgb_values
 
 def bin_rgb_values(rgb_value: str) -> str:
@@ -51,7 +48,7 @@ def to_csv(docPath: Path, data_set: str, rgb_colours: list, rgb_frequencies: lis
             writer.writerow(["RGB colours frequencies (%)", *rgb_frequency_percentages])
             writer.writerow('')
 
-if __name__ == "__main__":
+def main() -> None:
     if Path(f"results/3_RGB_value/TEST_0.csv").is_file():
         os.remove(Path(f"results/3_RGB_value/TEST_0.csv"))
 
@@ -99,3 +96,6 @@ if __name__ == "__main__":
             
         to_csv(path, data_set[i], colours, frequencies, frequency_percentages)
         i += 1
+
+if __name__ == "__main__":
+    main()

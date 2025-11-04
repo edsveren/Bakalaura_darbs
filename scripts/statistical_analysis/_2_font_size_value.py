@@ -96,7 +96,7 @@ def to_csv(docPath: Path, data_set: str, font_sizes: list, font_size_frequency: 
             writer.writerow(["Font Sizes Count", *font_size_frequency])
             writer.writerow('')
 
-if __name__ == "__main__":
+def main() -> None:
     if Path(f"results/2_font_sizes/TEST_0.csv").is_file():
         os.remove(Path(f"results/2_font_sizes/TEST_0.csv"))
 
@@ -132,7 +132,9 @@ if __name__ == "__main__":
             print(f"Font size: {size} pt. Frequency: {frequency}")
         to_csv(path, data_set[i], sizes, frequencies)
         i += 1
-
+        
+if __name__ == "__main__":
+    main()
 # docPath_0 = Path("data_set/clean_files/TEST_0.docx")
 # docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
 # docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")

@@ -65,7 +65,7 @@ def to_csv(docPath: Path, data_set: str, total_char_count: int, non_ascii_char_c
             writer.writerow(["Non-ASCII counts per paragraph", *non_ascii_char_count_paragraphs])
             writer.writerow('')
 
-if __name__ == "__main__":
+def main():
     if Path(f"results/6_unicode/TEST_0.csv").is_file():
         os.remove(Path(f"results/6_unicode/TEST_0.csv"))
 
@@ -99,3 +99,5 @@ if __name__ == "__main__":
         to_csv(path, data_set[i], total_char_count, total_non_ascii_char_count, total_char_to_non_ascii_char_ratio, non_ascii_char_count_paragraphs)
         i += 1
         
+if __name__ == "__main__":
+    main()

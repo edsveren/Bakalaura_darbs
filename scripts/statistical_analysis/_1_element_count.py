@@ -86,7 +86,7 @@ def to_csv(docPath: Path, data_set: str, total_paragraph_count: int|None,
                 writer.writerow(["Text Elements Per Run", *text_element_per_run_list])  # *text_element_per_run_list
             writer.writerow('')
 
-if __name__ == "__main__":
+def main() -> None:
     if Path(f"results/1_element_count/TEST_0.csv").is_file():
         os.remove(Path(f"results/1_element_count/TEST_0.csv"))
     docPath_0 = Path("data_set/clean_files/TEST_0.docx")
@@ -122,3 +122,6 @@ if __name__ == "__main__":
         # print(get_font_size_value_from_each_run(document, i, 0, path, "clean"))
         to_csv(path, data_set[i], total_paragraph_count, total_run_element_count, total_text_elements, text_element_per_paragraph_list, None)
         i += 1
+
+if __name__ == "__main__":
+    main()

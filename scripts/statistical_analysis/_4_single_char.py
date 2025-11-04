@@ -20,9 +20,6 @@ def run_text_with_single_character(document: DocumentObject) -> list:
         for run in paragraph.runs:
             if len(run.text) == 1 and run.text != ' ':
                 runs.append(run.text)
-    with open("results/one_char.txt", "w", encoding="utf-8") as file:
-        for char in runs:
-            file.write(str(char) + "\n")
     return runs
 
 def bin_single_chars(single_char: str) -> str:
@@ -61,7 +58,7 @@ def to_csv(docPath: Path, data_set: str, chars: list, char_frequencies: list,
             writer.writerow(["Char frequencies (total runs, %)", *frequency_percentages_total_runs])
             writer.writerow('')
 
-if __name__ == "__main__":
+def main() -> None:
     if Path(f"results/4_single_char/TEST_0.csv").is_file():
         os.remove(Path(f"results/4_single_char/TEST_0.csv"))
 
@@ -109,3 +106,6 @@ if __name__ == "__main__":
             print(f"Char type: {char}. Frequency: {frequency} (Single char runs: {frequency_percent_out_of_single_run}%, Total runs: {frequency_percent_out_of_total_runs}%).")
         to_csv(path, data_set[i], chars, frequencies, frequency_percentages_single_run, frequency_percentages_total_runs)
         i += 1
+
+if __name__ == "__main__":
+    main()

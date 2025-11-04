@@ -18,9 +18,6 @@ def count_whitespace_characters_in_each_paragraph(document: DocumentObject) -> l
     for paragraph in document.paragraphs:
         whitespace_count = sum(1 for char in paragraph.text if char.isspace())
         whitespace_counts.append(whitespace_count)
-    with open("results/whitespace_counts.txt", "w", encoding="utf-8") as file:
-        for count in whitespace_counts:
-            file.write(str(count) + "\n")
     return whitespace_counts
 
 def count_whitespace_characters_in_each_run(document: DocumentObject) -> list:
@@ -29,9 +26,6 @@ def count_whitespace_characters_in_each_run(document: DocumentObject) -> list:
         for run in paragraph.runs:
             whitespace_count = sum(1 for char in run.text if char.isspace())
             whitespace_counts.append(whitespace_count)
-    with open("results/whitespace_counts.txt", "w", encoding="utf-8") as file:
-        for count in whitespace_counts:
-            file.write(str(count) + "\n")
     return whitespace_counts
 
 def to_csv(docPath: Path, data_set: str, total_word_count: int, total_whitespace_count: int, 
@@ -60,7 +54,7 @@ def to_csv(docPath: Path, data_set: str, total_word_count: int, total_whitespace
             writer.writerow(["Whitespace counts per paragraph", *whitespace_counts_per_paragraph])
             writer.writerow('')
 
-if __name__ == "__main__":
+def main() -> None:
     if Path(f"results/5_space_char/TEST_0.csv").is_file():
         os.remove(Path(f"results/5_space_char/TEST_0.csv"))
 
@@ -98,3 +92,6 @@ if __name__ == "__main__":
         print(f"Total word count: {total_word_count} to total whitespace count {total_whitespace_count}. Ratio: {word_to_whitespace_ratio} (%)")
         to_csv(path, data_set[i], total_word_count, total_whitespace_count, word_to_whitespace_ratio, whitespace_counts_per_paragraph)
         i += 1
+
+if __name__ == "__main__":
+    main()
