@@ -175,7 +175,7 @@ def main() -> None:
     # DOCX file
     base = "data_set/clean_files"
     for file in Path(base).iterdir():
-        docPath = f"{base}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
+        docPath = str(Path(f"{base}/{file.name}")) #Path("data_set/clean_files/TEST_0.docx")
         print(f"DOCX file: {docPath}")
         print("Beginning the embedding process...")
         document = Document(docPath)
