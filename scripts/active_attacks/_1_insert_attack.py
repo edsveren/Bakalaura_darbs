@@ -39,7 +39,7 @@ def insert_word_at_every_nth_word(
 if __name__ == "__main__":
     base = "data_set/stego_files"
     attacked_base = "data_set/attacked_stego_files"
-    attack_type = "1_insert_attack"
+    attack_type = "01_insert_attack"
     totalTimeLapse = 0
     directoryTimeLapseList = []
     data_set_type_list = []

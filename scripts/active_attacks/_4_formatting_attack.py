@@ -39,7 +39,7 @@ def change_text_style_for_auto_text(document: DocumentObject) -> None:
 if __name__ == "__main__":
     base = "data_set/stego_files"
     attacked_base = "data_set/attacked_stego_files"
-    attack_type = "4_format_attack"
+    attack_type = "04_format_attack"
     totalTimeLapse = 0
     directoryTimeLapseList = []
     data_set_type_list = []

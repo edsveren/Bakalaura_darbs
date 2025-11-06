@@ -126,10 +126,16 @@ from docx.enum.style import WD_STYLE_TYPE
 #     else: # If no default document style found
 #         return None
 
-docPath = str(Path("data_set/clean_files/TEST_0.docx"))
-print(type(docPath))
-document = Document(docPath)
-styles = document.styles
-new_style = styles.add_style('stego_style', WD_STYLE_TYPE.CHARACTER)
+# docPath = str(Path("data_set/clean_files/TEST_0.docx"))
+# print(type(docPath))
+# document = Document(docPath)
+# styles = document.styles
+# new_style = styles.add_style('stego_style', WD_STYLE_TYPE.CHARACTER)
 
-print(type(new_style))
+# print(type(new_style))
+
+try:
+    import lxml.etree
+    print("Already installed")
+except ImportError as e:
+    print("Error -> ", e)

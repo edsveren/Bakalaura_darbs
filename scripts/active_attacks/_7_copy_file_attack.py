@@ -6,7 +6,7 @@ from logging_time import *
 if __name__ == "__main__":
     base = "data_set/stego_files"
     attacked_base = "data_set/attacked_stego_files"
-    attack_type = "7_copy_attack"
+    attack_type = "07_copy_attack"
     totalTimeLapse = 0
     directoryTimeLapseList = []
     data_set_type_list = []

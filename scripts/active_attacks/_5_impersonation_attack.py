@@ -8,7 +8,7 @@ if __name__ == "__main__":
     base = "data_set/stego_files"
     attacked_base = "data_set/attacked_stego_files"
     #stego_dir = "data_set/attacked_stego_files/5_impersonation_attack"
-    attack_type = "5_impersonation_attack"
+    attack_type = "05_impersonation_attack"
     totalTimeLapse = 0
     directoryTimeLapseList = []
     data_set_type_list = []
