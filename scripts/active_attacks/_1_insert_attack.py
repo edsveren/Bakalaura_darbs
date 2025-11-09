@@ -109,4 +109,5 @@ def main() -> None:
     logging_time.log_time_attack_to_csv_individual(attack_type, totalTimeLapseSec, totalTimeLapseFloat, data_set_type_list, directoryTimeLapseList)
 
 if __name__ == "__main__":
-    main()
+    #main()
+    logging_time.unified_attack("01_insert_attack", insert_attack)
