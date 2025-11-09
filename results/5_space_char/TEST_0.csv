@@ -10,7 +10,7 @@ Data set;hide_in_text
 Total word count;1586
 Total whitespace count;1571
 Word to Whitespace ratio (%);99.05
-Whitespace counts per paragraph;2;110;307;180;0;0;250;84;170;44;16;48;53;90;59;51;107
+Whitespace counts per paragraph;2;220;437;180;0;0;125;42;97;44;16;48;53;90;59;51;107
 
 Document Name;TEST_0
 Data set;multilayer_hybrid
@@ -24,7 +24,7 @@ Data set;two_bit_transformation
 Total word count;1335
 Total whitespace count;1478
 Word to Whitespace ratio (%);110.71
-Whitespace counts per paragraph;2;203;361;180;0;0;125;42;97;44;16;48;53;90;59;51;107
+Whitespace counts per paragraph;2;110;307;180;0;0;125;42;97;44;16;83;104;151;59;51;107
 
 Document Name;TEST_0
 Data set;modify_RGB_color_ch

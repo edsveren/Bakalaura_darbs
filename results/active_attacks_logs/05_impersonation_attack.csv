@@ -1,0 +1,6 @@
+Active stego-attack type;05_impersonation_attack
+Total attack time lapse (s);885.22
+Total attack time lapse (min);14.75
+Stego-file data set;stego_method_1;stego_method_2;stego_method_3;stego_method_4;stego_method_5;stego_method_6
+Attack time for each stego-file data set (s);249.48;0;0;247.95;141.28;246.52
+

@@ -9,15 +9,15 @@ Document Name;TEST_0
 Data set;hide_in_text
 Total Paragraph Count;17
 Total Run Element Count;987
-Total Text Element Count;986
-Text Elements Per Paragraph;1;5;1;7;0;1;501;169;293;1;1;1;1;1;1;1;1
+Total Text Element Count;984
+Text Elements Per Paragraph;1;443;521;7;0;1;1;1;1;1;1;1;1;1;1;1;1
 
 Document Name;TEST_0
 Data set;multilayer_hybrid
 Total Paragraph Count;17
-Total Run Element Count;240
-Total Text Element Count;239
-Text Elements Per Paragraph;1;5;1;7;0;1;1;1;214;1;1;1;1;1;1;1;1
+Total Run Element Count;237
+Total Text Element Count;236
+Text Elements Per Paragraph;1;5;1;7;0;1;1;1;1;1;1;211;1;1;1;1;1
 
 Document Name;TEST_0
 Data set;two_bit_transformation

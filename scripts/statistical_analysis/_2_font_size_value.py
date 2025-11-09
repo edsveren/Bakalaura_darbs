@@ -150,7 +150,7 @@ if __name__ == "__main__":
 #     print()
 #     if file.name.startswith('~$'):
 #         continue
-#     docPath = f"{clean_files}/{file.name}" #Path("data_set/clean_files/TEST_0.docx")
+#     docPath = str(Path(f"{clean_files}/{file.name}")) #Path("data_set/clean_files/TEST_0.docx")
 #     print(f"DOCUMENT: {docPath}")
 #     document = Document(docPath)
 #     txt_element_count = count_text_elements(document)
@@ -163,7 +163,7 @@ if __name__ == "__main__":
 # i = 0
 # for directories in Path(stego_files).iterdir():
 #     for file in directories.iterdir():
-#         docPath = f"{stego_files}/{directories.name}/{file.name}"
+#         docPath = str(Path(f"{stego_files}/{directories.name}/{file.name}"))
 #         print(f"DOCUMENT: {docPath}")
 #         document = Document(docPath)
 #         print(f"Text element count: {count_text_elements(document)}")

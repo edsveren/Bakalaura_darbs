@@ -2,18 +2,42 @@ import os
 from pathlib import Path
 import time
 import win32com.client as win32
-from logging_time import *
+from win32com.client.dynamic import CDispatch as dynamic_CDispatch
+import logging_time
 
-if __name__ == "__main__":
+def impersonation_attack(
+        word: dynamic_CDispatch, 
+        docPath: Path, 
+        stegoPDFPath: Path, 
+        stegoDocPath: Path,
+        wdFormatPDF: int,
+        wdFormatDocumentDefault: int
+        ) -> None:
+    # DOCX to PDF conversion
+    print(f"Converting to: {str(stegoPDFPath)}")
+    document = word.Documents.Open(str(docPath), ReadOnly=1, AddToRecentFiles=False)
+    document.SaveAs2(str(stegoPDFPath), FileFormat=wdFormatPDF)
+    document.Close()
+
+    # PDF back to DOCX conversion
+    print(f"Converting to: {str(stegoDocPath)}")
+    document = word.Documents.Open(str(stegoPDFPath), ReadOnly=1, AddToRecentFiles=False)
+    document.SaveAs2(str(stegoDocPath), FileFormat=wdFormatDocumentDefault)
+    document.Close()
+
+    # Remove any leftover PDF files
+    if stegoPDFPath.exists():
+        os.remove(stegoPDFPath)
+
+def main() -> None:
     base = "data_set/stego_files"
     attacked_base = "data_set/attacked_stego_files"
-    #stego_dir = "data_set/attacked_stego_files/5_impersonation_attack"
     attack_type = "05_impersonation_attack"
+    wdFormatPDF = 17
+    wdFormatDocumentDefault = 16
     totalTimeLapse = 0
     directoryTimeLapseList = []
     data_set_type_list = []
-    wdFormatPDF = 17
-    wdFormatDocumentDefault = 16
     word = win32.Dispatch("Word.Application")
     word.Visible = False
     word.DisplayAlerts = 0
@@ -28,45 +52,51 @@ if __name__ == "__main__":
             if file.name.startswith('~$') or file.name.startswith('.'):
                 continue
             start = time.time()
+
             docPath = Path(f"{base}/{directories.name}/{file.name}").resolve()
             print(f"Opened: {docPath}")
 
             stegoPDFPath = Path(f"{attacked_base}/{attack_type}/{directories.name}/{file.stem}.pdf").resolve()
             stegoDocPath = Path(f"{attacked_base}/{attack_type}/{directories.name}/{file.name}").resolve()
-
-            # DOCX to PDF conversion
-            print(f"Converting to: {str(stegoPDFPath)}")
-            document = word.Documents.Open(str(docPath), ReadOnly=1, AddToRecentFiles=False)
-            document.SaveAs2(str(stegoPDFPath), FileFormat=wdFormatPDF)
-            document.Close()
-
-            # PDF back to DOCX conversion
-            print(f"Converting to: {str(stegoDocPath)}")
-            document = word.Documents.Open(str(stegoPDFPath), ReadOnly=1, AddToRecentFiles=False)
-            document.SaveAs2(str(stegoDocPath), FileFormat=wdFormatDocumentDefault)
-            document.Close()
-
-            # Remove any leftover PDF files
-            if stegoPDFPath.exists():
-                os.remove(stegoPDFPath)
+            impersonation_attack(word, docPath, stegoPDFPath, stegoDocPath, wdFormatPDF, wdFormatDocumentDefault)
 
             print(f"Saved: {str(stegoDocPath)}")
+            
             end = time.time()
             fileTimeLapse = end - start
             directoryTimeLapse += fileTimeLapse
-            print(f"Time taken (s): {round(fileTimeLapse, 2)}")
+            print(f"Time taken (s): {int(fileTimeLapse * 100) / 100}")
             print()
-        data_set_type_list.append(directories.name)
-        directoryTimeLapseList.append(round(directoryTimeLapse, 2))
-        totalTimeLapse += directoryTimeLapse
-        print(f"Directory timelapse (s): {round(directoryTimeLapse, 2)}")
-        print(f"Directory timelapse (min): {round(directoryTimeLapse / 60, 2)}")
-    word.Quit()
-    print()
-    totalTimeLapseSec = round(totalTimeLapse, 2)
-    totalTimeLapseMin = round(totalTimeLapse / 60, 2)
-    print(f"Total timelapse (s): {totalTimeLapseSec}")
-    print(f"Total timelapse (min): {totalTimeLapseMin}")
+        directoryTimeLapseSec = int(directoryTimeLapse * 100) / 100
 
-    clean_logs_individual(attack_type)
-    log_time_attack_to_csv_individual(attack_type, totalTimeLapseSec, totalTimeLapseMin, data_set_type_list, directoryTimeLapseList)
+        directoryTimeLapseTotalSec = int(directoryTimeLapse)    # truncate, no rounding
+        directoryTimeLapsePureMin = directoryTimeLapseTotalSec // 60
+        directoryTimeLapseSecRemainder = directoryTimeLapseTotalSec % 60
+
+        directoryTimeLapseFloat = float(f"{directoryTimeLapsePureMin}.{directoryTimeLapseSecRemainder:02d}")
+
+        data_set_type_list.append(directories.name)
+        directoryTimeLapseList.append(directoryTimeLapseFloat)
+        totalTimeLapse += directoryTimeLapse
+
+        print(f"Directory timelapse (s): {directoryTimeLapseSec}")
+        print(f"Directory timelapse (min): {directoryTimeLapsePureMin}")
+        print(f"Directory timelapse: {directoryTimeLapseFloat}")
+    print()
+    
+    totalTimeLapseTotalSec = int(totalTimeLapse)
+    totalTimeLapseSec = int(totalTimeLapse * 100) / 100
+    totalTimeLapsePureMin = totalTimeLapseTotalSec // 60
+    totalTimeLapseSecRemainder = totalTimeLapseTotalSec % 60
+
+    totalTimeLapseFloat = float(f"{totalTimeLapsePureMin}.{totalTimeLapseSecRemainder:02d}")
+
+    print(f"Total timelapse (s): {totalTimeLapseSec}")
+    print(f"Total timelapse (min): {totalTimeLapsePureMin}")
+    print(f"Total timelapse: {totalTimeLapseFloat}")
+
+    logging_time.clean_logs_individual(attack_type)
+    logging_time.log_time_attack_to_csv_individual(attack_type, totalTimeLapseSec, totalTimeLapseFloat, data_set_type_list, directoryTimeLapseList)
+
+if __name__ == "__main__":
+    main()

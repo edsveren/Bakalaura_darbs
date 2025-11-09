@@ -134,8 +134,20 @@ from docx.enum.style import WD_STYLE_TYPE
 
 # print(type(new_style))
 
-try:
-    import lxml.etree
-    print("Already installed")
-except ImportError as e:
-    print("Error -> ", e)
+# import pandas as pd
+# data = {'Name': ['ANSH', 'VANSH'], 'Age': [25, 30]}
+# #data = {'Name': ['Age'], 'ANSH': [25], 'VANSH': [30]}
+
+# df = pd.DataFrame(data)
+# #df.set_index(['Name', 'ANSH', 'VANSH'], inplace=True)
+# print("Original DataFrame:")
+# print(df)
+# transposed_df = df.transpose()
+# print("\nTransposed DataFrame:")
+# print(transposed_df)
+
+#data_tp = {'Name': ['Age'], 'ANSH': [25], 'VANSH': [30]}
+
+print(26 % 7)
+print(26 / 7)
+print(26 // 7)
