@@ -4,6 +4,7 @@ import time
 from pathlib import Path
 from typing import Callable
 from docx.document import Document as DocumentObject
+import win32com.client as win32
 
 def log_time_attack_to_csv_individual(
           attack_type: str, 
@@ -63,15 +64,39 @@ def clean_logs_folder() -> None:
 
 def unified_attack(
         attack_type: str, 
-        attack: Callable[[str], DocumentObject]
+        attack: Callable[..., None],
+        UsingWin: bool
         ) -> None:
-    base = "data_set/stego_files"
+    # Stego-files' location
+    stego_base = "data_set/stego_files"
+    # Attacked stego-files' saving location
     attacked_base = "data_set/attacked_stego_files"
+
     totalTimeLapse = 0
     directoryTimeLapseList = []
     data_set_type_list = []
 
-    for directories in Path(base).iterdir():
+    # MS Word PDF format index
+    wdFormatPDF = 17 
+    # MS Word default (DOCX) document file format.
+    wdFormatDocumentDefault = 16
+    # Remove all document information index
+    wdRDIAll = 99
+
+    # Opening MS Word is disabled by default
+    word = None
+
+    # Using MS Word
+    if UsingWin:
+        word = win32.Dispatch("Word.Application")
+        word.Visible = False
+        word.DisplayAlerts = 0
+
+        # Close any open documents without saving
+        while word.Documents.Count > 0:
+            word.Documents(1).Close(SaveChanges=0)
+
+    for directories in Path(stego_base).iterdir():
         directoryTimeLapse = 0
         for file in directories.iterdir():
             print()
@@ -79,12 +104,26 @@ def unified_attack(
                 continue
             start = time.time()
 
-            docPath = str(Path(f"{base}/{directories.name}/{file.name}")) #Path("data_set/clean_files/TEST_0.docx")
+            docPath = str(Path(f"{stego_base}/{directories.name}/{file.name}").resolve())
+            stegoPDFPath = str(Path(f"{attacked_base}/{attack_type}/{directories.name}/{file.stem}.pdf").resolve())
+            stegoDocPath = str(Path(f"{attacked_base}/{attack_type}/{directories.name}/{file.name}").resolve())
+            
             print(f"Opened: {docPath}")
-            document = attack(docPath)
+            # Using MS Word
+            if UsingWin:
+                match attack_type:
+                    case "05_impersonation_attack":
+                        attack(word, docPath, stegoPDFPath, stegoDocPath, wdFormatPDF, wdFormatDocumentDefault)
+                    case "10_document_inspector_attack":
+                        attack(word, docPath, stegoDocPath, wdFormatDocumentDefault, wdRDIAll)
+                    case _:
+                        attack(word, docPath, stegoDocPath, wdFormatDocumentDefault)
+            else:
+                # docPath = str(Path(f"{stego_base}/{directories.name}/{file.name}")) #Path("data_set/clean_files/TEST_0.docx")
+                # stegoDocPath = str(Path(f"{attacked_base}/{attack_type}/{directories.name}/{file.name}"))
 
-            stegoDocPath = str(Path(f"{attacked_base}/{attack_type}/{directories.name}/{file.name}"))
-            document.save(stegoDocPath)
+                #print(f"Opened: {docPath}")
+                attack(docPath, stegoDocPath)
             print(f"Saved: {stegoDocPath}")
 
             end = time.time()
@@ -94,7 +133,7 @@ def unified_attack(
             print()
         directoryTimeLapseSec = int(directoryTimeLapse * 100) / 100
 
-        directoryTimeLapseTotalSec = int(directoryTimeLapse)    # truncate, no rounding
+        directoryTimeLapseTotalSec = int(directoryTimeLapse)
         directoryTimeLapsePureMin = directoryTimeLapseTotalSec // 60
         directoryTimeLapseSecRemainder = directoryTimeLapseTotalSec % 60
 
@@ -108,6 +147,8 @@ def unified_attack(
         print(f"Directory timelapse (min): {directoryTimeLapsePureMin}")
         print(f"Directory timelapse: {directoryTimeLapseFloat}")
     print()
+    if UsingWin:
+        word.Quit()
     
     totalTimeLapseTotalSec = int(totalTimeLapse)
     totalTimeLapseSec = int(totalTimeLapse * 100) / 100
