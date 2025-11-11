@@ -1,0 +1,80 @@
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+01_insert_attack;1.05;stego_method_1;0.2;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;0.17;
+;;stego_method_5;0.1;
+;;stego_method_6;0.15;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+02_delete_attack;1.02;stego_method_1;0.18;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;0.16;
+;;stego_method_5;0.11;
+;;stego_method_6;0.16;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+03_edit_modify_attack;1.01;stego_method_1;0.18;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;0.16;
+;;stego_method_5;0.1;
+;;stego_method_6;0.15;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+04_format_attack;5.09;stego_method_1;1.28;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;1.23;
+;;stego_method_5;0.55;
+;;stego_method_6;1.21;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+05_impersonation_attack;14.38;stego_method_1;4.05;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;4.06;
+;;stego_method_5;2.21;
+;;stego_method_6;4.05;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+06_save_as_attack;1.1;stego_method_1;0.2;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;0.19;
+;;stego_method_5;0.14;
+;;stego_method_6;0.16;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+07_copy_attack;0.0;stego_method_1;0.0;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;0.0;
+;;stego_method_5;0.0;
+;;stego_method_6;0.0;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+08_retype_attack;0.12;stego_method_1;0.03;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;0.03;
+;;stego_method_5;0.02;
+;;stego_method_6;0.03;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+09_clear_format_attack;1.22;stego_method_1;0.23;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;0.22;
+;;stego_method_5;0.16;
+;;stego_method_6;0.2;
+
+Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+10_document_inspector_attack;1.41;stego_method_1;0.29;
+;;stego_method_2;0.0;
+;;stego_method_3;0.0;
+;;stego_method_4;0.25;
+;;stego_method_5;0.2;
+;;stego_method_6;0.24;
+
