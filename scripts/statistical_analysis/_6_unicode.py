@@ -42,7 +42,7 @@ def count_non_ascii_chars_in_runs(document: DocumentObject) -> list[int]:
 def to_csv(docPath: Path, data_set: str, total_char_count: int, non_ascii_char_count: int, 
            total_char_to_non_ascii_char_ratio: float, non_ascii_char_count_paragraphs: list) -> None:
     file_name = docPath.stem
-    result_file = f"results/6_unicode/{file_name}.csv"
+    result_file = f"results/statistical_analysis/6_unicode/{file_name}.csv"
 
     if Path(result_file).is_file():
         with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
@@ -66,8 +66,8 @@ def to_csv(docPath: Path, data_set: str, total_char_count: int, non_ascii_char_c
             writer.writerow('')
 
 def main():
-    if Path(f"results/6_unicode/TEST_0.csv").is_file():
-        os.remove(Path(f"results/6_unicode/TEST_0.csv"))
+    if Path(f"results/statistical_analysis/6_unicode/TEST_0.csv").is_file():
+        os.remove(Path(f"results/statistical_analysis/6_unicode/TEST_0.csv"))
 
     docPath_0 = Path("data_set/clean_files/TEST_0.docx")
     docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")

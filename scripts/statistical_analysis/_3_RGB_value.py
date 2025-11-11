@@ -27,7 +27,7 @@ def bin_rgb_values(rgb_value: str) -> str:
 
 def to_csv(docPath: Path, data_set: str, rgb_colours: list, rgb_frequencies: list, rgb_frequency_percentages: list) -> None:
     file_name = docPath.stem
-    result_file = f"results/3_RGB_value/{file_name}.csv"
+    result_file = f"results/statistical_analysis/3_RGB_value/{file_name}.csv"
 
     if Path(result_file).is_file():
         with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
@@ -49,8 +49,8 @@ def to_csv(docPath: Path, data_set: str, rgb_colours: list, rgb_frequencies: lis
             writer.writerow('')
 
 def main() -> None:
-    if Path(f"results/3_RGB_value/TEST_0.csv").is_file():
-        os.remove(Path(f"results/3_RGB_value/TEST_0.csv"))
+    if Path(f"results/statistical_analysis/3_RGB_value/TEST_0.csv").is_file():
+        os.remove(Path(f"results/statistical_analysis/3_RGB_value/TEST_0.csv"))
 
     docPath_0 = Path("data_set/clean_files/TEST_0.docx")
     docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")

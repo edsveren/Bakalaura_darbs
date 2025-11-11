@@ -35,7 +35,7 @@ def bin_single_chars(single_char: str) -> str:
 def to_csv(docPath: Path, data_set: str, chars: list, char_frequencies: list, 
            frequency_percentages_single_run: list, frequency_percentages_total_runs: list) -> None:
     file_name = docPath.stem
-    result_file = f"results/4_single_char/{file_name}.csv"
+    result_file = f"results/statistical_analysis/4_single_char/{file_name}.csv"
 
     if Path(result_file).is_file():
         with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
@@ -59,8 +59,8 @@ def to_csv(docPath: Path, data_set: str, chars: list, char_frequencies: list,
             writer.writerow('')
 
 def main() -> None:
-    if Path(f"results/4_single_char/TEST_0.csv").is_file():
-        os.remove(Path(f"results/4_single_char/TEST_0.csv"))
+    if Path(f"results/statistical_analysis/4_single_char/TEST_0.csv").is_file():
+        os.remove(Path(f"results/statistical_analysis/4_single_char/TEST_0.csv"))
 
     docPath_0 = Path("data_set/clean_files/TEST_0.docx")
     docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")

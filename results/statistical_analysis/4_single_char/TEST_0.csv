@@ -8,16 +8,16 @@ Char frequencies (total runs, %);0.0;3.7;0.0;3.7
 Document Name;TEST_0
 Data set;hide_in_text
 Chars;uppercase;lowercase;digit;other
-Char frequencies;107;113;25;3
-Char frequencies (single run, %);43.15;45.56;10.08;1.21
-Char frequencies (total runs, %);10.84;11.45;2.53;0.3
+Char frequencies;107;110;25;3
+Char frequencies (single run, %);43.67;44.9;10.2;1.22
+Char frequencies (total runs, %);10.84;11.14;2.53;0.3
 
 Document Name;TEST_0
 Data set;multilayer_hybrid
 Chars;uppercase;lowercase;digit;other
-Char frequencies;1;174;0;5
-Char frequencies (single run, %);0.56;96.67;0.0;2.78
-Char frequencies (total runs, %);0.42;72.5;0.0;2.08
+Char frequencies;2;173;0;5
+Char frequencies (single run, %);1.11;96.11;0.0;2.78
+Char frequencies (total runs, %);0.84;73.0;0.0;2.11
 
 Document Name;TEST_0
 Data set;two_bit_transformation

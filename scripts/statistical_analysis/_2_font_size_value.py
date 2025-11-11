@@ -77,7 +77,7 @@ def get_font_size_value_from_each_run(document: DocumentObject) -> list:
 
 def to_csv(docPath: Path, data_set: str, font_sizes: list, font_size_frequency: list) -> None:
     file_name = docPath.stem
-    result_file = f"results/2_font_sizes/{file_name}.csv"
+    result_file = f"results/statistical_analysis/2_font_sizes/{file_name}.csv"
 
     if Path(result_file).is_file():
         with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
@@ -97,8 +97,8 @@ def to_csv(docPath: Path, data_set: str, font_sizes: list, font_size_frequency: 
             writer.writerow('')
 
 def main() -> None:
-    if Path(f"results/2_font_sizes/TEST_0.csv").is_file():
-        os.remove(Path(f"results/2_font_sizes/TEST_0.csv"))
+    if Path(f"results/statistical_analysis/2_font_sizes/TEST_0.csv").is_file():
+        os.remove(Path(f"results/statistical_analysis/2_font_sizes/TEST_0.csv"))
 
     docPath_0 = Path("data_set/clean_files/TEST_0.docx")
     docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
