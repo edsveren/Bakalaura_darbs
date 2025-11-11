@@ -1,99 +1,34 @@
 from pathlib import Path
-import time
-import win32com.client as win32
 from win32com.client.dynamic import CDispatch as dynamic_CDispatch
-import logging_time
+import unified_active_attack_file
 
 def document_inspect_attack(
         word: dynamic_CDispatch, 
-        docPath: str, 
         stegoDocPath: str, 
+        attackedStegoDocPath: str, 
         wdFormatDocumentDefault: int,
         wdRDIAll: int
         ) -> None:
-    print(f"Attacking: {stegoDocPath}")
+    
+    print(f"Using Document Inspect tool on: {Path(stegoDocPath).name}")
+    document = word.Documents.Open(stegoDocPath, ReadOnly=1, AddToRecentFiles=False)
 
     # Document Inspector Attack for Metadata
-    document = word.Documents.Open(docPath, ReadOnly=1, AddToRecentFiles=False)
+    document.RemoveDocumentInformation(RemoveDocInfoType=wdRDIAll)
 
     # Document Inspector Attack for Content
-    document.RemoveDocumentInformation(RemoveDocInfoType=wdRDIAll)
+    # Each content needs a separate attack
     for i in range(1, document.DocumentInspectors.Count + 1):
+        # DocumentInspector.Inspect method
         status, result = document.DocumentInspectors.Item(i).Inspect()
         print(f"{i}. {document.DocumentInspectors.Item(i).Name} Status: {status} Result: {result}")
+        # DocumentInspector.Fix method
         if status == 1: 
             document.DocumentInspectors.Item(i).Fix()
 
-    # Save
-    document.SaveAs2(stegoDocPath, FileFormat=wdFormatDocumentDefault)
+    # Save and Close
+    document.SaveAs2(attackedStegoDocPath, FileFormat=wdFormatDocumentDefault)
     document.Close()
 
-# def main() -> None:
-#     base = "data_set/stego_files"
-#     attacked_base = "data_set/attacked_stego_files"
-#     attack_type = "10_document_inspector_attack"
-#     totalTimeLapse = 0
-#     directoryTimeLapseList = []
-#     data_set_type_list = []
-#     wdFormatDocumentDefault = 16
-#     wdRDIAll = 99
-#     word = win32.Dispatch("Word.Application")
-#     word.Visible = False
-#     word.DisplayAlerts = 0
-#     # Close any open documents
-#     while word.Documents.Count > 0:
-#         word.Documents(1).Close(SaveChanges=0)
-#     for directories in Path(base).resolve().iterdir():
-#         directoryTimeLapse = 0
-#         for file in directories.iterdir():
-#             # Ignore temporary files
-#             if file.name.startswith('~$') or file.name.startswith('.'):
-#                 continue
-#             start = time.time()
-
-#             docPath = str(Path(f"{base}/{directories.name}/{file.name}").resolve())
-#             stegoDocPath = str(Path(f"{attacked_base}/{attack_type}/{directories.name}/{file.name}").resolve())
-
-#             print(f"Opened: {docPath}")
-#             document_inspect_attack(word, docPath, stegoDocPath, wdFormatDocumentDefault, wdRDIAll)
-#             print(f"Saved: {stegoDocPath}")
-
-#             end = time.time()
-#             fileTimeLapse = end - start
-#             directoryTimeLapse += fileTimeLapse
-#             print(f"Time taken (s): {int(fileTimeLapse * 100) / 100}")
-#             print()
-#         directoryTimeLapseSec = int(directoryTimeLapse * 100) / 100
-
-#         directoryTimeLapseTotalSec = int(directoryTimeLapse)    # truncate, no rounding
-#         directoryTimeLapsePureMin = directoryTimeLapseTotalSec // 60
-#         directoryTimeLapseSecRemainder = directoryTimeLapseTotalSec % 60
-
-#         directoryTimeLapseFloat = float(f"{directoryTimeLapsePureMin}.{directoryTimeLapseSecRemainder:02d}")
-
-#         data_set_type_list.append(directories.name)
-#         directoryTimeLapseList.append(directoryTimeLapseFloat)
-#         totalTimeLapse += directoryTimeLapse
-
-#         print(f"Directory timelapse (s): {directoryTimeLapseSec}")
-#         print(f"Directory timelapse (min): {directoryTimeLapsePureMin}")
-#         print(f"Directory timelapse: {directoryTimeLapseFloat}")
-#     print()
-    
-#     totalTimeLapseTotalSec = int(totalTimeLapse)
-#     totalTimeLapseSec = int(totalTimeLapse * 100) / 100
-#     totalTimeLapsePureMin = totalTimeLapseTotalSec // 60
-#     totalTimeLapseSecRemainder = totalTimeLapseTotalSec % 60
-
-#     totalTimeLapseFloat = float(f"{totalTimeLapsePureMin}.{totalTimeLapseSecRemainder:02d}")
-
-#     print(f"Total timelapse (s): {totalTimeLapseSec}")
-#     print(f"Total timelapse (min): {totalTimeLapsePureMin}")
-#     print(f"Total timelapse: {totalTimeLapseFloat}")
-
-#     logging_time.clean_logs_individual(attack_type)
-#     logging_time.log_time_attack_to_csv_individual(attack_type, totalTimeLapseSec, totalTimeLapseFloat, data_set_type_list, directoryTimeLapseList)
-
 if __name__ == "__main__":
-    # main()
-    logging_time.unified_attack("10_document_inspector_attack", document_inspect_attack, True)
+    unified_active_attack_file.unified_attack("10_document_inspector_attack", document_inspect_attack, True)

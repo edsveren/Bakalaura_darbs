@@ -1,6 +1,5 @@
 Active stego-attack type;09_clear_format_attack
-Total attack time lapse (s);86.6
 Total attack time lapse (min);1.26
 Stego-file data set;stego_method_1;stego_method_2;stego_method_3;stego_method_4;stego_method_5;stego_method_6
-Attack time for each stego-file data set (s);0.23;0.0;0.0;0.25;0.16;0.2
+Attack time for each stego-file data set (min);0.23;0.0;0.0;0.22;0.18;0.21
 

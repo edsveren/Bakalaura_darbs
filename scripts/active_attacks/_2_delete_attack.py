@@ -1,113 +1,73 @@
 import re
 from pathlib import Path
-import time
 from docx import Document
 from docx.text.run import Run
 from docx.oxml.ns import qn
-from docx.document import Document as DocumentObject
-import logging_time
+import unified_active_attack_file
 
 def delete_every_nth_word(
         run: Run, 
         n: int, 
         word_index: int
         ) -> int:
+    
+    # Get the entire run text
     text = run.text
+    # A ReGex that finds blocks of whitespace and preserves them as individual tokens
     text_pattern = re.compile(r'(\s+)')
+    # Split text into words and whitespaces
     tokens = text_pattern.split(text)
-    #print(tokens)
-    #print("".join(tokens))
+    # A list that will be used to reform the text
     text_list = []
 
+    # Loop through each word and whitespace
     for token in tokens:
+        # If the current text token is whitespace, just add it to the list
         if token.strip() == "":
             text_list.append(token)
             continue
         else:
+            # Increase index after each found word token
             word_index += 1
+            # When the index is equal to the index for insertion
             if word_index == (n - 1):
+                # Removes a word by adding empty whitespace to the list instead
                 text_list.append("")
+                # Reset the index
                 word_index = 0
+            # Otherwise, just add word the list
             else:
                 text_list.append(token)
-    #print(text_list)
+
+    # Replace the current run text with the created list
     run.text = "".join(text_list)
-    #print(text)
+
+    # Return current index
     return word_index
 
 def delete_attack(
-        docPath: str, 
-        stegoDocPath: str
+        stegoDocPath: str, 
+        attackedStegoDocPath: str
         ) -> None:
-    print(f"Attacking: {docPath}")
-    document = Document(docPath)
+    
+    # Open the stego-file
+    document = Document(stegoDocPath)
+    # Index of when to insert a word
     every_nth_word = 10
+    # Index to follow when to insert a word
     word_index = 0
+
+    print(f"Deleting every {every_nth_word}th word in the {Path(stegoDocPath).name}")
+    # Go through each run in each paragraph
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
+            # Get the run element and attack it if it has at least one text element 
             run_element = run._r
             if run_element.find(qn('w:t')) != None:
                 word_index = delete_every_nth_word(run, every_nth_word, word_index)
-    document.save(stegoDocPath)
 
-# def main() -> None:
-#     base = "data_set/stego_files"
-#     attacked_base = "data_set/attacked_stego_files"
-#     attack_type = "02_delete_attack"
-#     totalTimeLapse = 0
-#     directoryTimeLapseList = []
-#     data_set_type_list = []
-#     for directories in Path(base).iterdir():
-#         directoryTimeLapse = 0
-#         for file in directories.iterdir():
-#             print()
-#             if file.name.startswith('~$') or file.name.startswith('.'):
-#                 continue
-#             start = time.time()
-
-#             docPath = str(Path(f"{base}/{directories.name}/{file.name}")) #Path("data_set/clean_files/TEST_0.docx")
-#             stegoDocPath = str(Path(f"{attacked_base}/{attack_type}/{directories.name}/{file.name}"))
-
-#             print(f"Opened: {docPath}")
-#             delete_attack(docPath, stegoDocPath)
-#             print(f"Saved: {stegoDocPath}")
-            
-#             end = time.time()
-#             fileTimeLapse = end - start
-#             directoryTimeLapse += fileTimeLapse
-#             print(f"Time taken (s): {int(fileTimeLapse * 100) / 100}")
-#             print()
-#         directoryTimeLapseSec = int(directoryTimeLapse * 100) / 100
-
-#         directoryTimeLapseTotalSec = int(directoryTimeLapse)    # truncate, no rounding
-#         directoryTimeLapsePureMin = directoryTimeLapseTotalSec // 60
-#         directoryTimeLapseSecRemainder = directoryTimeLapseTotalSec % 60
-
-#         directoryTimeLapseFloat = float(f"{directoryTimeLapsePureMin}.{directoryTimeLapseSecRemainder:02d}")
-
-#         data_set_type_list.append(directories.name)
-#         directoryTimeLapseList.append(directoryTimeLapseFloat)
-#         totalTimeLapse += directoryTimeLapse
-
-#         print(f"Directory timelapse (s): {directoryTimeLapseSec}")
-#         print(f"Directory timelapse (min): {directoryTimeLapsePureMin}")
-#         print(f"Directory timelapse: {directoryTimeLapseFloat}")
-#     print()
-    
-#     totalTimeLapseTotalSec = int(totalTimeLapse)
-#     totalTimeLapseSec = int(totalTimeLapse * 100) / 100
-#     totalTimeLapsePureMin = totalTimeLapseTotalSec // 60
-#     totalTimeLapseSecRemainder = totalTimeLapseTotalSec % 60
-
-#     totalTimeLapseFloat = float(f"{totalTimeLapsePureMin}.{totalTimeLapseSecRemainder:02d}")
-
-#     print(f"Total timelapse (s): {totalTimeLapseSec}")
-#     print(f"Total timelapse (min): {totalTimeLapsePureMin}")
-#     print(f"Total timelapse: {totalTimeLapseFloat}")
-
-#     logging_time.clean_logs_individual(attack_type)
-#     logging_time.log_time_attack_to_csv_individual(attack_type, totalTimeLapseSec, totalTimeLapseFloat, data_set_type_list, directoryTimeLapseList)
+    # Save
+    document.save(attackedStegoDocPath)
 
 if __name__ == "__main__":
-    # main()
-    logging_time.unified_attack("02_delete_attack", delete_attack, False)
+    unified_active_attack_file.unified_attack("02_delete_attack", delete_attack, False)
