@@ -45,12 +45,12 @@ def csv_transpose(attack_type: str):
 
     # Transpose using zip_longest to handle unequal row and columns lengths
     # Replace "missing cells" with empty strings
-    transposed = list(zip_longest(*rows, fillvalue=""))
+    transposed_rows = list(zip_longest(*rows, fillvalue=""))
 
     # Write transposed rows
     with open(output_file, "w", newline="", encoding="utf-8") as output_file:
         writer = csv.writer(output_file, delimiter=";")
-        for row in transposed:
+        for row in transposed_rows:
             new_row = ["", *row]
             writer.writerow(new_row)
         # writer.writerows(transposed)
@@ -112,7 +112,7 @@ def time_display(
     print(f"{timelapse_object_name} timelapse (min): {timeLapseFloat}")
     return timeLapseFloat
 
-# A unified active steganalysis attack framework
+### A unified active steganalysis attack framework ###
 def unified_attack(
         attack_type: str, 
         attack: Callable[..., None],
