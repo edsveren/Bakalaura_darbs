@@ -1,0 +1,61 @@
+Stego-method;stego_method_1
+Attack type;01_insert_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;0;0;0;16;0
+Number of such states (%);0.0;0.0;0.0;100.0;0.0
+
+Attack type;02_delete_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;0;0;0;16;0
+Number of such states (%);0.0;0.0;0.0;100.0;0.0
+
+Attack type;03_edit_modify_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;0;0;0;16;0
+Number of such states (%);0.0;0.0;0.0;100.0;0.0
+
+Attack type;04_format_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;16;0;0;0;0
+Number of such states (%);100.0;0.0;0.0;0.0;0.0
+
+Attack type;05_impersonation_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;0;0;0;0;16
+Number of such states (%);0.0;0.0;0.0;0.0;100.0
+
+Attack type;06_save_as_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;16;0;0;0;0
+Number of such states (%);100.0;0.0;0.0;0.0;0.0
+
+Attack type;07_copy_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;16;0;0;0;0
+Number of such states (%);100.0;0.0;0.0;0.0;0.0
+
+Attack type;08_retype_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;16;0;0;0;0
+Number of such states (%);100.0;0.0;0.0;0.0;0.0
+
+Attack type;09_clear_format_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;0;0;0;0;16
+Number of such states (%);0.0;0.0;0.0;0.0;100.0
+
+Attack type;10_document_inspector_attack
+Number of documents attacked;16
+Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
+Number of such states;0;0;0;0;16
+Number of such states (%);0.0;0.0;0.0;0.0;100.0
+

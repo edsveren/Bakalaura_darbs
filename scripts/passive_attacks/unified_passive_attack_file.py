@@ -1,13 +1,14 @@
 import os
 import csv
-import pandas as pd
+import difflib
 from pathlib import Path
 from collections import Counter
 from typing import Callable
+from itertools import zip_longest
 from docx import Document
 from docx.document import Document as DocumentObject
 
-# Extract text from the document
+# Extract the text from the document
 def extract_text(document: DocumentObject) -> str:
     text = []
     for paragraph in document.paragraphs:
@@ -24,15 +25,23 @@ def stego_message() -> str:
     return stegoMessageText
 
 # Analyze each corrupt stego-message's corruption level
-# def analyse_corruption_level(stego_message_text: str, stego_message_extracted: str):
-#     i = 0
-#     not_equal = 0
-#     for char in stego_message_text:
-#         if i > len(stego_message_extracted):
-#             break
-#         if char != stego_message_extracted[i]:
-#             not_equal += 1
-#         i += 1
+def analyse_corruption_level(stego_message_text: str, stego_message_extracted: str) -> float:
+    stego_message_difference = difflib.SequenceMatcher(None, stego_message_text, stego_message_extracted)
+    stego_message_difference_percentage = round(stego_message_difference.ratio() * 100, 2)
+    if stego_message_difference_percentage >= 95.0:
+        return stego_message_difference_percentage
+    if stego_message_extracted != "HEAVILY CORRUPTED (Over 50% corruption)":
+        # The stego-message was corrupted but still extractable
+        print("Stego-message should be:")
+        print(stego_message_text)
+        print("But instead is:")
+        print(stego_message_extracted)
+        print(f"Corrupted message resemblance to the original stego-message: {stego_message_difference_percentage}%")
+    else:
+        # The stego-message was too corrupted to be extracted
+        print("Stego-message too corrupted to be extracted properly!")
+        print(f"Corrupted message ratio: {stego_message_difference_percentage}%")
+    return stego_message_difference_percentage
 
 # An individual document check
 def check_for_stego_message(
@@ -46,14 +55,21 @@ def check_for_stego_message(
         #print(stego_message_extracted)
         if stego_message_text == stego_message_extracted:
             #print(f"{file_name}'s extracted stego-message: {stego_message_extracted}. EQUAL!")
-            return "SAFE" # STEGO-MESSAGE GOOD
+            return "SAFE" # STAGE 1: STEGO-MESSAGE GOOD
         else:
-            #analyse_corruption_level(stego_message_text, stego_message_extracted)
+            stego_message_difference_percentage = analyse_corruption_level(stego_message_text, stego_message_extracted)
+            if stego_message_difference_percentage >= 95.0:
+                return "ALMOST SAFE (Less than 5% corruption)" # STAGE 1: STEGO-MESSAGE SLIGHTLY DEGRADED
             #print(f"{file_name}'s extracted stego-message: {stego_message_extracted}. NOT EQUAL!")
-            return "CORRUPTED" # STAGE 2: STEGO-MESSAGE DEGRADED
+            elif stego_message_difference_percentage >= 50.0:
+                return "SIGNIFICANTLY CORRUPTED (Up to 50% corruption)"
+            else:
+                return "HEAVILY CORRUPTED (Over 50% corruption)" # STAGE 2: STEGO-MESSAGE DEGRADED
     else:
         #print(f"{file_name}'s extracted stego-message: THERE IS NO STEGO-MESSAGE!")
-        return "MISSING" # THERE IS NO STEGO-MESSAGE
+        return "MISSING" # STAGE 3: THERE IS NO STEGO-MESSAGE
+    
+# def export_passive_attack_to_csv() -> None:
 
 # Export to CSV for data analysis
 def export_to_csv(
@@ -64,50 +80,133 @@ def export_to_csv(
         state_frequencies: list, 
         state_frequency_percentages: list
     ) -> None:
-    result_file = f"results/passive_attacks/{stego_method}.csv"
+
+    # The non-transposed data result file
+    result_file = f"results/passive_attacks/not_transposed/{stego_method}.csv"
+    # The temporary file to store individual attack results before creating a regular file
+    temporary_file = f"results/passive_attacks/not_transposed/temporary.csv"
+
+    # Create temporary file to store individual attack results
+    with open(temporary_file, "w", encoding="utf-8", newline="") as output_file:
+        writer = csv.writer(output_file, delimiter=";")
+        writer.writerow(["Attack type", attack_type])
+        writer.writerow(["Number of documents attacked", number_of_docs])
+        writer.writerow(["Stego-message state", *states])
+        writer.writerow(["Number of such states", *state_frequencies])
+        writer.writerow(["Number of such states (%)", *state_frequency_percentages])
+        writer.writerow('')
+
+    # Transpose temporary file data in a more readable format
+    export_to_csv_transposed(stego_method, temporary_file)
 
     if Path(result_file).is_file():
-        with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
+        # Read the temporary file data
+        # Append the next attack results to the existing non-transposed result file
+        with open(temporary_file, "r", encoding="utf-8", newline="") as input_file, open(result_file, "a+", encoding="utf-8", newline="") as output_file:
+            reader = csv.reader(input_file, delimiter=";")
             writer = csv.writer(output_file, delimiter=";")
-            writer.writerow(["Attack type", attack_type])
-            writer.writerow(["Number of documents attacked", number_of_docs])
-            writer.writerow(["Stego-message state", *states])
-            writer.writerow(["Number of such states", *state_frequencies])
-            writer.writerow(["Number of such states (%)", *state_frequency_percentages])
-            writer.writerow('')
+            for row in reader:
+                writer.writerow(row)
     else:
-        with open(result_file, "w", encoding="utf-8", newline="") as output_file:
+        # Read the temporary file data
+        # Create the non-transposed result file with the first attack type
+        with open(temporary_file, "r", encoding="utf-8", newline="") as input_file, open(result_file, "w", encoding="utf-8", newline="") as output_file:
+            reader = csv.reader(input_file, delimiter=";")
             writer = csv.writer(output_file, delimiter=";")
-            writer.writerow(["Attack type", attack_type])
-            writer.writerow(["Number of documents attacked", number_of_docs])
-            writer.writerow(["Stego-message state", *states])
-            writer.writerow(["Number of such states", *state_frequencies])
-            writer.writerow(["Number of such states (%)", *state_frequency_percentages])
+            writer.writerow(["Stego-method", stego_method])
+            for row in reader:
+                writer.writerow(row)
+    
+    # Delete the temporary file
+    delete_file(Path(temporary_file))
+
+# Transpose the temporary file data
+def export_to_csv_transposed(stego_method: str, temporary_file: str):
+    transposed_file = f"results/passive_attacks/transposed/{stego_method}_transposed.csv"
+    
+    # Read the temporary file data
+    with open(temporary_file, newline="", encoding="utf-8") as input_file:
+        reader = csv.reader(input_file, delimiter=";")
+        rows = list(reader)
+
+    # Transpose using zip_longest to handle unequal row and columns lengths
+    # Replace "missing cells" with empty strings
+    transposed_rows = list(zip_longest(*rows, fillvalue=""))
+
+    if Path(transposed_file).is_file():
+        # Append the next attack results to the existing transposed result file
+        with open(transposed_file, "a+", encoding="utf-8", newline="") as output_file:
+            writer = csv.writer(output_file, delimiter=";")
+            for row in transposed_rows:
+                writer.writerow(row)
+            writer.writerow('')            
+    else:
+        # Create the transposed result file with the first attack type
+        with open(transposed_file, "w", encoding="utf-8", newline="") as output_file:
+            writer = csv.writer(output_file, delimiter=";")
+            writer.writerow(["Stego-method", stego_method])
+            for row in transposed_rows:
+                writer.writerow(row)
             writer.writerow('')
 
-### TODO
-### must create the same csv but from the perspective of the active attack, not stego-method
-# def combine_all_csv_into_one():
-#     data = {'Name': ['ANSH', 'VANSH'], 'Age': [25, 30]}
-#     df = pd.DataFrame(data)
-#     print("Original DataFrame:")
-#     print(df)
-#     transposed_df = df.transpose()
-#     print("\nTransposed DataFrame:")
-#     print(transposed_df)
-#     print("NOT DONE")
+def export_to_csv_all() -> None:
+    result_file = f"results/passive_attacks/transposed/unified_passive_attack_file.csv"
+    delete_file(Path(result_file))
+    i = 1
+    for i in range(1, 7):
+        individual_transposed_file = f"results/passive_attacks/transposed/stego_method_{i}_transposed.csv"
+        if Path(individual_transposed_file).is_file():
+            with open(individual_transposed_file, "r", encoding="utf-8", newline="") as input_file:
+                reader = csv.reader(input_file, delimiter=";")
+                individual_stego_rows = list(reader)
+            
+            if Path(result_file).is_file(): 
+                with open(result_file, "r", encoding="utf-8", newline="") as input_file:
+                    reader = csv.reader(input_file, delimiter=";")
+                    existing_individual_stego_rows = list(reader)
+            else:
+                existing_individual_stego_rows = []
+
+            with open(result_file, "w", encoding="utf-8", newline="") as output_file:
+                writer = csv.writer(output_file, delimiter=";")
+                j = 0
+                for row in individual_stego_rows:
+                    if existing_individual_stego_rows:
+                        if j == 0:
+                            number_of_columns = 4
+                            spacer = [''] * number_of_columns
+                            writer.writerow(existing_individual_stego_rows[j] + spacer + row[1:])
+                        else:
+                            #spacer = [""]
+                            writer.writerow(existing_individual_stego_rows[j] + row[1:])
+                    else:
+                        writer.writerow(row)
+                    j += 1
+
+# Delete file
+def delete_file(file: Path) -> None:
+    if file.is_file() and not file.name.startswith("."):
+        print(f"Deleting: {file}")
+        os.remove(file)
+
+# Clean individual passive steganalysis attack results
+def clean_results_individual(attack_type: str) -> None:
+    file = Path(f"results/passive_attacks/not_transposed/{attack_type}.csv")
+    file_transposed = Path(f"results/passive_attacks/transposed/{attack_type}_transposed.csv")
+    delete_file(file)
+    delete_file(file_transposed)
 
 ### Main function ###
 def passive_attack(
         stego_method: str, 
         stego_message_extraction: Callable[[DocumentObject], str],
-        stego_message_text: str|None
+        stego_message_text: str|None,
+        desired_file: str|None
     ) -> None:
     
-    # CSV file
-    csv_file = Path(f"results/passive_attacks/{stego_method}.csv")
-    if csv_file.is_file():
-        os.remove(csv_file)
+    if desired_file == None:
+        # Clean up CSV files
+        clean_results_individual(stego_method)
 
     # Attacked DOCX file data set
     attacked_stego_files = "data_set/attacked_stego_files"
@@ -117,7 +216,7 @@ def passive_attack(
         stego_message_text = stego_message()
 
     print()
-    # Loop through 10 active steganalysis attack directories
+    # Loop through 10 active steganalysis directories
     for attack_directories in Path(attacked_stego_files).iterdir():
         
         # Current steganalysis attack directory
@@ -132,34 +231,47 @@ def passive_attack(
 
         # Loop through each stego-method data set in attack directories
         for stego_directories in attack_directories.iterdir():
-            #print(stego_directories.name)
-            # Choosing only the attacked data sets for the specific stego-method
+
+            # Choose only the attacked data sets for the specific stego-method
             if stego_directories.name == stego_method:
 
                 # Loop through each individual file in the select stego-method data set
                 for file in stego_directories.iterdir():
+                    # Ignore temporary and git files
                     if file.is_file() and not file.name.startswith("."):
-                        docPath = str(Path(f"{attacked_stego_files}/{attack_directories.name}/{stego_directories.name}/{file.name}"))
-                        document = Document(docPath)
-                        state = check_for_stego_message(file.name, document, stego_message_text, stego_message_extraction)
-                        states_list.append(state)
-                        nr_of_files += 1
+                        # Process only the desired file if specified
+                        if desired_file != None and file.name == desired_file:
+                            docPath = str(Path(f"{attacked_stego_files}/{attack_directories.name}/{stego_directories.name}/{file.name}"))
+                            document = Document(docPath)
+                            state = check_for_stego_message(file.name, document, stego_message_text, stego_message_extraction)
+                        # Otherwise, process all files in the data set
+                        else:
+                            # Return the state of the stego-message in the individual document
+                            docPath = str(Path(f"{attacked_stego_files}/{attack_directories.name}/{stego_directories.name}/{file.name}"))
+                            document = Document(docPath)
+                            state = check_for_stego_message(file.name, document, stego_message_text, stego_message_extraction)
+                            states_list.append(state)
+                            nr_of_files += 1
 
         # Count frequencies of each of three states
-        counter = {key: Counter(states_list).get(key, 0) for key in ['SAFE', 'CORRUPTED', 'MISSING']}
-
-        states_list = list(counter.keys())
-        state_frequencies = list(counter.values())
-        frequency_percentages = []
-
-        # Print results to terminal for the viewer
-        for size, frequency in counter.items():
-            frequency_percent = str(round((frequency / nr_of_files) * 100, 2)) #.replace(".", ",")
-            print(f"State: {size}! Amount: {frequency} out of {nr_of_files} ({frequency_percent}%).")
-            frequency_percentages.append(frequency_percent)
+        counter = {key: Counter(states_list).get(key, 0) for key in ['SAFE', 'ALMOST SAFE (Less than 5% corruption)', 'CORRUPTED', 'MISSING']}
         
-        # Export to CSV for data analysis
-        export_to_csv(stego_method, attack_directory_name, nr_of_files, states_list, state_frequencies, frequency_percentages)
-        print()
+        if desired_file == None:
+            states_list = list(counter.keys())
+            state_frequencies = list(counter.values())
+            frequency_percentages = []
+
+            # Print results to terminal for the viewer
+            for size, frequency in counter.items():
+                frequency_percent = str(round((frequency / nr_of_files) * 100, 2)) #.replace(".", ",")
+                print(f"State: {size}! Amount: {frequency} out of {nr_of_files} ({frequency_percent}%).")
+                frequency_percentages.append(frequency_percent)
+            
+            # Export to CSV for data analysis
+            export_to_csv(stego_method, attack_directory_name, nr_of_files, states_list, state_frequencies, frequency_percentages)
+            print()
         
     print("Extraction over!")
+
+if __name__ == "__main__":
+    export_to_csv_all()

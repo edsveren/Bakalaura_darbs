@@ -28,9 +28,12 @@ def stego_message_extraction(document: DocumentObject) -> str:
         stegoMessage = base64.b64decode(stegoMessage_as_base64).decode('utf-8', errors='replace')
     except Exception as e: 
         #print(e)
-        stegoMessage = "CORRUPTED"
+        stegoMessage = "HEAVILY CORRUPTED (Over 50% corruption)"
     #print(stegoMessage)
     return stegoMessage
+
+def main() -> None:
+    unified_passive_attack_file.passive_attack("stego_method_1", stego_message_extraction, None)
             
 if __name__ == "__main__":
-    unified_passive_attack_file.passive_attack("stego_method_1", stego_message_extraction, None)
+    main()
