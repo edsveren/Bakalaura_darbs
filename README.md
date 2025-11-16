@@ -15,4 +15,4 @@ The following libraries are required:
 * shutil
 * csv
 * collections
-* pandas
+* itertools
