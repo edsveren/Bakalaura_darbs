@@ -8,31 +8,29 @@ import win32com.client as win32
 
 # Log time of each active steganalysis attack
 def log_time_attack_to_csv_individual(
-          attack_type: str, 
-          #totalTimeLapseSec: float, 
-          totalTimeLapseMin: float, 
-          data_set_type_list: list, 
-          directoryTimeLapseList: list
+        attack_type: str,
+        data_to_csv: list[list]
           ) -> None:
+    
+    # Delete previous logs
+    clean_logs_individual(attack_type)
+    
     result_file = f"results/active_attacks_logs/logs_not_transposed/{attack_type}.csv"
     if Path(result_file).is_file():
         with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
                 writer = csv.writer(output_file, delimiter=";")
-                writer.writerow(["Active stego-attack type", attack_type])
-                # writer.writerow(["Total attack time lapse (s)", totalTimeLapseSec])
-                writer.writerow(["Total attack time lapse (min)", totalTimeLapseMin])
-                writer.writerow(["Stego-file data set", *data_set_type_list]) 
-                writer.writerow(["Attack time for each stego-file data set (min)", *directoryTimeLapseList])
+                for row in data_to_csv:
+                    writer.writerow(row)
                 writer.writerow('')
     else:
         with open(result_file, "w", encoding="utf-8", newline="") as output_file:
                 writer = csv.writer(output_file, delimiter=";")
-                writer.writerow(["Active stego-attack type", attack_type])
-                # writer.writerow(["Total attack time lapse (s)", totalTimeLapseSec])
-                writer.writerow(["Total attack time lapse (min)", totalTimeLapseMin])
-                writer.writerow(["Stego-file data set", *data_set_type_list]) 
-                writer.writerow(["Attack time for each stego-file data set (min)", *directoryTimeLapseList])
+                for row in data_to_csv:
+                    writer.writerow(row)
                 writer.writerow('')
+    
+    # Transpose the log file
+    csv_transpose(attack_type)
 
 # Transpose the logs
 def csv_transpose(attack_type: str):
@@ -200,9 +198,16 @@ def unified_attack(
 
     totalTimeLapseFloat = time_display("Total", totalTimeLapse)
 
-    clean_logs_individual(attack_type)
-    log_time_attack_to_csv_individual(attack_type, totalTimeLapseFloat, data_set_type_list, directoryTimeLapseList)
-    csv_transpose(attack_type)
+    # Data to save to CSV
+    data_to_csv = [
+        ["Active stego-attack type", attack_type],
+        # ["Total attack time lapse (s)", totalTimeLapseSec],
+        ["Total attack time lapse (min)", totalTimeLapseFloat],
+        ["Stego-file data set", *data_set_type_list], 
+        ["Attack time for each stego-file data set (min)", *directoryTimeLapseList]
+    ]
+
+    log_time_attack_to_csv_individual(attack_type, data_to_csv)
 
 if __name__ == "__main__":
     # clean_logs_folder()
