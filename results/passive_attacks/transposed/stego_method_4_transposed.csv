@@ -29,10 +29,10 @@ Attack type;Number of documents attacked;Stego-message state;Number of such stat
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
 05_impersonation_attack;18;SAFE;0;0.0;
-;;ALMOST SAFE (Less than 5% corruption);18;100.0;
+;;ALMOST SAFE (Less than 5% corruption);16;88.89;
 ;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0.0;
-;;HEAVILY CORRUPTED (Over 50% corruption);0;0.0;
-;;MISSING;0;0.0;
+;;HEAVILY CORRUPTED (Over 50% corruption);1;5.56;
+;;MISSING;1;5.56;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
 06_save_as_attack;18;SAFE;0;0.0;

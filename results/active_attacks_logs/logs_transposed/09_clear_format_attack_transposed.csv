@@ -1,7 +1,7 @@
-Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
-09_clear_format_attack;1.22;stego_method_1;0.23;
-;;stego_method_2;0.0;
-;;stego_method_3;0.0;
-;;stego_method_4;0.22;
-;;stego_method_5;0.16;
-;;stego_method_6;0.2;
+;Active stego-attack type;Total attack time lapse (min);Stego-file data set;Attack time for each stego-file data set (min);
+;09_clear_format_attack;0.57;stego_method_1;0.14;
+;;;stego_method_2;0.0;
+;;;stego_method_3;0.0;
+;;;stego_method_4;0.15;
+;;;stego_method_5;0.12;
+;;;stego_method_6;0.14;

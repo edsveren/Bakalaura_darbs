@@ -75,8 +75,11 @@ def stego_message_extraction(document: DocumentObject) -> str:
                     unispace_combination = ''
     stegoMessage = stegoMessage[1:-1]
     return stegoMessage
-            
-if __name__ == "__main__":
+
+def main(desired_file: str|None) -> None:
     stego_message_text = unified_passive_attack_file.stego_message()
     stegoMessageInWhiteSpaceUnicode = stego_message_standarization_to_unispace_method(stego_message_text)
-    unified_passive_attack_file.passive_attack("stego_method_5", stego_message_extraction, stegoMessageInWhiteSpaceUnicode)
+    unified_passive_attack_file.passive_attack("stego_method_5", stego_message_extraction, stegoMessageInWhiteSpaceUnicode, desired_file)
+            
+if __name__ == "__main__":
+    main(None)

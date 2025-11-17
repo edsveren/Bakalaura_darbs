@@ -1,50 +1,70 @@
 Stego-method;stego_method_1;;;;;stego_method_4;;;;;stego_method_5;;;;;stego_method_6;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 01_insert_attack;16;SAFE;0;0;;18;SAFE;18;100;;15;SAFE;0;0;;15;SAFE;15;100
-;;CORRUPTED;16;100;;;CORRUPTED;0;0;;;CORRUPTED;10;66.67;;;CORRUPTED;0;0
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0
+;;HEAVILY CORRUPTED (Over 50% corruption);16;100;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);10;66.67;;;HEAVILY CORRUPTED (Over 50% corruption);0;0
 ;;MISSING;0;0;;;MISSING;0;0;;;MISSING;5;33.33;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 02_delete_attack;16;SAFE;0;0;;18;SAFE;18;100;;15;SAFE;0;0;;15;SAFE;0;0
-;;CORRUPTED;16;100;;;CORRUPTED;0;0;;;CORRUPTED;15;100;;;CORRUPTED;15;100
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);3;20;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0
+;;HEAVILY CORRUPTED (Over 50% corruption);16;100;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);12;80;;;HEAVILY CORRUPTED (Over 50% corruption);15;100
 ;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 03_edit_modify_attack;16;SAFE;0;0;;18;SAFE;18;100;;15;SAFE;0;0;;15;SAFE;0;0
-;;CORRUPTED;16;100;;;CORRUPTED;0;0;;;CORRUPTED;15;100;;;CORRUPTED;15;100
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);3;20;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0
+;;HEAVILY CORRUPTED (Over 50% corruption);16;100;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);12;80;;;HEAVILY CORRUPTED (Over 50% corruption);15;100
 ;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 04_format_attack;16;SAFE;16;100;;18;SAFE;18;100;;15;SAFE;15;100;;15;SAFE;15;100
-;;CORRUPTED;0;0;;;CORRUPTED;0;0;;;CORRUPTED;0;0;;;CORRUPTED;0;0
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0
+;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0
 ;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 05_impersonation_attack;16;SAFE;0;0;;18;SAFE;0;0;;15;SAFE;0;0;;15;SAFE;10;66.67
-;;CORRUPTED;0;0;;;CORRUPTED;18;100;;;CORRUPTED;0;0;;;CORRUPTED;5;33.33
-;;MISSING;16;100;;;MISSING;0;0;;;MISSING;15;100;;;MISSING;0;0
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);16;88.89;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0
+;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);1;5.56;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);5;33.33
+;;MISSING;16;100;;;MISSING;1;5.56;;;MISSING;15;100;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 06_save_as_attack;16;SAFE;16;100;;18;SAFE;0;0;;15;SAFE;13;86.67;;15;SAFE;14;93.33
-;;CORRUPTED;0;0;;;CORRUPTED;18;100;;;CORRUPTED;1;6.67;;;CORRUPTED;1;6.67
-;;MISSING;0;0;;;MISSING;0;0;;;MISSING;1;6.67;;;MISSING;0;0
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);18;100;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);2;13.33;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);1;6.67
+;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0
+;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 07_copy_attack;16;SAFE;16;100;;18;SAFE;18;100;;15;SAFE;15;100;;15;SAFE;15;100
-;;CORRUPTED;0;0;;;CORRUPTED;0;0;;;CORRUPTED;0;0;;;CORRUPTED;0;0
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0
+;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0
 ;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 08_retype_attack;16;SAFE;16;100;;18;SAFE;18;100;;15;SAFE;15;100;;15;SAFE;15;100
-;;CORRUPTED;0;0;;;CORRUPTED;0;0;;;CORRUPTED;0;0;;;CORRUPTED;0;0
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0
+;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0
 ;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 09_clear_format_attack;16;SAFE;0;0;;18;SAFE;0;0;;15;SAFE;13;86.67;;15;SAFE;14;93.33
-;;CORRUPTED;0;0;;;CORRUPTED;0;0;;;CORRUPTED;1;6.67;;;CORRUPTED;1;6.67
-;;MISSING;16;100;;;MISSING;18;100;;;MISSING;1;6.67;;;MISSING;0;0
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);2;13.33;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);1;6.67
+;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0
+;;MISSING;16;100;;;MISSING;18;100;;;MISSING;0;0;;;MISSING;0;0
 ;;;;;;;;;;;;;;;;;;;
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%)
 10_document_inspector_attack;16;SAFE;0;0;;18;SAFE;0;0;;15;SAFE;13;86.67;;15;SAFE;14;93.33
-;;CORRUPTED;0;0;;;CORRUPTED;18;100;;;CORRUPTED;1;6.67;;;CORRUPTED;1;6.67
-;;MISSING;16;100;;;MISSING;0;0;;;MISSING;1;6.67;;;MISSING;0;0
+;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);18;100;;;ALMOST SAFE (Less than 5% corruption);0;0;;;ALMOST SAFE (Less than 5% corruption);0;0
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);2;13.33;;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);1;6.67
+;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0;;;HEAVILY CORRUPTED (Over 50% corruption);0;0
+;;MISSING;16;100;;;MISSING;0;0;;;MISSING;0;0;;;MISSING;0;0

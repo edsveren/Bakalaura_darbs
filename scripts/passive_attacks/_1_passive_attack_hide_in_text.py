@@ -32,8 +32,8 @@ def stego_message_extraction(document: DocumentObject) -> str:
     #print(stegoMessage)
     return stegoMessage
 
-def main() -> None:
-    unified_passive_attack_file.passive_attack("stego_method_1", stego_message_extraction, None)
+def main(desired_file: str|None) -> None:
+    unified_passive_attack_file.passive_attack("stego_method_1", stego_message_extraction, None, desired_file)
             
 if __name__ == "__main__":
-    main()
+    main(None)

@@ -8,14 +8,14 @@ Number of such states (%);0.0;0.0;0.0;66.67;33.33
 Attack type;02_delete_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;0;0;9;6;0
-Number of such states (%);0.0;0.0;60.0;40.0;0.0
+Number of such states;0;0;3;12;0
+Number of such states (%);0.0;0.0;20.0;80.0;0.0
 
 Attack type;03_edit_modify_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;0;0;9;6;0
-Number of such states (%);0.0;0.0;60.0;40.0;0.0
+Number of such states;0;0;3;12;0
+Number of such states (%);0.0;0.0;20.0;80.0;0.0
 
 Attack type;04_format_attack
 Number of documents attacked;15
@@ -32,8 +32,8 @@ Number of such states (%);0.0;0.0;0.0;0.0;100.0
 Attack type;06_save_as_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;13;0;0;1;1
-Number of such states (%);86.67;0.0;0.0;6.67;6.67
+Number of such states;13;0;2;0;0
+Number of such states (%);86.67;0.0;13.33;0.0;0.0
 
 Attack type;07_copy_attack
 Number of documents attacked;15
@@ -50,12 +50,12 @@ Number of such states (%);100.0;0.0;0.0;0.0;0.0
 Attack type;09_clear_format_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;13;0;0;1;1
-Number of such states (%);86.67;0.0;0.0;6.67;6.67
+Number of such states;13;0;2;0;0
+Number of such states (%);86.67;0.0;13.33;0.0;0.0
 
 Attack type;10_document_inspector_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;13;0;0;1;1
-Number of such states (%);86.67;0.0;0.0;6.67;6.67
+Number of such states;13;0;2;0;0
+Number of such states (%);86.67;0.0;13.33;0.0;0.0
 
