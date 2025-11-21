@@ -148,42 +148,53 @@ from docx.enum.style import WD_STYLE_TYPE
 
 #data_tp = {'Name': ['Age'], 'ANSH': [25], 'VANSH': [30]}
 
-import csv
-from pathlib import Path
+# import csv
+# from pathlib import Path
 
-def side_by_side_csv(files, out_path):
-    files = ["file1.csv", "file2.csv", "file3.csv"]  # same number of columns in each
+# def side_by_side_csv(files, out_path):
+#     files = ["file1.csv", "file2.csv", "file3.csv"]  # same number of columns in each
 
-    # Read all rows from each file
-    tables = []
-    col_counts = []
-    for file in files:
-        with open(file, "r", newline="", encoding="utf-8") as f:
-            reader = csv.reader(f)
-            rows = list(reader)
-            tables.append(rows)
-            # infer column count (handle empty files)
-            col_counts.append(max((len(r) for r in rows), default=0))
+#     # Read all rows from each file
+#     tables = []
+#     col_counts = []
+#     for file in files:
+#         with open(file, "r", newline="", encoding="utf-8") as f:
+#             reader = csv.reader(f)
+#             rows = list(reader)
+#             tables.append(rows)
+#             # infer column count (handle empty files)
+#             col_counts.append(max((len(r) for r in rows), default=0))
 
-    # Max number of rows across files
-    max_rows = max((len(table) for table in tables), default=0)
+#     # Max number of rows across files
+#     max_rows = max((len(table) for table in tables), default=0)
 
-    with open("unified_csv", "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
+#     with open("unified_csv", "w", newline="", encoding="utf-8") as f:
+#         w = csv.writer(f)
 
-        for i in range(max_rows):
-            out_row = []
-            for table, number_of_columns in zip(tables, col_counts):
-                # row i from this table, or an all-empty row if this table is shorter
-                if i < len(table):
-                    row = table[i]
-                else:
-                    row = [""] * number_of_columns
-                # pad short rows within a table (just in case)
-                if len(row) < number_of_columns:
-                    row = row + [""] * (number_of_columns - len(row))
-                out_row.extend(row)
-                out_row.append("")  # single empty spacer column
-            if out_row:
-                out_row.pop()  # remove trailing spacer
-            w.writerow(out_row)
+#         for i in range(max_rows):
+#             out_row = []
+#             for table, number_of_columns in zip(tables, col_counts):
+#                 # row i from this table, or an all-empty row if this table is shorter
+#                 if i < len(table):
+#                     row = table[i]
+#                 else:
+#                     row = [""] * number_of_columns
+#                 # pad short rows within a table (just in case)
+#                 if len(row) < number_of_columns:
+#                     row = row + [""] * (number_of_columns - len(row))
+#                 out_row.extend(row)
+#                 out_row.append("")  # single empty spacer column
+#             if out_row:
+#                 out_row.pop()  # remove trailing spacer
+#             w.writerow(out_row)
+
+import difflib
+
+stego_message_difference = difflib.SequenceMatcher(None, 'STEGO', '')
+# Make it a percentage
+stego_message_difference_percentage = round(stego_message_difference.ratio() * 100, 2)
+
+print(stego_message_difference_percentage)
+
+desired_file_csv_name = f"{"TEST_0.docx".rsplit('.', 1)[0]}_stego_method_1"
+print(desired_file_csv_name)

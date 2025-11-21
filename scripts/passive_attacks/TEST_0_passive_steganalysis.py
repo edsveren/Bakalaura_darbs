@@ -8,13 +8,13 @@ if __name__ == "__main__":
     desired_file = "TEST_0.docx"
     # Choose stego-method to attack
     # stego_method_1
-    stego_message_extraction = _1_passive_attack_hide_in_text.main(desired_file)
+    _1_passive_attack_hide_in_text.main(desired_file)
 
     # stego_method_4
-    # stego_message_extraction = _4_passive_attack_modify_RGB_color_ch.main(desired_file)
+    _4_passive_attack_modify_RGB_color_ch.main(desired_file)
 
     # stego_method_5
-    # stego_message_extraction = _5_passive_attack_unispace.main(desired_file)
+    _5_passive_attack_unispace.main(desired_file)
 
     # stego_method_6
-    # stego_message_extraction = _6_passive_attack_unicode_homoglyphs.main(desired_file)
+    _6_passive_attack_unicode_homoglyphs.main(desired_file)

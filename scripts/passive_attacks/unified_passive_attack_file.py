@@ -30,6 +30,7 @@ def analyse_corruption_level(
         stego_message_extracted: str,
         desired_file: str|None,
         ) -> float:
+
     # Calculate the difference percentage between the original and extracted stego-message
     # Using difflib library which uses Ratcliff/Obershelp algorithm
     stego_message_difference = difflib.SequenceMatcher(None, stego_message_text, stego_message_extracted)
@@ -40,18 +41,18 @@ def analyse_corruption_level(
     # if stego_message_difference_percentage >= 95.0:
     #     return stego_message_difference_percentage
     
-    if desired_file != None:
-        if stego_message_extracted != "HEAVILY CORRUPTED (Over 50% corruption)":
-            # The stego-message was corrupted but still extractable
-            print("Stego-message should be:")
-            print(stego_message_text)
-            print("But instead is:")
-            print(stego_message_extracted)
-            # print(f"Corrupted message resemblance to the original stego-message: {stego_message_difference_percentage}%")
-        else:
-            # The stego-message was too corrupted to be extracted
-            print("Stego-message too corrupted to be extracted properly!")
-        print(f"Corrupted message resemblance to the original stego-message: {stego_message_difference_percentage}%")
+    # if desired_file != None:
+    #     if stego_message_extracted != "TOO CORRUPT":
+    #         # The stego-message was corrupted but still extractable
+    #         # print("Stego-message should be:")
+    #         # print(stego_message_text)
+    #         # print("But instead is:")
+    #         # print(stego_message_extracted)
+    #         print(f"Extracted message: [ {stego_message_extracted} ]")
+    #     else:
+    #         # The stego-message was too corrupted to be extracted
+    #         print(f"Extracted message: [ TOO CORRUPT ]!")
+    #     print(f"Extracted message resemblance to the original stego-message: {stego_message_difference_percentage}%")
     return stego_message_difference_percentage
 
 # An individual document check
@@ -64,38 +65,63 @@ def check_for_stego_message(
         desired_file: str|None
     ) -> tuple[str, float|str]:
 
+    # Make non-printable characters visible for analysis
+    stego_message_extracted_readable = ''
+    for char in stego_message_extracted:
+        if char.isprintable(): #and char not in '\r\n':
+            stego_message_extracted_readable += char
+        else:
+            stego_message_extracted_readable += '?'
+
+    if desired_file != None:
+        print(f"Stego-message: [ {stego_message_text} ]")    
+
     # Extract the stego-message from the document
     # Using the provided extraction function for the specific stego-method
     # stego_message_extracted = stego_message_extraction(document)
 
-    if stego_message_extracted != '':
-        #print(stego_message_extracted)
-        if stego_message_text == stego_message_extracted:
-            #print(f"{file_name}'s extracted stego-message: {stego_message_extracted}. EQUAL!")
-            return "SAFE", 100.0 # STAGE 1: STEGO-MESSAGE GOOD
+    # Calculate the corruption level
+    stego_message_difference_percentage = analyse_corruption_level(stego_message_text, stego_message_extracted_readable, desired_file)
+    state = ''
+
+    # Calculate the difference percentage between the original and extracted stego-message
+    # Using difflib library which uses Ratcliff/Obershelp algorithm
+    stego_message_difference = difflib.SequenceMatcher(None, stego_message_text, stego_message_extracted)
+    # Make it a percentage
+    stego_message_difference_percentage = round(stego_message_difference.ratio() * 100, 2)
+
+    if stego_message_difference_percentage != 0.0:
+        if desired_file != None:
+            print(f"Extracted message: [ {stego_message_extracted} ]!")
+            
+        # STAGE 1: STEGO-MESSAGE GOOD
+        if stego_message_difference_percentage == 100.0:
+            state = "SAFE"
         else:
-            # Calculate the corruption level
-            stego_message_difference_percentage = analyse_corruption_level(stego_message_text, stego_message_extracted, desired_file)
+            # STAGE 2: STEGO-MESSAGE SLIGHTLY DEGRADED
             if stego_message_difference_percentage >= 95.0:
-                return "ALMOST SAFE (Less than 5% corruption)", stego_message_difference_percentage # STAGE 2: STEGO-MESSAGE SLIGHTLY DEGRADED
+                state = "ALMOST SAFE (Less than 5% corruption)"
+            # STAGE 3: STEGO-MESSAGE DEGRADED
             elif stego_message_difference_percentage >= 50.0:
-                return "SIGNIFICANTLY CORRUPTED (Up to 50% corruption)", stego_message_difference_percentage # STAGE 3: STEGO-MESSAGE DEGRADED
+                state = "SIGNIFICANTLY CORRUPTED (Up to 50% corruption)"
+            # STAGE 4: STEGO-MESSAGE TOO DEGRADED 
             else:
-                return "HEAVILY CORRUPTED (Over 50% corruption)", stego_message_difference_percentage # STAGE 4: STEGO-MESSAGE TOO DEGRADED
+                state = "HEAVILY CORRUPTED (Over 50% corruption)"
     else:
-        #print(f"{file_name}'s extracted stego-message: THERE IS NO STEGO-MESSAGE!")
-        return "MISSING", 'NA' # STAGE 3: THERE IS NO STEGO-MESSAGE
+        # STAGE 5: THERE IS NO STEGO-MESSAGE
+        if desired_file != None:
+            print("The stego-message is gone!")
+        stego_message_difference_percentage = 'NA'
+        state = "MISSING"
+        # return "MISSING", 'NA' 
     
-# def export_passive_attack_to_csv() -> None:
+    if desired_file != None:
+        print(f"Extracted message resemblance to the original stego-message: {stego_message_difference_percentage}%")
+    return state, stego_message_difference_percentage
 
 # Export to CSV for data analysis
 def export_to_csv(
         stego_method_or_file: str,
-        # attack_type: str, 
-        # number_of_docs: int, 
-        # states: list, 
-        # state_frequencies: list, 
-        # state_frequency_percentages: list
         data_to_csv: list[list]
     ) -> None:
 
@@ -107,11 +133,6 @@ def export_to_csv(
     # Create temporary file to store individual attack results
     with open(temporary_file, "w", encoding="utf-8", newline="") as output_file:
         writer = csv.writer(output_file, delimiter=";")
-        # writer.writerow(["Attack type", attack_type])
-        # writer.writerow(["Number of documents attacked", number_of_docs])
-        # writer.writerow(["Stego-message state", *states])
-        # writer.writerow(["Number of such states", *state_frequencies])
-        # writer.writerow(["Number of such states (%)", *state_frequency_percentages])
         for row in data_to_csv:
             writer.writerow(row)
         writer.writerow('')
@@ -147,7 +168,7 @@ def export_to_csv_transposed(stego_method_or_file: str, temporary_file: str):
     transposed_file = f"results/passive_attacks/transposed/{stego_method_or_file}_transposed.csv"
     
     # Read the temporary file data
-    with open(temporary_file, newline="", encoding="utf-8") as input_file:
+    with open(temporary_file, "r", newline="", encoding="utf-8") as input_file:
         reader = csv.reader(input_file, delimiter=";")
         rows = list(reader)
 
@@ -227,16 +248,12 @@ def delete_file(file: Path) -> None:
         print(f"Deleting: {str(file)}")
         os.remove(file)
 
-# Clean individual passive steganalysis attack results
-def clean_results_individual(attack_type: str) -> None:
-    file = Path(f"results/passive_attacks/not_transposed/{attack_type}.csv")
-    file_transposed = Path(f"results/passive_attacks/transposed/{attack_type}_transposed.csv")
+# Clean individual passive steganalysis attack results or specific file results
+def clean_results_individual(attack_type_or_file: str) -> None:
+    file = Path(f"results/passive_attacks/not_transposed/{attack_type_or_file}.csv")
+    file_transposed = Path(f"results/passive_attacks/transposed/{attack_type_or_file}_transposed.csv")
     delete_file(file)
     delete_file(file_transposed)
-
-# Clean specific file from passive steganalysis attack results
-def clean_results_specific_file(desired_file: str) -> None:
-    print("TODO")
     
 ### Main function ###
 def passive_attack(
@@ -248,9 +265,11 @@ def passive_attack(
     
     # Clean up CSV files
     if desired_file == None:
+        desired_file_csv_name = ''
         clean_results_individual(stego_method)
     else:
-        clean_results_specific_file(desired_file)
+        desired_file_csv_name = f"{desired_file.rsplit('.', 1)[0]}_{stego_method}"
+        clean_results_individual(desired_file_csv_name)
 
     # Attacked DOCX file data set
     attacked_stego_files = "data_set/attacked_stego_files"
@@ -271,9 +290,11 @@ def passive_attack(
 
         # The state of the stego-message and the number of DOCX files in the data
         states_list = []
+        stego_message_extracted_list = []
         corruption_list = []
         nr_of_files = 0
 
+        print(f"Stego-method: {stego_method}")
         print("Extracting stego-messages...")
 
         # Loop through each stego-method data set in attack directories
@@ -281,46 +302,51 @@ def passive_attack(
 
             # Choose only the attacked data sets for the specific stego-method
             if stego_directories.name == stego_method:
+                desired_file_found = False
+                # desired_file_specified = (desired_file != None)
 
                 # Loop through each individual file in the select stego-method data set
                 for file in stego_directories.iterdir():
-                    desired_file_found = False
 
                     # Ignore temporary and git files
                     if file.is_file() and not file.name.startswith("."):
-                        # Process only the desired file if specified
-                        if desired_file != None and file.name == desired_file:
-                            docPath = str(Path(f"{attacked_stego_files}/{attack_directories.name}/{stego_directories.name}/{desired_file}"))
-                            desired_file_found = True
-                        # Otherwise, process all files in the data set
-                        else:
+
+                        if desired_file == None or file.name == desired_file:
+                        
+                            if desired_file != None and file.name == desired_file:
+                                # print(attack_directories.name + " -> " + stego_directories.name + " -> " + file.name)
+                                desired_file_found = True
+
+                            # Process only the desired file if specified
+                            # if desired_file != None and file.name == desired_file:
+                            #     docPath = str(Path(f"{attacked_stego_files}/{attack_directories.name}/{stego_directories.name}/{desired_file}"))
+                            #     desired_file_found = True
+                            # # Otherwise, process all files in the data set
+                            # elif desired_file == None:
+                            
                             docPath = str(Path(f"{attacked_stego_files}/{attack_directories.name}/{stego_directories.name}/{file.name}"))
 
-                        # Return the state of the stego-message in the individual document
-                        document = Document(docPath)
-                        # Extract the stego-message from the document
-                        # Using the provided extraction function for the specific stego-method
-                        stego_message_extracted = stego_message_extraction(document)
+                            # Return the state of the stego-message in the individual document
+                            document = Document(docPath)
+                            # Extract the stego-message from the document
+                            # Using the provided extraction function for the specific stego-method
+                            stego_message_extracted = stego_message_extraction(document)
+                            state, stego_message_difference_percentage = check_for_stego_message(file.name, document, stego_message_text, stego_message_extracted, desired_file)
+                            stego_message_extracted_list.append(stego_message_extracted)
+                            corruption_list.append(stego_message_difference_percentage)
+                            states_list.append(state)
+                            nr_of_files += 1
 
-                        state, stego_message_difference_percentage = check_for_stego_message(file.name, document, stego_message_text, stego_message_extracted, desired_file)
-                        corruption_list.append(stego_message_difference_percentage)
-                        states_list.append(state)
-                        nr_of_files += 1
+                            if desired_file_found:
+                                break
 
-                    if desired_file_found:
-                        break    
-
-            # if desired_file_found:
-            #     break
-
-        # Count frequencies of each of three states
-        counter = {key: Counter(states_list).get(key, 0) for key in ['SAFE', 'ALMOST SAFE (Less than 5% corruption)', 'SIGNIFICANTLY CORRUPTED (Up to 50% corruption)', 'HEAVILY CORRUPTED (Over 50% corruption)', 'MISSING']}
-        
-        states_list = list(counter.keys())
-        state_frequencies = list(counter.values())
-        frequency_percentages = []
-        
         if desired_file == None:
+            # Count frequencies of each of three states
+            counter = {key: Counter(states_list).get(key, 0) for key in ['SAFE', 'ALMOST SAFE (Less than 5% corruption)', 'SIGNIFICANTLY CORRUPTED (Up to 50% corruption)', 'HEAVILY CORRUPTED (Over 50% corruption)', 'MISSING']}
+            
+            states_list = list(counter.keys())
+            state_frequencies = list(counter.values())
+            frequency_percentages = []
             # Print results to terminal for the viewer
             for size, frequency in counter.items():
                 frequency_percent = str(round((frequency / nr_of_files) * 100, 2)) #.replace(".", ",")
@@ -339,11 +365,11 @@ def passive_attack(
             data_to_csv = [
                 ["Attack type", attack_directory_name],
                 ["Stego-message", stego_message_text],
-                ["Extracted stego-message", stego_message_extracted],
+                ["Extracted stego-message", *stego_message_extracted_list],
                 ["Stego-message state", *states_list],
                 ["Stego-message integrity level", *corruption_list]
             ]
-            # export_to_csv(desired_file, data_to_csv)
+            export_to_csv(desired_file_csv_name, data_to_csv)
 
         # data_to_csv = {
         #     "Attack type": attack_directory_name,
@@ -358,6 +384,7 @@ def passive_attack(
         print()
         
     print("Extraction over!")
+    print()
 
 if __name__ == "__main__":
     export_to_csv_all()
