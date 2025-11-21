@@ -28,7 +28,7 @@ def stego_message_extraction(document: DocumentObject) -> str:
         stegoMessage = base64.b64decode(stegoMessage_as_base64).decode('utf-8', errors='replace')
     except Exception as e: 
         #print(e)
-        stegoMessage = "HEAVILY CORRUPTED (Over 50% corruption)"
+        stegoMessage = "TOO CORRUPT"
     #print(stegoMessage)
     return stegoMessage
 
