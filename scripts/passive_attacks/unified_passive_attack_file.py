@@ -24,41 +24,10 @@ def stego_message() -> str:
     #print(f"Stego-message: {stegoMessageText}")
     return stegoMessageText
 
-# Analyze each corrupt stego-message's corruption level
-def analyse_corruption_level(
-        stego_message_text: str, 
-        stego_message_extracted: str,
-        desired_file: str|None,
-        ) -> float:
-
-    # Calculate the difference percentage between the original and extracted stego-message
-    # Using difflib library which uses Ratcliff/Obershelp algorithm
-    stego_message_difference = difflib.SequenceMatcher(None, stego_message_text, stego_message_extracted)
-    # Make it a percentage
-    stego_message_difference_percentage = round(stego_message_difference.ratio() * 100, 2)
-
-    # With above 95% resemblance, the stego-message is still very readable
-    # if stego_message_difference_percentage >= 95.0:
-    #     return stego_message_difference_percentage
-    
-    # if desired_file != None:
-    #     if stego_message_extracted != "TOO CORRUPT":
-    #         # The stego-message was corrupted but still extractable
-    #         # print("Stego-message should be:")
-    #         # print(stego_message_text)
-    #         # print("But instead is:")
-    #         # print(stego_message_extracted)
-    #         print(f"Extracted message: [ {stego_message_extracted} ]")
-    #     else:
-    #         # The stego-message was too corrupted to be extracted
-    #         print(f"Extracted message: [ TOO CORRUPT ]!")
-    #     print(f"Extracted message resemblance to the original stego-message: {stego_message_difference_percentage}%")
-    return stego_message_difference_percentage
-
 # An individual document check
 def check_for_stego_message(
-        file_name: str, 
-        document: DocumentObject, 
+        # file_name: str, 
+        # document: DocumentObject, 
         stego_message_text: str, 
         # stego_message_extraction: Callable[[DocumentObject], str]
         stego_message_extracted: str,
@@ -67,26 +36,19 @@ def check_for_stego_message(
 
     # Make non-printable characters visible for analysis
     stego_message_extracted_readable = ''
+    # Line feeds and carriage returns break the output format, so replace them with '?'
     for char in stego_message_extracted:
-        if char.isprintable(): #and char not in '\r\n':
+        if char not in '\r\n':
             stego_message_extracted_readable += char
         else:
             stego_message_extracted_readable += '?'
 
     if desired_file != None:
-        print(f"Stego-message: [ {stego_message_text} ]")    
-
-    # Extract the stego-message from the document
-    # Using the provided extraction function for the specific stego-method
-    # stego_message_extracted = stego_message_extraction(document)
-
-    # Calculate the corruption level
-    stego_message_difference_percentage = analyse_corruption_level(stego_message_text, stego_message_extracted_readable, desired_file)
-    state = ''
-
+        print(f"Stego-message: [ {stego_message_text} ]")
+    
     # Calculate the difference percentage between the original and extracted stego-message
     # Using difflib library which uses Ratcliff/Obershelp algorithm
-    stego_message_difference = difflib.SequenceMatcher(None, stego_message_text, stego_message_extracted)
+    stego_message_difference = difflib.SequenceMatcher(None, stego_message_text, stego_message_extracted_readable)
     # Make it a percentage
     stego_message_difference_percentage = round(stego_message_difference.ratio() * 100, 2)
 
@@ -111,9 +73,8 @@ def check_for_stego_message(
         # STAGE 5: THERE IS NO STEGO-MESSAGE
         if desired_file != None:
             print("The stego-message is gone!")
-        stego_message_difference_percentage = 'NA'
+        # stego_message_difference_percentage = 'NA'
         state = "MISSING"
-        # return "MISSING", 'NA' 
     
     if desired_file != None:
         print(f"Extracted message resemblance to the original stego-message: {stego_message_difference_percentage}%")
@@ -331,7 +292,7 @@ def passive_attack(
                             # Extract the stego-message from the document
                             # Using the provided extraction function for the specific stego-method
                             stego_message_extracted = stego_message_extraction(document)
-                            state, stego_message_difference_percentage = check_for_stego_message(file.name, document, stego_message_text, stego_message_extracted, desired_file)
+                            state, stego_message_difference_percentage = check_for_stego_message(stego_message_text, stego_message_extracted, desired_file)
                             stego_message_extracted_list.append(stego_message_extracted)
                             corruption_list.append(stego_message_difference_percentage)
                             states_list.append(state)
