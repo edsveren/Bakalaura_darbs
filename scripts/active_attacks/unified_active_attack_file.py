@@ -6,16 +6,16 @@ from typing import Callable
 from itertools import zip_longest
 import win32com.client as win32
 
-# Log time of each active steganalysis attack
-def log_time_attack_to_csv_individual(
+# Export time of each active steganalysis attack to CSV
+def export_attack_time_to_csv_individual(
         attack_type: str,
         data_to_csv: list[list]
           ) -> None:
     
-    # Delete previous logs
-    clean_logs_individual(attack_type)
+    # Delete previous CSV results
+    clean_results_individual(attack_type)
     
-    result_file = f"results/active_attacks_logs/logs_not_transposed/{attack_type}.csv"
+    result_file = f"results/active_attacks/not_transposed/{attack_type}.csv"
     if Path(result_file).is_file():
         with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
                 writer = csv.writer(output_file, delimiter=";")
@@ -28,14 +28,15 @@ def log_time_attack_to_csv_individual(
                 for row in data_to_csv:
                     writer.writerow(row)
                 writer.writerow('')
+        print(f"Created a CSV file: {str(Path(result_file))}")
     
-    # Transpose the log file
+    # Transpose the resulting CSV file
     csv_transpose(attack_type)
 
-# Transpose the logs
+# Transpose the CSV file
 def csv_transpose(attack_type: str):
-    input_file = f"results/active_attacks_logs/logs_not_transposed/{attack_type}.csv"
-    output_file = f"results/active_attacks_logs/logs_transposed/{attack_type}_transposed.csv"
+    input_file = f"results/active_attacks/not_transposed/{attack_type}.csv"
+    output_file_ = f"results/active_attacks/transposed/{attack_type}_transposed.csv"
     
     # Read CSV rows
     with open(input_file, newline="", encoding="utf-8") as input_file:
@@ -46,26 +47,30 @@ def csv_transpose(attack_type: str):
     transposed_rows = list(zip_longest(*rows, fillvalue=""))
 
     # Write transposed rows
-    with open(output_file, "w", newline="", encoding="utf-8") as output_file:
+    with open(output_file_, "w", newline="", encoding="utf-8") as output_file:
         writer = csv.writer(output_file, delimiter=";")
         for row in transposed_rows:
             new_row = ["", *row]
             writer.writerow(new_row)
-        # writer.writerows(transposed)
+    
+    print(f"Created a CSV file: {str(Path(output_file_))}")
 
-# Log time of all active steganalysis attacks into a single file
-def log_time_attack_to_csv_all(transposed_state: str, type: str) -> None:
-    base = f"results/active_attacks_logs/{transposed_state}"
-    all_attacks = f"all_attacks{type}.csv"
-    with open(f"{base}/{all_attacks}", "w", encoding="utf-8", newline="") as output_file:
+# Export time of all active steganalysis attacks into a single CSV file
+def export_attack_time_to_csv_all(transposed_state: str, transposed_or_not_type: str) -> None:
+    base = f"results/active_attacks/{transposed_state}"
+    all_attacks = f"all_attacks{transposed_or_not_type}.csv"
+    result_file = f"{base}/{all_attacks}"
+    with open(result_file, "w", encoding="utf-8", newline="") as output_file:
         writer = csv.writer(output_file, delimiter=";")
-        for attack_log_files in Path(base).iterdir():
-            if attack_log_files.is_file() and not attack_log_files.name.startswith(".") and attack_log_files.name != all_attacks:
-                with open(attack_log_files, "r", encoding="utf-8") as input_file:
+        for attack_result_files in Path(base).iterdir():
+            if attack_result_files.is_file() and not attack_result_files.name.startswith(".") and attack_result_files.name != all_attacks:
+                with open(attack_result_files, "r", encoding="utf-8") as input_file:
                     reader = csv.reader(input_file, delimiter=";")
                     for row in reader:
                         writer.writerow(row)
-                writer.writerow('')  # Add an empty line between different attack logs
+                writer.writerow('')  # Add an empty line between different attack results
+    
+    print(f"Created a CSV file: {str(Path(result_file))}")
 
 # Delete file
 def delete_file(file: Path) -> None:
@@ -73,26 +78,26 @@ def delete_file(file: Path) -> None:
         print(f"Deleting: {file}")
         os.remove(file)
 
-# Clean individual active steganalysis attack logs
-def clean_logs_individual(attack_type: str) -> None:
-    file = Path(f"results/active_attacks_logs/logs_not_transposed/{attack_type}.csv")
-    file_transposed = Path(f"results/active_attacks_logs/logs_transposed/{attack_type}_transposed.csv")
+# Clean individual active steganalysis attack results CSV file
+def clean_results_individual(attack_type: str) -> None:
+    file = Path(f"results/active_attacks/not_transposed/{attack_type}.csv")
+    file_transposed = Path(f"results/active_attacks/transposed/{attack_type}_transposed.csv")
     delete_file(file)
     delete_file(file_transposed)
 
-# Clean the unified active steganalysis attack log file
-def clean_logs_all_attacks() -> None:
-    file = Path("results/active_attacks_logs/logs_not_transposed/all_attacks.csv")
-    file_transposed = Path("results/active_attacks_logs/logs_transposed/all_attacks_transposed.csv")
+# Clean the unified active steganalysis attack results CSV file
+def clean_results_all_attacks() -> None:
+    file = Path("results/active_attacks/not_transposed/all_attacks.csv")
+    file_transposed = Path("results/active_attacks/transposed/all_attacks_transposed.csv")
     delete_file(file)
     delete_file(file_transposed)
 
-# Clean every single log file
-def clean_logs_folder() -> None:
-    base = "results/active_attacks_logs"
+# Clean every single active steganalysis attack results file
+def clean_results_folder() -> None:
+    base = "results/active_attacks"
     for folders in Path(base).iterdir():
-        for attack_log_files in folders.iterdir():
-            delete_file(attack_log_files)
+        for attack_result_files in folders.iterdir():
+            delete_file(attack_result_files)
 
 # Process and display active steganalysis attack time
 def time_display(
@@ -207,11 +212,11 @@ def unified_attack(
         ["Attack time for each stego-file data set (min)", *directoryTimeLapseList]
     ]
 
-    log_time_attack_to_csv_individual(attack_type, data_to_csv)
+    export_attack_time_to_csv_individual(attack_type, data_to_csv)
 
 if __name__ == "__main__":
-    # clean_logs_folder()
-    clean_logs_all_attacks()
-    log_time_attack_to_csv_all("logs_not_transposed", "")
+    # clean_results_folder()
+    clean_results_all_attacks()
+    export_attack_time_to_csv_all("not_transposed", "")
     # csv_transpose("all_attacks")
-    log_time_attack_to_csv_all("logs_transposed", "_transposed")
+    export_attack_time_to_csv_all("transposed", "_transposed")
