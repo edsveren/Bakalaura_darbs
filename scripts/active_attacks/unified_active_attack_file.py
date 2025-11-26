@@ -75,8 +75,8 @@ def export_attack_time_to_csv_all(transposed_state: str, transposed_or_not_type:
 # Delete file
 def delete_file(file: Path) -> None:
     if file.is_file() and not file.name.startswith("."):
-        print(f"Deleting: {file}")
         os.remove(file)
+        print(f"Deleted: {file}")
 
 # Clean individual active steganalysis attack results CSV file
 def clean_results_individual(attack_type: str) -> None:
