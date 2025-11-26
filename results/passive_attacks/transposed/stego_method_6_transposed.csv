@@ -28,17 +28,17 @@ Attack type;Number of documents attacked;Stego-message state;Number of such stat
 ;;MISSING;0;0.0;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
-05_impersonation_attack;15;SAFE;10;66.67;
-;;ALMOST SAFE (Less than 5% corruption);0;0.0;
-;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0.0;
-;;HEAVILY CORRUPTED (Over 50% corruption);5;33.33;
+05_impersonation_attack;15;SAFE;9;60.0;
+;;ALMOST SAFE (Less than 5% corruption);1;6.67;
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);3;20.0;
+;;HEAVILY CORRUPTED (Over 50% corruption);2;13.33;
 ;;MISSING;0;0.0;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
-06_save_as_attack;15;SAFE;14;93.33;
+06_save_as_attack;15;SAFE;13;86.67;
 ;;ALMOST SAFE (Less than 5% corruption);0;0.0;
 ;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);1;6.67;
-;;HEAVILY CORRUPTED (Over 50% corruption);0;0.0;
+;;HEAVILY CORRUPTED (Over 50% corruption);1;6.67;
 ;;MISSING;0;0.0;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
@@ -56,16 +56,16 @@ Attack type;Number of documents attacked;Stego-message state;Number of such stat
 ;;MISSING;0;0.0;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
-09_clear_format_attack;15;SAFE;14;93.33;
+09_clear_format_attack;15;SAFE;13;86.67;
 ;;ALMOST SAFE (Less than 5% corruption);0;0.0;
 ;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);1;6.67;
-;;HEAVILY CORRUPTED (Over 50% corruption);0;0.0;
+;;HEAVILY CORRUPTED (Over 50% corruption);1;6.67;
 ;;MISSING;0;0.0;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
-10_document_inspector_attack;15;SAFE;14;93.33;
+10_document_inspector_attack;15;SAFE;13;86.67;
 ;;ALMOST SAFE (Less than 5% corruption);0;0.0;
 ;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);1;6.67;
-;;HEAVILY CORRUPTED (Over 50% corruption);0;0.0;
+;;HEAVILY CORRUPTED (Over 50% corruption);1;6.67;
 ;;MISSING;0;0.0;
 

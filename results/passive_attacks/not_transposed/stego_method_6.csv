@@ -26,14 +26,14 @@ Number of such states (%);100.0;0.0;0.0;0.0;0.0
 Attack type;05_impersonation_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;10;0;0;5;0
-Number of such states (%);66.67;0.0;0.0;33.33;0.0
+Number of such states;9;1;3;2;0
+Number of such states (%);60.0;6.67;20.0;13.33;0.0
 
 Attack type;06_save_as_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;14;0;1;0;0
-Number of such states (%);93.33;0.0;6.67;0.0;0.0
+Number of such states;13;0;1;1;0
+Number of such states (%);86.67;0.0;6.67;6.67;0.0
 
 Attack type;07_copy_attack
 Number of documents attacked;15
@@ -50,12 +50,12 @@ Number of such states (%);100.0;0.0;0.0;0.0;0.0
 Attack type;09_clear_format_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;14;0;1;0;0
-Number of such states (%);93.33;0.0;6.67;0.0;0.0
+Number of such states;13;0;1;1;0
+Number of such states (%);86.67;0.0;6.67;6.67;0.0
 
 Attack type;10_document_inspector_attack
 Number of documents attacked;15
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;14;0;1;0;0
-Number of such states (%);93.33;0.0;6.67;0.0;0.0
+Number of such states;13;0;1;1;0
+Number of such states (%);86.67;0.0;6.67;6.67;0.0
 

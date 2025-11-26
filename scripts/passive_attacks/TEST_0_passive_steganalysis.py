@@ -2,6 +2,7 @@ import _1_passive_attack_hide_in_text
 import _4_passive_attack_modify_RGB_color_ch
 import _5_passive_attack_unispace
 import _6_passive_attack_unicode_homoglyphs
+import unified_passive_attack_file
 
 if __name__ == "__main__":
 
@@ -18,3 +19,5 @@ if __name__ == "__main__":
 
     # stego_method_6
     _6_passive_attack_unicode_homoglyphs.main(desired_file)
+
+    unified_passive_attack_file.export_to_csv_all(desired_file.rsplit('.', 1)[0])

@@ -3,8 +3,8 @@ Attack type;Number of documents attacked;Stego-message state;Number of such stat
 01_insert_attack;15;SAFE;0;0.0;
 ;;ALMOST SAFE (Less than 5% corruption);0;0.0;
 ;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0.0;
-;;HEAVILY CORRUPTED (Over 50% corruption);10;66.67;
-;;MISSING;5;33.33;
+;;HEAVILY CORRUPTED (Over 50% corruption);14;93.33;
+;;MISSING;1;6.67;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
 02_delete_attack;15;SAFE;0;0.0;
@@ -35,9 +35,9 @@ Attack type;Number of documents attacked;Stego-message state;Number of such stat
 ;;MISSING;15;100.0;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
-06_save_as_attack;15;SAFE;13;86.67;
+06_save_as_attack;15;SAFE;15;100.0;
 ;;ALMOST SAFE (Less than 5% corruption);0;0.0;
-;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);2;13.33;
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0.0;
 ;;HEAVILY CORRUPTED (Over 50% corruption);0;0.0;
 ;;MISSING;0;0.0;
 
@@ -56,16 +56,16 @@ Attack type;Number of documents attacked;Stego-message state;Number of such stat
 ;;MISSING;0;0.0;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
-09_clear_format_attack;15;SAFE;13;86.67;
+09_clear_format_attack;15;SAFE;15;100.0;
 ;;ALMOST SAFE (Less than 5% corruption);0;0.0;
-;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);2;13.33;
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0.0;
 ;;HEAVILY CORRUPTED (Over 50% corruption);0;0.0;
 ;;MISSING;0;0.0;
 
 Attack type;Number of documents attacked;Stego-message state;Number of such states;Number of such states (%);
-10_document_inspector_attack;15;SAFE;13;86.67;
+10_document_inspector_attack;15;SAFE;15;100.0;
 ;;ALMOST SAFE (Less than 5% corruption);0;0.0;
-;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);2;13.33;
+;;SIGNIFICANTLY CORRUPTED (Up to 50% corruption);0;0.0;
 ;;HEAVILY CORRUPTED (Over 50% corruption);0;0.0;
 ;;MISSING;0;0.0;
 
