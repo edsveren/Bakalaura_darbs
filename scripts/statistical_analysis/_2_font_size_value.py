@@ -6,6 +6,7 @@ from docx import Document
 from docx.document import Document as DocumentObject
 from docx.oxml.ns import qn
 from docx.oxml.styles import CT_Styles
+import unified_statistical_analysis_file
 
 def paragraph_default_font_size_value(styles_element: CT_Styles) -> float | None:
     all_styles = styles_element.findall(f".//{qn('w:style')}")
@@ -75,6 +76,35 @@ def get_font_size_value_from_each_run(document: DocumentObject) -> list:
                 font_sizes.append(default_pt)
     return font_sizes
 
+def font_size_value_analysis(path: Path, data_set: str) -> list[list]:
+    document = Document(str(path))
+    font_sizes = get_font_size_value_from_each_run(document)
+    font_sizes_amount = len(font_sizes)
+    counter = Counter(font_sizes)        
+
+    font_sizes_value = list(counter.keys())
+    font_sizes_frequencies = list(counter.values())
+    frequency_percentages = []
+    
+    # print(f"Font sizes values for each run element: {font_sizes}")
+    # print(f"Font sizes: {font_sizes_value}")
+    # print(f"Font size frequencies: {font_sizes_frequencies}")
+    for size, frequency in counter.items():
+        frequency_percent = str(round((frequency / font_sizes_amount) * 100, 2)) #.replace(".", ",")
+        frequency_percentages.append(frequency_percent)
+        # print(f"Font size: {size} pt. Frequency: {frequency}")
+
+    data_to_csv = [
+        ["Document Name", path.stem],
+        ["Data set", data_set],
+        ["Font Sizes map", *font_sizes],
+        ["Font Sizes (pt)", *font_sizes_value],
+        ["Font Sizes Count", *font_sizes_frequencies],
+        ["Font Sizes Count (%)", *frequency_percentages]
+    ]
+
+    return data_to_csv
+
 def to_csv(docPath: Path, data_set: str, font_sizes: list, font_size_frequency: list) -> None:
     file_name = docPath.stem
     result_file = f"results/statistical_analysis/2_font_sizes/{file_name}.csv"
@@ -121,17 +151,20 @@ def main() -> None:
         document = Document(str(path))
         font_sizes = get_font_size_value_from_each_run(document)
         counter = Counter(font_sizes)        
-        sizes = list(counter.keys())
-        frequencies = list(counter.values())
+        font_sizes_value = list(counter.keys())
+        font_sizes_frequencies = list(counter.values())
 
-        print("Font sizes values for each run element:")
-        print(font_sizes)
-        print(f"Font sizes: {sizes}")
-        print(f"Font size frequencies: {frequencies}")
+        print(f"Font sizes values for each run element: {font_sizes}")
+        print(f"Font sizes: {font_sizes_value}")
+        print(f"Font size frequencies: {font_sizes_frequencies}")
         for size, frequency in counter.items():
             print(f"Font size: {size} pt. Frequency: {frequency}")
-        to_csv(path, data_set[i], sizes, frequencies)
+
+        to_csv(path, data_set[i], font_sizes_value, font_sizes_frequencies)
         i += 1
+
+def main() -> None:
+    unified_statistical_analysis_file.singular_check('2_font_sizes', 'TEST_0', font_size_value_analysis)
         
 if __name__ == "__main__":
     main()

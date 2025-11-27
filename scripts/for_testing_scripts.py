@@ -188,13 +188,8 @@ from docx.enum.style import WD_STYLE_TYPE
 #                 out_row.pop()  # remove trailing spacer
 #             w.writerow(out_row)
 
-import difflib
+listlist = [1, 2, 3]
+print(*listlist)  # prints: 1 2 3
 
-stego_message_difference = difflib.SequenceMatcher(None, 'STEGO', '')
-# Make it a percentage
-stego_message_difference_percentage = round(stego_message_difference.ratio() * 100, 2)
-
-print(stego_message_difference_percentage)
-
-desired_file_csv_name = f"{"TEST_0.docx".rsplit('.', 1)[0]}_stego_method_1"
-print(desired_file_csv_name)
+print(type(listlist))  # prints: <class 'list'>
+print(type(*listlist))  # prints: <class 'int'>
