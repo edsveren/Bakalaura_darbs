@@ -1,34 +1,49 @@
 Document Name;TEST_0
 Data set;clean
-Chars;uppercase;lowercase;digit;other
+Single non-whitespace char run count;2
+Total run element count;27
+Total run element count percentage (%);7,41
+Char type;uppercase;lowercase;digit;other
 Char frequencies;0;1;0;1
 Char frequencies (single run, %);0.0;50.0;0.0;50.0
 Char frequencies (total runs, %);0.0;3.7;0.0;3.7
 
 Document Name;TEST_0
 Data set;hide_in_text
-Chars;uppercase;lowercase;digit;other
-Char frequencies;107;110;25;3
-Char frequencies (single run, %);43.67;44.9;10.2;1.22
-Char frequencies (total runs, %);10.84;11.14;2.53;0.3
+Single non-whitespace char run count;245
+Total run element count;971
+Total run element count percentage (%);25,23
+Char type;uppercase;lowercase;digit;other
+Char frequencies;113;101;28;3
+Char frequencies (single run, %);46.12;41.22;11.43;1.22
+Char frequencies (total runs, %);11.64;10.4;2.88;0.31
 
 Document Name;TEST_0
-Data set;multilayer_hybrid
-Chars;uppercase;lowercase;digit;other
-Char frequencies;2;173;0;5
-Char frequencies (single run, %);1.11;96.11;0.0;2.78
-Char frequencies (total runs, %);0.84;73.0;0.0;2.11
+Data set;modify_RGB_color_ch
+Single non-whitespace char run count;178
+Total run element count;243
+Total run element count percentage (%);73,25
+Char type;uppercase;lowercase;digit;other
+Char frequencies;1;175;0;2
+Char frequencies (single run, %);0.56;98.31;0.0;1.12
+Char frequencies (total runs, %);0.41;72.02;0.0;0.82
 
 Document Name;TEST_0
-Data set;two_bit_transformation
-Chars;uppercase;lowercase;digit;other
+Data set;unispace
+Single non-whitespace char run count;2
+Total run element count;27
+Total run element count percentage (%);7,41
+Char type;uppercase;lowercase;digit;other
 Char frequencies;0;1;0;1
 Char frequencies (single run, %);0.0;50.0;0.0;50.0
 Char frequencies (total runs, %);0.0;3.7;0.0;3.7
 
 Document Name;TEST_0
-Data set;modify_RGB_color_ch
-Chars;uppercase;lowercase;digit;other
+Data set;unicode_homoglyphs
+Single non-whitespace char run count;2
+Total run element count;27
+Total run element count percentage (%);7,41
+Char type;uppercase;lowercase;digit;other
 Char frequencies;0;1;0;1
 Char frequencies (single run, %);0.0;50.0;0.0;50.0
 Char frequencies (total runs, %);0.0;3.7;0.0;3.7

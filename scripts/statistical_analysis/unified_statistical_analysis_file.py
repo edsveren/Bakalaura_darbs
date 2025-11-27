@@ -1,9 +1,6 @@
 import os
 import csv
 from pathlib import Path
-from docx import Document
-from docx.oxml.ns import qn
-from docx.document import Document as DocumentObject
 from typing import Callable
 
 # Delete file
@@ -13,11 +10,9 @@ def delete_file(file: Path) -> None:
         print(f"Deleted: {str(file)}")
 
 def export_to_csv(
-        docPath: Path, 
+        result_file: str, 
         data_to_csv: list[list]
     ) -> None:
-    file_name = docPath.stem
-    result_file = f"results/statistical_analysis/1_element_count/{file_name}.csv"
 
     if Path(result_file).is_file():
         with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
@@ -69,5 +64,42 @@ def singular_check(
             label, *values = item
             print(f"{label}: {', '.join(map(str, values))}")
 
-        export_to_csv(path, data_to_csv)
+        export_to_csv(csv_file, data_to_csv)
         j += 1
+
+
+# docPath_0 = Path("data_set/clean_files/TEST_0.docx")
+# docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
+# docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
+# docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
+# docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
+# docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
+
+# data_set = ["clean", "hide_in_text", "2_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
+
+# clean_files = "data_set/clean_files"
+# i = 1
+# for file in Path(clean_files).iterdir():
+#     print()
+#     if file.name.startswith('~$'):
+#         continue
+#     docPath = str(Path(f"{clean_files}/{file.name}")) #Path("data_set/clean_files/TEST_0.docx")
+#     print(f"DOCUMENT: {docPath}")
+#     document = Document(docPath)
+#     txt_element_count = count_text_elements(document)
+#     print(f"Text element count: {txt_element_count}")
+#     print("Font sizes values for each run element:")
+#     print(get_font_size_value_from_each_run(document, i, txt_element_count, docPath, data_set[0]))
+#     i += 1
+
+# stego_files = "data_set/stego_files"
+# i = 0
+# for directories in Path(stego_files).iterdir():
+#     for file in directories.iterdir():
+#         docPath = str(Path(f"{stego_files}/{directories.name}/{file.name}"))
+#         print(f"DOCUMENT: {docPath}")
+#         document = Document(docPath)
+#         print(f"Text element count: {count_text_elements(document)}")
+#         print("Font sizes values for each run element:")
+#         print(get_font_size_value_from_each_run(document, docPath, data_set[i]))
+#     i += 1

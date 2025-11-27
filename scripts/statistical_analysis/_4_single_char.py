@@ -1,10 +1,9 @@
-import os
-import csv
 from pathlib import Path
 from collections import Counter
 import _1_element_count
 from docx import Document
 from docx.document import Document as DocumentObject
+import unified_statistical_analysis_file
 
 def number_of_runs_with_a_single_character(document: DocumentObject) -> int:
     count = 0
@@ -32,80 +31,48 @@ def bin_single_chars(single_char: str) -> str:
     else:
         return "other"
     
-def to_csv(docPath: Path, data_set: str, chars: list, char_frequencies: list, 
-           frequency_percentages_single_run: list, frequency_percentages_total_runs: list) -> None:
-    file_name = docPath.stem
-    result_file = f"results/statistical_analysis/4_single_char/{file_name}.csv"
+def single_char_analysis(path: Path, data_set: str) -> list[list]:
+    document = Document(str(path))
+    total_run_element_count = _1_element_count.count_total_runs_elements(document)
+    single_char_run_count = number_of_runs_with_a_single_character(document)
+    run_percentages = str(round((single_char_run_count / total_run_element_count) * 100, 2)).replace(".", ",")
+    single_char_texts = run_text_with_single_character(document)
+    single_char_texts_list = [bin_single_chars(single_char) for single_char in single_char_texts]
+    single_char_bins = {key: Counter(single_char_texts_list).get(key, 0) for key in ['uppercase', 'lowercase', 'digit', 'other']}
+    
+    chars = []
+    frequencies = []
+    frequency_percentages_single_run = []
+    frequency_percentages_total_runs = []
 
-    if Path(result_file).is_file():
-        with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
-            writer = csv.writer(output_file, delimiter=";")
-            writer.writerow(["Document Name", file_name])
-            writer.writerow(["Data set", data_set])
-            writer.writerow(["Chars", *chars])
-            writer.writerow(["Char frequencies", *char_frequencies])
-            writer.writerow(["Char frequencies (single run, %)", *frequency_percentages_single_run])
-            writer.writerow(["Char frequencies (total runs, %)", *frequency_percentages_total_runs])
-            writer.writerow('')
-    else:
-        with open(result_file, "w", encoding="utf-8", newline="") as output_file:
-            writer = csv.writer(output_file, delimiter=";")
-            writer.writerow(["Document Name", file_name])
-            writer.writerow(["Data set", data_set])
-            writer.writerow(["Chars", *chars])
-            writer.writerow(["Char frequencies", *char_frequencies])
-            writer.writerow(["Char frequencies (single run, %)", *frequency_percentages_single_run])
-            writer.writerow(["Char frequencies (total runs, %)", *frequency_percentages_total_runs])
-            writer.writerow('')
+    # print(f"Number of runs with a single char (non-whitespace): {single_char_run_count} out of {total_run_element_count} runs. ({run_percentages}%).")
+    # print("Char from each single-char run element:")
+    # print(single_char_texts)
+    for char, frequency in single_char_bins.items():
+        frequency_percent_out_of_single_run = str(round((frequency / single_char_run_count) * 100, 2)) #.replace(".", ",")
+        frequency_percent_out_of_total_runs = str(round((frequency / total_run_element_count) * 100, 2)) #.replace(".", ",")
+        chars.append(char)
+        frequencies.append(frequency)
+        frequency_percentages_single_run.append(frequency_percent_out_of_single_run)
+        frequency_percentages_total_runs.append(frequency_percent_out_of_total_runs)
+        # print(f"Char type: {char}. Frequency: {frequency} (Single char runs: {frequency_percent_out_of_single_run}%, Total runs: {frequency_percent_out_of_total_runs}%).")
+        
+    data_to_csv = [
+        ["Document Name", path.stem],
+        ["Data set", data_set],
+        ["Single non-whitespace char run count", single_char_run_count],
+        ["Total run element count", total_run_element_count],
+        ["Total run element count percentage (%)", run_percentages],
+        ["Char type", *chars],
+        ["Char frequencies", *frequencies],
+        ["Char frequencies (single run, %)", *frequency_percentages_single_run],
+        ["Char frequencies (total runs, %)", *frequency_percentages_total_runs]
+    ]
+    
+    return data_to_csv
 
 def main() -> None:
-    if Path(f"results/statistical_analysis/4_single_char/TEST_0.csv").is_file():
-        os.remove(Path(f"results/statistical_analysis/4_single_char/TEST_0.csv"))
-
-    docPath_0 = Path("data_set/clean_files/TEST_0.docx")
-    docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
-    docPath_2 = Path("data_set/stego_files/stego_method_2/TEST_0.docx")
-    docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
-    docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
-    docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
-    docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
-
-    paths = [docPath_0, docPath_1, docPath_2, docPath_3, docPath_4, docPath_5, docPath_6]
-    data_set = ["clean", "hide_in_text", "multilayer_hybrid", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
-    
-    i = 0
-    for path in paths:
-        print("")
-        if not Path(path).is_file():
-            print(f"File doesn't exist: {path}")
-            continue
-        print(f"Opened: {path}")
-        document = Document(str(path))
-        total_run_element_count = _1_element_count.count_total_runs_elements(document)
-        single_char_run_count = number_of_runs_with_a_single_character(document)
-        run_percentages = str(round((single_char_run_count / total_run_element_count) * 100, 2)).replace(".", ",")
-        single_char_texts = run_text_with_single_character(document)
-        single_char_texts_list = [bin_single_chars(single_char) for single_char in single_char_texts]
-        single_char_bins = {key: Counter(single_char_texts_list).get(key, 0) for key in ['uppercase', 'lowercase', 'digit', 'other']}
-        
-        chars = []
-        frequencies = []
-        frequency_percentages_single_run = []
-        frequency_percentages_total_runs = []
-
-        print(f"Number of runs with a single char (non-whitespace): {single_char_run_count} out of {total_run_element_count} runs. ({run_percentages}%).")
-        # print("Char from each single-char run element:")
-        # print(single_char_texts)
-        for char, frequency in single_char_bins.items():
-            frequency_percent_out_of_single_run = str(round((frequency / single_char_run_count) * 100, 2)) #.replace(".", ",")
-            frequency_percent_out_of_total_runs = str(round((frequency / total_run_element_count) * 100, 2)) #.replace(".", ",")
-            chars.append(char)
-            frequencies.append(frequency)
-            frequency_percentages_single_run.append(frequency_percent_out_of_single_run)
-            frequency_percentages_total_runs.append(frequency_percent_out_of_total_runs)
-            print(f"Char type: {char}. Frequency: {frequency} (Single char runs: {frequency_percent_out_of_single_run}%, Total runs: {frequency_percent_out_of_total_runs}%).")
-        to_csv(path, data_set[i], chars, frequencies, frequency_percentages_single_run, frequency_percentages_total_runs)
-        i += 1
+    unified_statistical_analysis_file.singular_check('4_single_char', 'TEST_0', single_char_analysis)
 
 if __name__ == "__main__":
     main()

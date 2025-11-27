@@ -7,23 +7,23 @@ RGB colours frequencies (%);100.0;0.0;0.0
 Document Name;TEST_0
 Data set;hide_in_text
 RGB colours;black;white;other
-RGB colours frequencies;747;240;0
-RGB colours frequencies (%);75.68;24.32;0.0
+RGB colours frequencies;735;236;0
+RGB colours frequencies (%);75.7;24.3;0.0
 
 Document Name;TEST_0
-Data set;multilayer_hybrid
+Data set;modify_RGB_color_ch
 RGB colours;black;white;other
-RGB colours frequencies;59;0;178
-RGB colours frequencies (%);24.89;0.0;75.11
+RGB colours frequencies;67;0;176
+RGB colours frequencies (%);27.57;0.0;72.43
 
 Document Name;TEST_0
-Data set;two_bit_transformation
+Data set;unispace
 RGB colours;black;white;other
 RGB colours frequencies;27;0;0
 RGB colours frequencies (%);100.0;0.0;0.0
 
 Document Name;TEST_0
-Data set;modify_RGB_color_ch
+Data set;unicode_homoglyphs
 RGB colours;black;white;other
 RGB colours frequencies;27;0;0
 RGB colours frequencies (%);100.0;0.0;0.0

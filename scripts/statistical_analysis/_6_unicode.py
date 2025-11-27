@@ -1,9 +1,8 @@
 import re
-import os
-import csv
 from pathlib import Path
 from docx import Document
 from docx.document import Document as DocumentObject
+import unified_statistical_analysis_file
 
 def count_chars_in_paragraphs(document: DocumentObject) -> int:
     char_count = 0
@@ -39,65 +38,30 @@ def count_non_ascii_chars_in_runs(document: DocumentObject) -> list[int]:
             char_count_run.append(len(run_chars))
     return char_count_run
 
-def to_csv(docPath: Path, data_set: str, total_char_count: int, non_ascii_char_count: int, 
-           total_char_to_non_ascii_char_ratio: float, non_ascii_char_count_paragraphs: list) -> None:
-    file_name = docPath.stem
-    result_file = f"results/statistical_analysis/6_unicode/{file_name}.csv"
+def unicode_analysis(path: Path, data_set: str) -> list[list]:
+    document = Document(str(path))
+    total_char_count = count_chars_in_paragraphs(document)
+    total_non_ascii_char_count, non_ascii_char_count_paragraphs = count_non_ascii_chars_in_paragraphs(document)
+    total_char_to_non_ascii_char_ratio = round((total_non_ascii_char_count/total_char_count) * 100, 2)
 
-    if Path(result_file).is_file():
-        with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
-            writer = csv.writer(output_file, delimiter=";")
-            writer.writerow(["Document Name", file_name])
-            writer.writerow(["Data set", data_set])
-            writer.writerow(["Total char count", total_char_count])
-            writer.writerow(["Total ASCII char count", non_ascii_char_count])
-            writer.writerow(["Total char to ASCII char ratio (%)", total_char_to_non_ascii_char_ratio])
-            writer.writerow(["Non-ASCII counts per paragraph", *non_ascii_char_count_paragraphs])
-            writer.writerow('')
-    else:
-        with open(result_file, "w", encoding="utf-8", newline="") as output_file:
-            writer = csv.writer(output_file, delimiter=";")
-            writer.writerow(["Document Name", file_name])
-            writer.writerow(["Data set", data_set])
-            writer.writerow(["Total char count", total_char_count])
-            writer.writerow(["Total ASCII char count", non_ascii_char_count])
-            writer.writerow(["Total char to ASCII char ratio (%)", total_char_to_non_ascii_char_ratio])
-            writer.writerow(["Non-ASCII counts per paragraph", *non_ascii_char_count_paragraphs])
-            writer.writerow('')
-
-def main():
-    if Path(f"results/statistical_analysis/6_unicode/TEST_0.csv").is_file():
-        os.remove(Path(f"results/statistical_analysis/6_unicode/TEST_0.csv"))
-
-    docPath_0 = Path("data_set/clean_files/TEST_0.docx")
-    docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
-    docPath_2 = Path("data_set/stego_files/stego_method_2/TEST_0.docx")
-    docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
-    docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
-    docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
-    docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
-
-    paths = [docPath_0, docPath_1, docPath_2, docPath_3, docPath_4, docPath_5, docPath_6]
-    data_set = ["clean", "hide_in_text", "multilayer_hybrid", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
+    # print(f"Non-ASCII characters in paragraphs: {non_ascii_char_count_paragraphs}")
+    # # print(f"Total non-ASCII char count: {non_ascii_char_count}")
+    # # print(f"Total char count: {char_count}")
+    # print(f"Total char count: {total_char_count} to total non-ASCII char count: {total_non_ascii_char_count}. Ratio: {total_char_to_non_ascii_char_ratio} (%)")
     
-    i = 0
-    for path in paths:
-        print("")
-        if not Path(path).is_file():
-            print(f"File doesn't exist: {path}")
-            continue
-        print(f"Opened: {path}")
-        document = Document(str(path))
-        total_char_count = count_chars_in_paragraphs(document)
-        total_non_ascii_char_count, non_ascii_char_count_paragraphs = count_non_ascii_chars_in_paragraphs(document)
-        total_char_to_non_ascii_char_ratio = round((total_non_ascii_char_count/total_char_count) * 100, 2)
-
-        print(f"Non-ASCII characters in paragraphs: {non_ascii_char_count_paragraphs}")
-        # print(f"Total non-ASCII char count: {non_ascii_char_count}")
-        # print(f"Total char count: {char_count}")
-        print(f"Total char count: {total_char_count} to total non-ASCII char count: {total_non_ascii_char_count}. Ratio: {total_char_to_non_ascii_char_ratio} (%)")
-        to_csv(path, data_set[i], total_char_count, total_non_ascii_char_count, total_char_to_non_ascii_char_ratio, non_ascii_char_count_paragraphs)
-        i += 1
+    data_to_csv = [
+        ["Document Name", path.stem],
+        ["Data set", data_set],
+        ["Total char count", total_char_count],
+        ["Total ASCII char count", total_non_ascii_char_count],
+        ["Total char to ASCII char ratio (%)", total_char_to_non_ascii_char_ratio],
+        ["Non-ASCII counts per paragraph", *non_ascii_char_count_paragraphs]
+    ]
+    
+    return data_to_csv
         
+def main() -> None:
+    unified_statistical_analysis_file.singular_check('6_unicode', 'TEST_0', unicode_analysis)
+
 if __name__ == "__main__":
     main()

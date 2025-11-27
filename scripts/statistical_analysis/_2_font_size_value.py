@@ -1,5 +1,3 @@
-import os
-import csv
 from pathlib import Path
 from collections import Counter
 from docx import Document
@@ -105,101 +103,8 @@ def font_size_value_analysis(path: Path, data_set: str) -> list[list]:
 
     return data_to_csv
 
-def to_csv(docPath: Path, data_set: str, font_sizes: list, font_size_frequency: list) -> None:
-    file_name = docPath.stem
-    result_file = f"results/statistical_analysis/2_font_sizes/{file_name}.csv"
-
-    if Path(result_file).is_file():
-        with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
-            writer = csv.writer(output_file, delimiter=";")
-            writer.writerow(["Document Name", file_name])
-            writer.writerow(["Data set", data_set])
-            writer.writerow(["Font Sizes (pt)", *font_sizes])
-            writer.writerow(["Font Sizes Count", *font_size_frequency])
-            writer.writerow('')
-    else:
-        with open(result_file, "w", encoding="utf-8", newline="") as output_file:
-            writer = csv.writer(output_file, delimiter=";")
-            writer.writerow(["Document Name", file_name])
-            writer.writerow(["Data set", data_set])
-            writer.writerow(["Font Sizes (pt)", *font_sizes])
-            writer.writerow(["Font Sizes Count", *font_size_frequency])
-            writer.writerow('')
-
-def main() -> None:
-    if Path(f"results/statistical_analysis/2_font_sizes/TEST_0.csv").is_file():
-        os.remove(Path(f"results/statistical_analysis/2_font_sizes/TEST_0.csv"))
-
-    docPath_0 = Path("data_set/clean_files/TEST_0.docx")
-    docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
-    docPath_2 = Path("data_set/stego_files/stego_method_2/TEST_0.docx")
-    docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
-    docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
-    docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
-    docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
-
-    paths = [docPath_0, docPath_1, docPath_2, docPath_3, docPath_4, docPath_5, docPath_6]
-    data_set = ["clean", "hide_in_text", "multilayer_hybrid", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
-    
-    i = 0
-    for path in paths:
-        print("")
-        if not Path(path).is_file():
-            print(f"File doesn't exist: {path}")
-            continue
-        print(f"Opened: {path}")
-        document = Document(str(path))
-        font_sizes = get_font_size_value_from_each_run(document)
-        counter = Counter(font_sizes)        
-        font_sizes_value = list(counter.keys())
-        font_sizes_frequencies = list(counter.values())
-
-        print(f"Font sizes values for each run element: {font_sizes}")
-        print(f"Font sizes: {font_sizes_value}")
-        print(f"Font size frequencies: {font_sizes_frequencies}")
-        for size, frequency in counter.items():
-            print(f"Font size: {size} pt. Frequency: {frequency}")
-
-        to_csv(path, data_set[i], font_sizes_value, font_sizes_frequencies)
-        i += 1
-
 def main() -> None:
     unified_statistical_analysis_file.singular_check('2_font_sizes', 'TEST_0', font_size_value_analysis)
         
 if __name__ == "__main__":
     main()
-# docPath_0 = Path("data_set/clean_files/TEST_0.docx")
-# docPath_1 = Path("data_set/stego_files/stego_method_1/TEST_0.docx")
-# docPath_3 = Path("data_set/stego_files/stego_method_3/TEST_0.docx")
-# docPath_4 = Path("data_set/stego_files/stego_method_4/TEST_0.docx")
-# docPath_5 = Path("data_set/stego_files/stego_method_5/TEST_0.docx")
-# docPath_6= Path("data_set/stego_files/stego_method_6/TEST_0.docx")
-
-# data_set = ["clean", "hide_in_text", "2_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
-
-# clean_files = "data_set/clean_files"
-# i = 1
-# for file in Path(clean_files).iterdir():
-#     print()
-#     if file.name.startswith('~$'):
-#         continue
-#     docPath = str(Path(f"{clean_files}/{file.name}")) #Path("data_set/clean_files/TEST_0.docx")
-#     print(f"DOCUMENT: {docPath}")
-#     document = Document(docPath)
-#     txt_element_count = count_text_elements(document)
-#     print(f"Text element count: {txt_element_count}")
-#     print("Font sizes values for each run element:")
-#     print(get_font_size_value_from_each_run(document, i, txt_element_count, docPath, data_set[0]))
-#     i += 1
-
-# stego_files = "data_set/stego_files"
-# i = 0
-# for directories in Path(stego_files).iterdir():
-#     for file in directories.iterdir():
-#         docPath = str(Path(f"{stego_files}/{directories.name}/{file.name}"))
-#         print(f"DOCUMENT: {docPath}")
-#         document = Document(docPath)
-#         print(f"Text element count: {count_text_elements(document)}")
-#         print("Font sizes values for each run element:")
-#         print(get_font_size_value_from_each_run(document, docPath, data_set[i]))
-#     i += 1

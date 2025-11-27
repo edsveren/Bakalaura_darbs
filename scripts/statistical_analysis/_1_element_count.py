@@ -59,8 +59,8 @@ def element_count_analysis(path: Path, data_set: str) -> list[list]:
         ["Total Paragraph Count", total_paragraph_count],
         ["Total Run Element Count", total_run_element_count],
         ["Total Text Element Count", total_text_elements],
-        ["Text Elements Per Paragraph", text_element_per_paragraph_list],
-        ["Text Elements Per Run", text_element_per_run_list]
+        ["Text Elements Per Paragraph", *text_element_per_paragraph_list],
+        ["Text Elements Per Run", *text_element_per_run_list]
     ]
     return data_to_csv
 
