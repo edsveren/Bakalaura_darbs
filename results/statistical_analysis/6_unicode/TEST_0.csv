@@ -1,35 +1,35 @@
 Document Name;TEST_0
 Data set;clean
 Total char count;7875
-Total ASCII char count;0
-Total char to ASCII char ratio (%);0.0
+Total non-ASCII char count;0
+Total char to non-ASCII char ratio (%);0.0
 Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 
 Document Name;TEST_0
 Data set;hide_in_text
 Total char count;8347
-Total ASCII char count;0
-Total char to ASCII char ratio (%);0.0
+Total non-ASCII char count;0
+Total char to non-ASCII char ratio (%);0.0
 Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 
 Document Name;TEST_0
 Data set;modify_RGB_color_ch
 Total char count;7875
-Total ASCII char count;0
-Total char to ASCII char ratio (%);0.0
+Total non-ASCII char count;0
+Total char to non-ASCII char ratio (%);0.0
 Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 
 Document Name;TEST_0
 Data set;unispace
 Total char count;8219
-Total ASCII char count;516
-Total char to ASCII char ratio (%);6.28
+Total non-ASCII char count;516
+Total char to non-ASCII char ratio (%);6.28
 Non-ASCII counts per paragraph;0;0;0;0;0;0;375;126;15;0;0;0;0;0;0;0;0
 
 Document Name;TEST_0
 Data set;unicode_homoglyphs
 Total char count;7875
-Total ASCII char count;661
-Total char to ASCII char ratio (%);8.39
+Total non-ASCII char count;661
+Total char to non-ASCII char ratio (%);8.39
 Non-ASCII counts per paragraph;0;0;0;0;0;0;0;0;0;0;0;0;0;212;120;104;225
 

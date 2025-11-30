@@ -56,16 +56,16 @@ def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]
             ["Document Name", path.stem],
             ["Data set", data_set],
             ["Total char count", total_char_count],
-            ["Total ASCII char count", total_non_ascii_char_count],
-            ["Total char to ASCII char ratio (%)", total_char_to_non_ascii_char_ratio]
+            ["Total non-ASCII char count", total_non_ascii_char_count],
+            ["Total char to non-ASCII char ratio (%)", total_char_to_non_ascii_char_ratio]
         ]
     else:
         data_to_csv = [
             ["Document Name", path.stem],
             ["Data set", data_set],
             ["Total char count", total_char_count],
-            ["Total ASCII char count", total_non_ascii_char_count],
-            ["Total char to ASCII char ratio (%)", total_char_to_non_ascii_char_ratio],
+            ["Total non-ASCII char count", total_non_ascii_char_count],
+            ["Total char to non-ASCII char ratio (%)", total_char_to_non_ascii_char_ratio],
             ["Non-ASCII counts per paragraph", *non_ascii_char_count_paragraphs]
         ]
     

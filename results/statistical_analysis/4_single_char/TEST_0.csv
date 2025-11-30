@@ -2,7 +2,7 @@ Document Name;TEST_0
 Data set;clean
 Single non-whitespace char run count;2
 Total run element count;27
-Total run element count percentage (%);7,41
+Total run element count percentage (%);7.41
 Char type;uppercase;lowercase;digit;other
 Char frequencies;0;1;0;1
 Char frequencies (single run, %);0.0;50.0;0.0;50.0
@@ -12,7 +12,7 @@ Document Name;TEST_0
 Data set;hide_in_text
 Single non-whitespace char run count;245
 Total run element count;971
-Total run element count percentage (%);25,23
+Total run element count percentage (%);25.23
 Char type;uppercase;lowercase;digit;other
 Char frequencies;113;101;28;3
 Char frequencies (single run, %);46.12;41.22;11.43;1.22
@@ -22,7 +22,7 @@ Document Name;TEST_0
 Data set;modify_RGB_color_ch
 Single non-whitespace char run count;178
 Total run element count;243
-Total run element count percentage (%);73,25
+Total run element count percentage (%);73.25
 Char type;uppercase;lowercase;digit;other
 Char frequencies;1;175;0;2
 Char frequencies (single run, %);0.56;98.31;0.0;1.12
@@ -32,7 +32,7 @@ Document Name;TEST_0
 Data set;unispace
 Single non-whitespace char run count;2
 Total run element count;27
-Total run element count percentage (%);7,41
+Total run element count percentage (%);7.41
 Char type;uppercase;lowercase;digit;other
 Char frequencies;0;1;0;1
 Char frequencies (single run, %);0.0;50.0;0.0;50.0
@@ -42,7 +42,7 @@ Document Name;TEST_0
 Data set;unicode_homoglyphs
 Single non-whitespace char run count;2
 Total run element count;27
-Total run element count percentage (%);7,41
+Total run element count percentage (%);7.41
 Char type;uppercase;lowercase;digit;other
 Char frequencies;0;1;0;1
 Char frequencies (single run, %);0.0;50.0;0.0;50.0
