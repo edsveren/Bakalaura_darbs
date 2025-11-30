@@ -27,7 +27,7 @@ def count_whitespace_characters_in_each_run(document: DocumentObject) -> list:
             whitespace_counts.append(whitespace_count)
     return whitespace_counts
 
-def space_char_analysis(path: Path, data_set: str) -> list[list]:
+def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]:
     document = Document(str(path))
     total_word_count = count_words_in_paragraphs(document)
     whitespace_counts_per_paragraph = count_whitespace_characters_in_each_paragraph(document)
@@ -35,28 +35,41 @@ def space_char_analysis(path: Path, data_set: str) -> list[list]:
     total_whitespace_count = 0
     for count in whitespace_counts_per_run:
         total_whitespace_count += count
-    word_to_whitespace_ratio = round((total_whitespace_count/total_word_count) * 100, 2)
-    
+    if total_word_count != 0:
+        word_to_whitespace_ratio = round((total_whitespace_count/total_word_count) * 100, 2)
+    else:
+        word_to_whitespace_ratio = 0
     # print(f"Whitespace count in each paragraph: {whitespace_counts_per_paragraph}")
     # print(f"Whitespace count in each run: {whitespace_counts_per_run}")
     # print(f"Total whitespace count: {total_whitespace_count}")
     # print(f"Total word count: {total_word_count}")
     # print(f"Total word count: {total_word_count} to total whitespace count {total_whitespace_count}. Ratio: {word_to_whitespace_ratio} (%)")
     
-    data_to_csv = [
-        ["Document Name", path.stem],
-        ["Data set", data_set],
-        ["Total word count", total_word_count],
-        ["Total whitespace count", total_whitespace_count],
-        ["Word to Whitespace ratio (%)", word_to_whitespace_ratio],
-        ["Whitespace counts per paragraph", *whitespace_counts_per_paragraph] #,
-        # ["Whitespace counts per run", *whitespace_counts_per_run]
-    ]
+    if not chosen_file:
+        data_to_csv = [
+            ["Document Name", path.stem],
+            ["Data set", data_set],
+            ["Total word count", total_word_count],
+            ["Total whitespace count", total_whitespace_count],
+            ["Word to Whitespace ratio (%)", word_to_whitespace_ratio],
+            # ["Whitespace counts per paragraph", *whitespace_counts_per_paragraph]
+        ]
+    else:
+        data_to_csv = [
+            ["Document Name", path.stem],
+            ["Data set", data_set],
+            ["Total word count", total_word_count],
+            ["Total whitespace count", total_whitespace_count],
+            ["Word to Whitespace ratio (%)", word_to_whitespace_ratio],
+            ["Whitespace counts per paragraph", *whitespace_counts_per_paragraph] #,
+            # ["Whitespace counts per run", *whitespace_counts_per_run]
+        ]
     
     return data_to_csv
 
 def main() -> None:
     unified_statistical_analysis_file.singular_check('5_space_char', 'TEST_0', space_char_analysis)
+    unified_statistical_analysis_file.singular_check('5_space_char', None, space_char_analysis)
 
 if __name__ == "__main__":
     main()

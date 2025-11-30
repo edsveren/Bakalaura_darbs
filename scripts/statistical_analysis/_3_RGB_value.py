@@ -24,7 +24,7 @@ def bin_rgb_values(rgb_value: str) -> str:
         case _:
             return "other"
         
-def RGB_value_analysis(path: Path, data_set: str) -> list[list]:
+def RGB_value_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]:
     document = Document(str(path))
     rgb_values = get_RGB_value_from_each_run(document)
     rgb_values_list = [bin_rgb_values(rgb) for rgb in rgb_values]
@@ -49,18 +49,28 @@ def RGB_value_analysis(path: Path, data_set: str) -> list[list]:
         frequency_percentages.append(frequency_percent)
         # print(f"RGB Color channel: {color}. Frequency: {frequency} ({frequency_percent}%).")
 
-    data_to_csv = [
-        ["Document Name", path.stem],
-        ["Data set", data_set],
-        ["RGB colours", *colours],
-        ["RGB colours frequencies", *frequencies],
-        ["RGB colours frequencies (%)", *frequency_percentages]
-    ]
+    if not chosen_file:
+        data_to_csv = [
+            ["Document Name", path.stem],
+            ["Data set", data_set],
+            ["RGB colours", *colours],
+            ["RGB colours frequencies", *frequencies],
+            ["RGB colours frequencies (%)", *frequency_percentages]
+        ]
+    else:
+        data_to_csv = [
+            ["Document Name", path.stem],
+            ["Data set", data_set],
+            ["RGB colours", *colours],
+            ["RGB colours frequencies", *frequencies],
+            ["RGB colours frequencies (%)", *frequency_percentages]
+        ]
     
     return data_to_csv
 
 def main() -> None:
     unified_statistical_analysis_file.singular_check('3_RGB_value', 'TEST_0', RGB_value_analysis)
+    unified_statistical_analysis_file.singular_check('3_RGB_value', None, RGB_value_analysis)
 
 if __name__ == "__main__":
     main()

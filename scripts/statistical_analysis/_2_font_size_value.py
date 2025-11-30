@@ -74,7 +74,7 @@ def get_font_size_value_from_each_run(document: DocumentObject) -> list:
                 font_sizes.append(default_pt)
     return font_sizes
 
-def font_size_value_analysis(path: Path, data_set: str) -> list[list]:
+def font_size_value_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]:
     document = Document(str(path))
     font_sizes = get_font_size_value_from_each_run(document)
     font_sizes_amount = len(font_sizes)
@@ -92,19 +92,30 @@ def font_size_value_analysis(path: Path, data_set: str) -> list[list]:
         frequency_percentages.append(frequency_percent)
         # print(f"Font size: {size} pt. Frequency: {frequency}")
 
-    data_to_csv = [
-        ["Document Name", path.stem],
-        ["Data set", data_set],
-        ["Font Sizes map", *font_sizes],
-        ["Font Sizes (pt)", *font_sizes_value],
-        ["Font Sizes Count", *font_sizes_frequencies],
-        ["Font Sizes Count (%)", *frequency_percentages]
-    ]
+    if not chosen_file:
+        data_to_csv = [
+            ["Document Name", path.stem],
+            ["Data set", data_set],
+            # ["Font Sizes map", *font_sizes],
+            ["Font Sizes (pt)", *font_sizes_value],
+            ["Font Sizes Count", *font_sizes_frequencies],
+            ["Font Sizes Count (%)", *frequency_percentages]
+        ]
+    else:
+        data_to_csv = [
+            ["Document Name", path.stem],
+            ["Data set", data_set],
+            ["Font Sizes map", *font_sizes],
+            ["Font Sizes (pt)", *font_sizes_value],
+            ["Font Sizes Count", *font_sizes_frequencies],
+            ["Font Sizes Count (%)", *frequency_percentages]
+        ]
 
     return data_to_csv
 
 def main() -> None:
     unified_statistical_analysis_file.singular_check('2_font_sizes', 'TEST_0', font_size_value_analysis)
+    unified_statistical_analysis_file.singular_check('2_font_sizes', None, font_size_value_analysis)
         
 if __name__ == "__main__":
     main()

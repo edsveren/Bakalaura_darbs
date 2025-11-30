@@ -188,8 +188,11 @@ from docx.enum.style import WD_STYLE_TYPE
 #                 out_row.pop()  # remove trailing spacer
 #             w.writerow(out_row)
 
-listlist = [1, 2, 3]
-print(*listlist)  # prints: 1 2 3
-
-print(type(listlist))  # prints: <class 'list'>
-print(type(*listlist))  # prints: <class 'int'>
+for folder in Path(f'data_set/stego_files').iterdir():
+    has_docx_files = any(Path(f'data_set/stego_files/{folder}').glob("*.docx"))
+    if not has_docx_files:
+        print(f"{folder} is empty!")
+    # else:
+    #     for file in folder.iterdir():
+    #         if file.is_file() and not file.name.startswith("."):
+    #             print(file)
