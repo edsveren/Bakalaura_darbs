@@ -38,7 +38,7 @@ def count_non_ascii_chars_in_runs(document: DocumentObject) -> list[int]:
             char_count_run.append(len(run_chars))
     return char_count_run
 
-def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]:
+def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
     document = Document(str(path))
     total_char_count = count_chars_in_paragraphs(document)
     total_non_ascii_char_count, non_ascii_char_count_paragraphs = count_non_ascii_chars_in_paragraphs(document)
@@ -53,11 +53,14 @@ def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]
     
     if not chosen_file:
         data_to_csv = [
-            ["Document Name", path.stem],
+            # ["Document Name", path.stem],
             ["Data set", data_set],
-            ["Total char count", total_char_count],
-            ["Total non-ASCII char count", total_non_ascii_char_count],
-            ["Total char to non-ASCII char ratio (%)", total_char_to_non_ascii_char_ratio]
+            # ["Total char count", total_char_count],
+            # ["Total non-ASCII char count", total_non_ascii_char_count],
+            # ["Total char to non-ASCII char ratio (%)", total_char_to_non_ascii_char_ratio],
+            
+            ["Document Name", "Total char count", "Total non-ASCII char count", "Total char to non-ASCII char ratio (%)"],
+            [path.stem, total_char_count, total_non_ascii_char_count, total_char_to_non_ascii_char_ratio],
         ]
     else:
         data_to_csv = [
@@ -69,11 +72,11 @@ def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]
             ["Non-ASCII counts per paragraph", *non_ascii_char_count_paragraphs]
         ]
     
-    return data_to_csv
+    return data_to_csv, (2,)
         
 def main() -> None:
-    unified_statistical_analysis_file.singular_check('6_unicode', 'TEST_0', unicode_analysis)
-    unified_statistical_analysis_file.singular_check('6_unicode', None, unicode_analysis)
+    unified_statistical_analysis_file.statistical_analysis('6_unicode', 'TEST_0', unicode_analysis)
+    unified_statistical_analysis_file.statistical_analysis('6_unicode', None, unicode_analysis)
 
 if __name__ == "__main__":
     main()

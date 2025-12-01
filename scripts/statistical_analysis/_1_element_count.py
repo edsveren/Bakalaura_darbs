@@ -45,7 +45,7 @@ def count_text_elements_per_run(document: DocumentObject) -> list[int]:
             text_element_per_run.append(text_element_in_run_count)
     return text_element_per_run
 
-def element_count_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]:
+def element_count_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
     document = Document(str(path))
     total_paragraph_count = count_total_paragraphs(document)
     total_run_element_count = count_total_runs_elements(document)
@@ -55,11 +55,13 @@ def element_count_analysis(path: Path, data_set: str, chosen_file: bool) -> list
 
     if not chosen_file:
         data_to_csv = [
-            ["Document Name", path.stem],
+            # ["Document Name", path.stem],
             ["Data set", data_set],
-            ["Total Paragraph Count", total_paragraph_count],
-            ["Total Run Element Count", total_run_element_count],
-            ["Total Text Element Count", total_text_elements]
+            # ["Total Paragraph Count", total_paragraph_count],
+            # ["Total Run Element Count", total_run_element_count],
+            # ["Total Text Element Count", total_text_elements],
+            ["Document Name", "Total Paragraph Count", "Total Run Element Count", "Total Text Element Count"],
+            [path.stem, total_paragraph_count, total_run_element_count, total_text_elements]
         ]
     else:
         data_to_csv = [
@@ -71,12 +73,11 @@ def element_count_analysis(path: Path, data_set: str, chosen_file: bool) -> list
             ["Text Elements Per Paragraph", *text_element_per_paragraph_list],
             ["Text Elements Per Run", *text_element_per_run_list]
         ]
-    return data_to_csv
+    return data_to_csv, (2,)
 
 def main() -> None:
-    
-    unified_statistical_analysis_file.singular_check('1_element_count', 'TEST_0', element_count_analysis)
-    unified_statistical_analysis_file.singular_check('1_element_count', None, element_count_analysis)
+    unified_statistical_analysis_file.statistical_analysis('1_element_count', 'TEST_0', element_count_analysis)
+    unified_statistical_analysis_file.statistical_analysis('1_element_count', None, element_count_analysis)
 
 if __name__ == "__main__":
     main()

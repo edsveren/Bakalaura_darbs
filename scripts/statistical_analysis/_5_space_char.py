@@ -27,7 +27,7 @@ def count_whitespace_characters_in_each_run(document: DocumentObject) -> list:
             whitespace_counts.append(whitespace_count)
     return whitespace_counts
 
-def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]:
+def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
     document = Document(str(path))
     total_word_count = count_words_in_paragraphs(document)
     whitespace_counts_per_paragraph = count_whitespace_characters_in_each_paragraph(document)
@@ -47,12 +47,14 @@ def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> list[li
     
     if not chosen_file:
         data_to_csv = [
-            ["Document Name", path.stem],
+            # ["Document Name", path.stem],
             ["Data set", data_set],
-            ["Total word count", total_word_count],
-            ["Total whitespace count", total_whitespace_count],
-            ["Word to Whitespace ratio (%)", word_to_whitespace_ratio],
+            # ["Total word count", total_word_count],
+            # ["Total whitespace count", total_whitespace_count],
+            # ["Word to Whitespace ratio (%)", word_to_whitespace_ratio],
             # ["Whitespace counts per paragraph", *whitespace_counts_per_paragraph]
+            ["Document Name", "Total word count", "Total whitespace count", "Word to Whitespace ratio (%)"],
+            [path.stem, total_word_count, total_whitespace_count, word_to_whitespace_ratio],
         ]
     else:
         data_to_csv = [
@@ -65,11 +67,11 @@ def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> list[li
             # ["Whitespace counts per run", *whitespace_counts_per_run]
         ]
     
-    return data_to_csv
+    return data_to_csv, (2,)
 
 def main() -> None:
-    unified_statistical_analysis_file.singular_check('5_space_char', 'TEST_0', space_char_analysis)
-    unified_statistical_analysis_file.singular_check('5_space_char', None, space_char_analysis)
+    unified_statistical_analysis_file.statistical_analysis('5_space_char', 'TEST_0', space_char_analysis)
+    unified_statistical_analysis_file.statistical_analysis('5_space_char', None, space_char_analysis)
 
 if __name__ == "__main__":
     main()

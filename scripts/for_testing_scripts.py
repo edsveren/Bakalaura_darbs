@@ -188,11 +188,40 @@ from docx.enum.style import WD_STYLE_TYPE
 #                 out_row.pop()  # remove trailing spacer
 #             w.writerow(out_row)
 
-for folder in Path(f'data_set/stego_files').iterdir():
-    has_docx_files = any(Path(f'data_set/stego_files/{folder}').glob("*.docx"))
-    if not has_docx_files:
-        print(f"{folder} is empty!")
+# for folder in Path(f'data_set/stego_files').iterdir():
+#     has_docx_files = any(Path(f'data_set/stego_files/{folder}').glob("*.docx"))
+#     if not has_docx_files:
+#         print(f"{folder} is empty!")
     # else:
     #     for file in folder.iterdir():
     #         if file.is_file() and not file.name.startswith("."):
     #             print(file)
+
+# data_set = [
+#     ["Document Name", 'XXXXX'],
+#     ["Document Type", 'YYYYY']
+# ]
+data_to_csv = [
+    # ["Document Name", path.stem],
+    ["Data set", 'clean'],
+    # ["Total Paragraph Count", total_paragraph_count],
+    # ["Total Run Element Count", total_run_element_count],
+    # ["Total Text Element Count", total_text_elements],
+    ["Document Name", "Total Paragraph Count", "Total Run Element Count", "Total Text Element Count"],
+    ['XXXXX', 1, 2, 3],
+    ['XXXXX', 1, 2, 3],
+    ['XXXXX', 1, 2, 3],
+    ['XXXXX', 1, 2, 3]
+]
+# for line in data_to_csv:
+#     print(line[1])
+
+# print(data_to_csv[2:])
+a1 = {'a':1, 'b':13, 'd':4, 'c':2, 'e':30}
+d_sorted = dict(sorted(a1.items(), reverse=True))
+
+# for k, v in a1.items():
+#     print(k, v)
+
+for k, v in d_sorted.items():
+    print(k, v)

@@ -31,7 +31,7 @@ def bin_single_chars(single_char: str) -> str:
     else:
         return "other"
     
-def single_char_analysis(path: Path, data_set: str, chosen_file: bool) -> list[list]:
+def single_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
     document = Document(str(path))
     total_run_element_count = _1_element_count.count_total_runs_elements(document)
     single_char_run_count = number_of_runs_with_a_single_character(document)
@@ -65,15 +65,23 @@ def single_char_analysis(path: Path, data_set: str, chosen_file: bool) -> list[l
     
     if not chosen_file:
         data_to_csv = [
-            ["Document Name", path.stem],
+            # ["Document Name", path.stem],
             ["Data set", data_set],
-            ["Single non-whitespace char run count", single_char_run_count],
-            ["Total run element count", total_run_element_count],
-            ["Total run element count percentage (%)", run_percentages],
-            ["Char type", *chars],
-            ["Char frequencies", *frequencies],
-            ["Char frequencies (single run, %)", *frequency_percentages_single_run],
-            ["Char frequencies (total runs, %)", *frequency_percentages_total_runs]
+            # ["Single non-whitespace char run count", single_char_run_count],
+            # ["Total run element count", total_run_element_count],
+            # ["Total run element count percentage (%)", run_percentages],
+            # ["Char type", *chars],
+            # ["Char frequencies", *frequencies],
+            # ["Char frequencies (single run, %)", *frequency_percentages_single_run],
+            # ["Char frequencies (total runs, %)", *frequency_percentages_total_runs],
+
+            ["Document Name", "Single non-whitespace char run count", "Total run element count", "Total run element count percentage", 
+             "Single Char type frequencies", '', '', '', 
+             "Single Char type frequencies (single run, %)", '', '', '', 
+             "Single Char type frequencies (total runs, %)", '', '', ''
+            ],
+            ['', '', '', '', *chars, *chars, *chars],
+            [path.stem, single_char_run_count, total_run_element_count, run_percentages, *frequencies, *frequency_percentages_single_run, *frequency_percentages_total_runs]
         ]
     else:
         data_to_csv = [
@@ -88,11 +96,11 @@ def single_char_analysis(path: Path, data_set: str, chosen_file: bool) -> list[l
             ["Char frequencies (total runs, %)", *frequency_percentages_total_runs]
         ]
     
-    return data_to_csv
+    return data_to_csv, (3,)
 
 def main() -> None:
-    unified_statistical_analysis_file.singular_check('4_single_char', 'TEST_0', single_char_analysis)
-    unified_statistical_analysis_file.singular_check('4_single_char', None, single_char_analysis)
+    unified_statistical_analysis_file.statistical_analysis('4_single_char', 'TEST_0', single_char_analysis)
+    unified_statistical_analysis_file.statistical_analysis('4_single_char', None, single_char_analysis)
 
 if __name__ == "__main__":
     main()
