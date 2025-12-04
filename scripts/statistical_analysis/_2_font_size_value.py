@@ -74,17 +74,29 @@ def get_font_size_value_from_each_run(document: DocumentObject) -> list:
                 font_sizes.append(default_pt)
     return font_sizes
 
-def font_size_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
+def bin_font_size_values(font_size: float) -> str:
+    if font_size > 20:
+        return '.+20.'
+    elif font_size > 11:
+        return '.20-11.'
+    elif font_size == 11:
+        return '.11.'
+    elif font_size > 1:
+        return '.10-1.'
+    else:
+        return '.1.'
+
+def font_size_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], int]:
     document = Document(str(path))
-    font_sizes = get_font_size_value_from_each_run(document)
-    font_sizes_amount = len(font_sizes)
-    counter = Counter(font_sizes)
+    font_size_values = get_font_size_value_from_each_run(document)
+    font_sizes_amount = len(font_size_values)
+
+    counter = Counter(font_size_values)
     counter_sorted = dict(sorted(counter.items(), reverse=True))        
 
     font_sizes_value = list(counter_sorted.keys())
     font_sizes_frequencies = list(counter_sorted.values())
     frequency_percentages = []
-
     
     # print(f"Font sizes values for each run element: {font_sizes}")
     # print(f"Font sizes: {font_sizes_value}")
@@ -93,6 +105,21 @@ def font_size_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tu
         frequency_percent = str(round((frequency / font_sizes_amount) * 100, 2)) #.replace(".", ",")
         frequency_percentages.append(frequency_percent)
         # print(f"Font size: {size} pt. Frequency: {frequency}")
+
+    
+
+    font_sizes_list = [bin_font_size_values(font_size) for font_size in font_size_values]
+    font_sizes_bins = {key: Counter(font_sizes_list).get(key, 0) for key in ['.+20.', '.20-11.', '.11.', '.10-1.', '.1.']}
+
+    font_sizes_value_multi = []
+    font_sizes_frequencies_multi = []
+    frequency_percentages_multi = []
+
+    for size, frequency in font_sizes_bins.items():
+        frequency_percent = str(round((frequency / font_sizes_amount) * 100, 2)) #.replace(".", ",")
+        font_sizes_value_multi.append(size)
+        font_sizes_frequencies_multi.append(frequency)
+        frequency_percentages_multi.append(frequency_percent)
 
     if not chosen_file:
         data_to_csv = [
@@ -103,24 +130,23 @@ def font_size_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tu
             # ["Font Sizes Count", *font_sizes_frequencies],
             # ["Font Sizes Count (%)", *frequency_percentages],
 
-            ["Document Name", "Font Sizes (pt)"],
-            ['', "Font Sizes Count"],
-            ['', "Font Sizes Count (%)"],
-            [path.stem, *font_sizes_value],
-            ['', *font_sizes_frequencies],
-            ['', *frequency_percentages]
+
+            ["Document Name", "Run Font Sizes (pt) frequencies", '', '', '', '', "Run Font Sizes (pt) frequencies (%)", '', '', '', ''],
+            # ["Document Name", "Font Sizes (pt)"],
+            ['', *font_sizes_value_multi, *font_sizes_value_multi],
+            [path.stem, *font_sizes_frequencies_multi, *frequency_percentages_multi]
         ]
     else:
         data_to_csv = [
             ["Document Name", path.stem],
             ["Data set", data_set],
-            ["Font Sizes map", *font_sizes],
+            ["Font Sizes map", *font_size_values],
             ["Font Sizes (pt)", *font_sizes_value],
             ["Font Sizes Count", *font_sizes_frequencies],
             ["Font Sizes Count (%)", *frequency_percentages]
         ]
 
-    return data_to_csv, (4, 5, 6)
+    return data_to_csv, 3 # (4, 5, 6)
 
 def main() -> None:
     unified_statistical_analysis_file.statistical_analysis('2_font_sizes', 'TEST_0', font_size_value_analysis)
