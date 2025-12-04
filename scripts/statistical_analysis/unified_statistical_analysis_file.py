@@ -2,7 +2,6 @@ import os
 import csv
 from pathlib import Path
 from typing import Callable
-from itertools import zip_longest
 
 # Delete file
 def delete_file(file: Path) -> None:
@@ -16,7 +15,8 @@ def export_to_csv(
         result_file: str, 
         data_to_csv: list[list],
         data_set_processed: bool,
-        append_starting_points: tuple
+        # append_starting_points: tuple,
+        append_starting_point: int
     ) -> None:
 
     if Path(result_file).is_file():
@@ -28,38 +28,72 @@ def export_to_csv(
                     writer.writerow(row)
             else:
                 # writer.writerow('')
-                for append_starting_point in append_starting_points: # THIS IS A HORRIBLE ATTEMPT
-                    writer.writerow(data_to_csv[append_starting_point]) # BETTER TO USE INT, FIX LATER!!!
+                # for append_starting_point in append_starting_points: # THIS IS A HORRIBLE ATTEMPT
+                writer.writerow(data_to_csv[append_starting_point]) # BETTER TO USE INT, FIX LATER!!!
     else:
         with open(result_file, "w", encoding="utf-8", newline="") as output_file:
             writer = csv.writer(output_file, delimiter=";")
             for row in data_to_csv:
                 writer.writerow(row)
 
+def process_specific_data_set(
+        data_set_processed: bool,
+        data_to_csv: list[list],
+        data_to_csv_list: list[list],
+        append_starting_point: int
+    ) -> list[list]:
 
-# Transpose the CSV file
-# def csv_transpose(
-#         input_file_str: str,
-#         output_folder: str
-#     ):
-#     output_file_ = f"{output_folder}/{Path(input_file_str).name}_transposed.csv"
+    row_width = len(data_to_csv[append_starting_point])
+
+    if not data_set_processed:
+        cell_index = 0
+        for cell in data_to_csv[1]:
+            if cell == '':
+                data_to_csv[1][cell_index] = '.'
+            cell_index += 1
+        data_to_csv_list.append(data_to_csv[1])
+        if append_starting_point == 2:
+            filler_row = ['.'] * row_width
+            data_to_csv_list.append(filler_row)
+        else:
+            data_to_csv_list.append(data_to_csv[2])
+    data_to_csv_list.append(data_to_csv[append_starting_point])
+    return data_to_csv_list
+
+# Export all individual statistical analysis data set results to a single CSV file
+def export_specific_data_set_to_csv(
+        result_file: str,
+        data_to_csv_list: list[list]
+        # existing_individual_stego_rows: list
+    ) -> None:
+
+    # Read existing statistical analysis data set result file data if it exists
+    if Path(result_file).is_file():
+        with open(result_file, "r", encoding="utf-8", newline="") as input_file:
+            reader = csv.reader(input_file, delimiter=";")
+            existing_individual_stego_rows = list(reader)
+    # Otherwise, create an empty list
+    else:
+        existing_individual_stego_rows = []
+
+    # Append individual statistical analysis data set results to the unified data set result file
+    with open(result_file, "w", encoding="utf-8", newline="") as output_file:
+        writer = csv.writer(output_file, delimiter=";")
+            
+        if existing_individual_stego_rows == []:
+            for row in data_to_csv_list:
+                writer.writerow(row[0:])
+        else:
+            for row_index in range(len(existing_individual_stego_rows)):
+                writer.writerow(existing_individual_stego_rows[row_index] + data_to_csv_list[row_index][1:])
     
-#     # Read CSV rows
-#     with open(input_file_str, newline="", encoding="utf-8") as input_file:
-#         rows = list(csv.reader(input_file, delimiter=";"))
+    print(f"Created a CSV file: {str(Path(result_file))}")
 
-#     # Transpose using zip_longest to handle unequal row and columns lengths
-#     # Replace "missing cells" with empty strings
-#     transposed_rows = list(zip_longest(*rows, fillvalue=""))
+def clear_specific_data_set_to_csv() -> None:
+    result_folder = f"results/statistical_analysis/all_specific_data_set_files"
 
-#     # Write transposed rows
-#     with open(output_file_, "w", newline="", encoding="utf-8") as output_file:
-#         writer = csv.writer(output_file, delimiter=";")
-#         for row in transposed_rows:
-#             new_row = ["", *row]
-#             writer.writerow(new_row)
-    
-#     print(f"Created a CSV file: {str(Path(output_file_))}")
+    for file in Path(result_folder).iterdir():
+        delete_file(file)
 
 def print_output(data_to_csv: list[list]) -> None:
     # for item in data_to_csv:
@@ -75,7 +109,7 @@ def print_output(data_to_csv: list[list]) -> None:
 def statistical_analysis(
         statistical_analysis_method: str, 
         analyzed_file: str|None, 
-        statistical_analysis_method_execution: Callable[[Path, str, bool], tuple[list[list], tuple]]
+        statistical_analysis_method_execution: Callable[[Path, str, bool], tuple[list[list], int]]
     ) -> None:
     
     csv_path = f"results/statistical_analysis/{statistical_analysis_method}"
@@ -118,14 +152,25 @@ def statistical_analysis(
             if not has_docx_files:
                 print(f"{str(Path(base_directory))} is empty!")
             else:
+                # The result file containing all individual data set results
+                result_file = f"results/statistical_analysis/all_specific_data_set_files/{data_set}.csv"
+                data_to_csv_list = []
+
                 for file in Path(base_directory).iterdir():
                     if file.is_file() and not file.name.startswith("."):    
                         print(f"Opened: {file}")
-                        data_to_csv, append_starting_point = statistical_analysis_method_execution(file, data_set, False)         
+                        data_to_csv, append_starting_point = statistical_analysis_method_execution(file, data_set, False)
+
                         print_output(data_to_csv)
                         export_to_csv(csv_path, csv_file, data_to_csv, data_set_processed, append_starting_point)
+                
+                        if data_to_csv[0][1] == data_set:
+                            data_to_csv_list = process_specific_data_set(data_set_processed, data_to_csv, data_to_csv_list, append_starting_point)
                         data_set_processed = True
 
+                export_specific_data_set_to_csv(result_file, data_to_csv_list)
+
         print()
-        
-        
+
+if __name__ == "__main__":
+    clear_specific_data_set_to_csv()

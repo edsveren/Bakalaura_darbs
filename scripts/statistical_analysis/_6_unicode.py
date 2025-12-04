@@ -38,7 +38,7 @@ def count_non_ascii_chars_in_runs(document: DocumentObject) -> list[int]:
             char_count_run.append(len(run_chars))
     return char_count_run
 
-def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
+def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], int]:
     document = Document(str(path))
     total_char_count = count_chars_in_paragraphs(document)
     total_non_ascii_char_count, non_ascii_char_count_paragraphs = count_non_ascii_chars_in_paragraphs(document)
@@ -72,7 +72,7 @@ def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list
             ["Non-ASCII counts per paragraph", *non_ascii_char_count_paragraphs]
         ]
     
-    return data_to_csv, (2,)
+    return data_to_csv, 2
         
 def main() -> None:
     unified_statistical_analysis_file.statistical_analysis('6_unicode', 'TEST_0', unicode_analysis)

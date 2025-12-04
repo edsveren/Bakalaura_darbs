@@ -27,7 +27,7 @@ def count_whitespace_characters_in_each_run(document: DocumentObject) -> list:
             whitespace_counts.append(whitespace_count)
     return whitespace_counts
 
-def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
+def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], int]:
     document = Document(str(path))
     total_word_count = count_words_in_paragraphs(document)
     whitespace_counts_per_paragraph = count_whitespace_characters_in_each_paragraph(document)
@@ -67,7 +67,7 @@ def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[l
             # ["Whitespace counts per run", *whitespace_counts_per_run]
         ]
     
-    return data_to_csv, (2,)
+    return data_to_csv, 2
 
 def main() -> None:
     unified_statistical_analysis_file.statistical_analysis('5_space_char', 'TEST_0', space_char_analysis)

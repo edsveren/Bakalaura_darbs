@@ -31,7 +31,7 @@ def bin_single_chars(single_char: str) -> str:
     else:
         return "other"
     
-def single_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
+def single_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], int]:
     document = Document(str(path))
     total_run_element_count = _1_element_count.count_total_runs_elements(document)
     single_char_run_count = number_of_runs_with_a_single_character(document)
@@ -96,7 +96,7 @@ def single_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[
             ["Char frequencies (total runs, %)", *frequency_percentages_total_runs]
         ]
     
-    return data_to_csv, (3,)
+    return data_to_csv, 3
 
 def main() -> None:
     unified_statistical_analysis_file.statistical_analysis('4_single_char', 'TEST_0', single_char_analysis)

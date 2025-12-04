@@ -223,5 +223,7 @@ d_sorted = dict(sorted(a1.items(), reverse=True))
 # for k, v in a1.items():
 #     print(k, v)
 
-for k, v in d_sorted.items():
-    print(k, v)
+# for k, v in d_sorted.items():
+#     print(k, v)
+
+print(data_to_csv[0][1])

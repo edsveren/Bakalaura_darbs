@@ -24,7 +24,7 @@ def bin_rgb_values(rgb_value: str) -> str:
         case _:
             return "other"
         
-def RGB_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], tuple]:
+def RGB_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], int]:
     document = Document(str(path))
     rgb_values = get_RGB_value_from_each_run(document)
     rgb_values_list = [bin_rgb_values(rgb) for rgb in rgb_values]
@@ -56,7 +56,7 @@ def RGB_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[li
             # ["RGB colours", *colours],
             # ["RGB colours frequencies", *frequencies],
             # ["RGB colours frequencies (%)", *frequency_percentages],
-            ["Document Name", "Run RGB colours frequencies", '', '', "Run RGB colours frequencies (%)"],
+            ["Document Name", "Run RGB colours frequencies", '', '', "Run RGB colours frequencies (%)", '', ''],
             ['', *colours, *colours],
             [path.stem, *frequencies, *frequency_percentages]
         ]
@@ -69,7 +69,7 @@ def RGB_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[li
             ["RGB colours frequencies (%)", *frequency_percentages]
         ]
     
-    return data_to_csv, (3,)
+    return data_to_csv, 3
 
 def main() -> None:
     unified_statistical_analysis_file.statistical_analysis('3_RGB_value', 'TEST_0', RGB_value_analysis)
