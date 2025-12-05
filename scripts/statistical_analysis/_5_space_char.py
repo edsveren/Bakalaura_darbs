@@ -4,7 +4,8 @@ from docx import Document
 from docx.document import Document as DocumentObject
 import unified_statistical_analysis_file
 
-def count_words_in_paragraphs(document: DocumentObject) -> int:
+# Count the amount of words in each paragraph element
+def count_words_in_each_paragraph(document: DocumentObject) -> int:
     word_count = 0
     for paragraph in document.paragraphs:
         text = paragraph.text.replace('\xa0', '\x20')  # NBSP -> space
@@ -12,6 +13,7 @@ def count_words_in_paragraphs(document: DocumentObject) -> int:
         word_count += len(words)
     return word_count
 
+# Count the amount of individual whitespace characters in each paragraph element
 def count_whitespace_characters_in_each_paragraph(document: DocumentObject) -> list:
     whitespace_counts = []
     for paragraph in document.paragraphs:
@@ -19,6 +21,7 @@ def count_whitespace_characters_in_each_paragraph(document: DocumentObject) -> l
         whitespace_counts.append(whitespace_count)
     return whitespace_counts
 
+# Count the amount of individual whitespace characters in each run element
 def count_whitespace_characters_in_each_run(document: DocumentObject) -> list:
     whitespace_counts = []
     for paragraph in document.paragraphs:
@@ -27,9 +30,10 @@ def count_whitespace_characters_in_each_run(document: DocumentObject) -> list:
             whitespace_counts.append(whitespace_count)
     return whitespace_counts
 
+### Main function ###
 def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], int]:
     document = Document(str(path))
-    total_word_count = count_words_in_paragraphs(document)
+    total_word_count = count_words_in_each_paragraph(document)
     whitespace_counts_per_paragraph = count_whitespace_characters_in_each_paragraph(document)
     whitespace_counts_per_run = count_whitespace_characters_in_each_run(document)
     total_whitespace_count = 0
@@ -45,14 +49,10 @@ def space_char_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[l
     # print(f"Total word count: {total_word_count}")
     # print(f"Total word count: {total_word_count} to total whitespace count {total_whitespace_count}. Ratio: {word_to_whitespace_ratio} (%)")
     
+    # Data export
     if not chosen_file:
         data_to_csv = [
-            # ["Document Name", path.stem],
             ["Data set", data_set],
-            # ["Total word count", total_word_count],
-            # ["Total whitespace count", total_whitespace_count],
-            # ["Word to Whitespace ratio (%)", word_to_whitespace_ratio],
-            # ["Whitespace counts per paragraph", *whitespace_counts_per_paragraph]
             ["Document Name", "Total word count", "Total whitespace count", "Word to Whitespace ratio (%)"],
             [path.stem, total_word_count, total_whitespace_count, word_to_whitespace_ratio],
         ]

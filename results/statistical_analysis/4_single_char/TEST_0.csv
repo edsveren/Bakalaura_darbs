@@ -47,4 +47,3 @@ Char type;uppercase;lowercase;digit;other
 Char frequencies;0;1;0;1
 Char frequencies (single run, %);0.0;50.0;0.0;50.0
 Char frequencies (total runs, %);0.0;3.7;0.0;3.7
-

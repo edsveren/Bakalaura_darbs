@@ -4,6 +4,7 @@ from docx import Document
 from docx.document import Document as DocumentObject
 import unified_statistical_analysis_file
 
+# Get the font RGB colour values from each run element
 def get_RGB_value_from_each_run(document: DocumentObject) -> list:
     rgb_values = []
     for paragraph in document.paragraphs:
@@ -15,6 +16,7 @@ def get_RGB_value_from_each_run(document: DocumentObject) -> list:
                 rgb_values.append("#000000")
     return rgb_values
 
+# Bin the entire RGB colour list into 3 categories
 def bin_rgb_values(rgb_value: str) -> str:
     match rgb_value:
         case "#000000":   
@@ -23,12 +25,12 @@ def bin_rgb_values(rgb_value: str) -> str:
             return "white"
         case _:
             return "other"
-        
+
+### Main function ###
 def RGB_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], int]:
     document = Document(str(path))
     rgb_values = get_RGB_value_from_each_run(document)
     rgb_values_list = [bin_rgb_values(rgb) for rgb in rgb_values]
-    #rgb_bins = Counter(bin_rgb_values(rgb_value) for rgb_value in rgb_values)
     rgb_bins = {key: Counter(rgb_values_list).get(key, 0) for key in ['black', 'white', 'other']}
     rgb_value_amount = len(rgb_values)
 
@@ -43,19 +45,16 @@ def RGB_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[li
 
     # print(f"Amount of different run RGB values: {rgb_value_amount}")
     for color, frequency in rgb_bins.items():
-        frequency_percent = str(round((frequency / rgb_value_amount) * 100, 2)) #.replace(".", ",")
+        frequency_percent = str(round((frequency / rgb_value_amount) * 100, 2))
         colours.append(color)
         frequencies.append(frequency)
         frequency_percentages.append(frequency_percent)
         # print(f"RGB Color channel: {color}. Frequency: {frequency} ({frequency_percent}%).")
 
+    # Data export
     if not chosen_file:
         data_to_csv = [
-            # ["Document Name", path.stem],
             ["Data set", data_set],
-            # ["RGB colours", *colours],
-            # ["RGB colours frequencies", *frequencies],
-            # ["RGB colours frequencies (%)", *frequency_percentages],
             ["Document Name", "Run RGB colours frequencies", '', '', "Run RGB colours frequencies (%)", '', ''],
             ['', *colours, *colours],
             [path.stem, *frequencies, *frequency_percentages]

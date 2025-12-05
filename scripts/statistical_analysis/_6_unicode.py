@@ -4,7 +4,8 @@ from docx import Document
 from docx.document import Document as DocumentObject
 import unified_statistical_analysis_file
 
-def count_chars_in_paragraphs(document: DocumentObject) -> int:
+# Count the amount of individual characters in each paragraph element
+def count_chars_in_each_paragraph(document: DocumentObject) -> int:
     char_count = 0
     for paragraph in document.paragraphs:
         text = paragraph.text.replace('\xa0', '\x20')  # NBSP -> space
@@ -12,7 +13,8 @@ def count_chars_in_paragraphs(document: DocumentObject) -> int:
         char_count += len(chars)
     return char_count
 
-def count_non_ascii_chars_in_paragraphs(document: DocumentObject) -> tuple[int, list[int]]:
+# Count the amount of individual non-ASCII characters in each paragraph element
+def count_non_ascii_chars_in_each_paragraph(document: DocumentObject) -> tuple[int, list[int]]:
     char_count_total = 0
     char_count_paragraph = []
     for paragraph in document.paragraphs:
@@ -29,6 +31,7 @@ def count_non_ascii_chars_in_paragraphs(document: DocumentObject) -> tuple[int, 
         #     char_count_total += run_chars_count
     return char_count_total, char_count_paragraph
 
+# Count the amount of individual non-ASCII characters in each run element
 def count_non_ascii_chars_in_runs(document: DocumentObject) -> list[int]:
     char_count_run = []
     for paragraph in document.paragraphs:
@@ -38,10 +41,11 @@ def count_non_ascii_chars_in_runs(document: DocumentObject) -> list[int]:
             char_count_run.append(len(run_chars))
     return char_count_run
 
+### Main function ###
 def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list[list], int]:
     document = Document(str(path))
-    total_char_count = count_chars_in_paragraphs(document)
-    total_non_ascii_char_count, non_ascii_char_count_paragraphs = count_non_ascii_chars_in_paragraphs(document)
+    total_char_count = count_chars_in_each_paragraph(document)
+    total_non_ascii_char_count, non_ascii_char_count_paragraphs = count_non_ascii_chars_in_each_paragraph(document)
     if total_char_count != 0:
         total_char_to_non_ascii_char_ratio = round((total_non_ascii_char_count/total_char_count) * 100, 2)
     else:
@@ -51,14 +55,10 @@ def unicode_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[list
     # # print(f"Total char count: {char_count}")
     # print(f"Total char count: {total_char_count} to total non-ASCII char count: {total_non_ascii_char_count}. Ratio: {total_char_to_non_ascii_char_ratio} (%)")
     
+    # Data export
     if not chosen_file:
         data_to_csv = [
-            # ["Document Name", path.stem],
             ["Data set", data_set],
-            # ["Total char count", total_char_count],
-            # ["Total non-ASCII char count", total_non_ascii_char_count],
-            # ["Total char to non-ASCII char ratio (%)", total_char_to_non_ascii_char_ratio],
-            
             ["Document Name", "Total char count", "Total non-ASCII char count", "Total char to non-ASCII char ratio (%)"],
             [path.stem, total_char_count, total_non_ascii_char_count, total_char_to_non_ascii_char_ratio],
         ]

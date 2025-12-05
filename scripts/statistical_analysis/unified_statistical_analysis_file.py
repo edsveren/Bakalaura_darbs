@@ -11,31 +11,33 @@ def delete_file(file: Path) -> None:
 
 # Export results to a CSV file
 def export_to_csv(
-        result_folder: str,
         result_file: str, 
         data_to_csv: list[list],
         data_set_processed: bool,
-        # append_starting_points: tuple,
         append_starting_point: int
     ) -> None:
 
     if Path(result_file).is_file():
         with open(result_file, "a+", encoding="utf-8", newline="") as output_file:
             writer = csv.writer(output_file, delimiter=";")
+            # If statistical analysis results weren't yet exported
+            # Add the header
             if not data_set_processed:
                 writer.writerow('') 
                 for row in data_to_csv:
                     writer.writerow(row)
+            # Otherwise, export just the raw data
             else:
-                # writer.writerow('')
-                # for append_starting_point in append_starting_points: # THIS IS A HORRIBLE ATTEMPT
-                writer.writerow(data_to_csv[append_starting_point]) # BETTER TO USE INT, FIX LATER!!!
+                writer.writerow(data_to_csv[append_starting_point])
     else:
+        # File wasn't yet created, export everything
         with open(result_file, "w", encoding="utf-8", newline="") as output_file:
             writer = csv.writer(output_file, delimiter=";")
             for row in data_to_csv:
                 writer.writerow(row)
 
+# Process all the individual statistical analysis results
+# For a specific data set to export to a unified CSV file  
 def process_specific_data_set(
         data_set_processed: bool,
         data_to_csv: list[list],
@@ -43,28 +45,35 @@ def process_specific_data_set(
         append_starting_point: int
     ) -> list[list]:
 
+    # Get the longest row width
     row_width = len(data_to_csv[append_starting_point])
 
+    # If results were not yet processed, adjust headers
     if not data_set_processed:
+        # For better export, add '.' to all empty cells
         cell_index = 0
         for cell in data_to_csv[1]:
             if cell == '':
                 data_to_csv[1][cell_index] = '.'
             cell_index += 1
         data_to_csv_list.append(data_to_csv[1])
+        
+        # As it stands currently, all headers are up to 2 or 3 rows long
+        # So when it's the former, fill the 3rd row with filler for better export
         if append_starting_point == 2:
             filler_row = ['.'] * row_width
             data_to_csv_list.append(filler_row)
+        # Otherwise just export the latter case
         else:
             data_to_csv_list.append(data_to_csv[2])
+    # Last, get the raw data row itself
     data_to_csv_list.append(data_to_csv[append_starting_point])
     return data_to_csv_list
 
-# Export all individual statistical analysis data set results to a single CSV file
+# Export all single data set statistical analysis results to a unified CSV file
 def export_specific_data_set_to_csv(
         result_file: str,
         data_to_csv_list: list[list]
-        # existing_individual_stego_rows: list
     ) -> None:
 
     # Read existing statistical analysis data set result file data if it exists
@@ -80,29 +89,29 @@ def export_specific_data_set_to_csv(
     with open(result_file, "w", encoding="utf-8", newline="") as output_file:
         writer = csv.writer(output_file, delimiter=";")
             
+        # If the result file doesn't exist, export everything    
         if existing_individual_stego_rows == []:
             for row in data_to_csv_list:
-                writer.writerow(row[0:])
+                writer.writerow(row)
+        # Otherwise, append the previous columns and do not export the document name (redundant)
         else:
             for row_index in range(len(existing_individual_stego_rows)):
                 writer.writerow(existing_individual_stego_rows[row_index] + data_to_csv_list[row_index][1:])
     
     print(f"Created a CSV file: {str(Path(result_file))}")
 
+# Clear all single data set statistical analysis results
 def clear_specific_data_set_to_csv() -> None:
     result_folder = f"results/statistical_analysis/all_specific_data_set_files"
 
     for file in Path(result_folder).iterdir():
         delete_file(file)
 
+# Print results to terminal
 def print_output(data_to_csv: list[list]) -> None:
-    # for item in data_to_csv:
-    #     print(f"{item[0]}: {item[1]}")
-
-    # Temporary solution
     for item in data_to_csv:
-        label, *values = item
-        print(f"{label}: {', '.join(map(str, values))}")
+        header, *values = item
+        print(f"{header}: {', '.join(map(str, values))}")
     print()
 
 ### Main function ###
@@ -112,6 +121,7 @@ def statistical_analysis(
         statistical_analysis_method_execution: Callable[[Path, str, bool], tuple[list[list], int]]
     ) -> None:
     
+    # Create a CSV result path depending on if a single file is specified or not
     csv_path = f"results/statistical_analysis/{statistical_analysis_method}"
     if analyzed_file == None:
         csv_file = f"{csv_path}/all_files.csv"
@@ -124,9 +134,14 @@ def statistical_analysis(
 
     data_sets = ["clean", "hide_in_text", "multilayer_hybrid", "two_bit_transformation", "modify_RGB_color_ch", "unispace", "unicode_homoglyphs"]
 
+    # Loop through each data set
     for data_set_index in range(len(data_sets)):
+        # Create a boolean for the purposes of tracking
+        # Whether the header should be added or not
         data_set_processed = False
         data_set = data_sets[data_set_index]
+
+        # Choose either clean or stego-data set directory
         if data_set == "clean":
             base_directory = clean_data_set
         else:
@@ -134,17 +149,21 @@ def statistical_analysis(
 
         # Process only the chosen file
         if analyzed_file != None:
+            # Document path in the data set
             docPath = Path(f"{base_directory}/{analyzed_file}.docx")
+
+            # If the data set doesn't exist, move on
             if not docPath.is_file():
                 print(f"File doesn't exist: {docPath}")
                 print()
                 data_set_index += 1
                 continue
 
+            # Get data results and the raw data index from the specific statistical analysis method
             print(f"Opened: {docPath}")
             data_to_csv, append_starting_point = statistical_analysis_method_execution(docPath, data_set, True)
             print_output(data_to_csv)
-            export_to_csv(csv_path, csv_file, data_to_csv, False, append_starting_point)
+            export_to_csv(csv_file, data_to_csv, False, append_starting_point)
         # Process all files
         else:
             # Check if the folder is empty
@@ -154,22 +173,26 @@ def statistical_analysis(
             else:
                 # The result file containing all individual data set results
                 result_file = f"results/statistical_analysis/all_specific_data_set_files/{data_set}.csv"
+                # Create an empty list to add each data set row to export a specific data set statistical analysis results
                 data_to_csv_list = []
 
+                # Loop through each file in the data set directory
                 for file in Path(base_directory).iterdir():
-                    if file.is_file() and not file.name.startswith("."):    
+                    # Find the non-git documents
+                    if file.is_file() and not file.name.startswith("."):
+                        # Get data results and the raw data index from the specific statistical analysis method
                         print(f"Opened: {file}")
                         data_to_csv, append_starting_point = statistical_analysis_method_execution(file, data_set, False)
-
                         print_output(data_to_csv)
-                        export_to_csv(csv_path, csv_file, data_to_csv, data_set_processed, append_starting_point)
-                
+                        export_to_csv(csv_file, data_to_csv, data_set_processed, append_starting_point)
+                        
+                        # If document belongs to the currently iterated data set,
+                        # Process its statistical analysis results for export to a unified data set CSV file
                         if data_to_csv[0][1] == data_set:
                             data_to_csv_list = process_specific_data_set(data_set_processed, data_to_csv, data_to_csv_list, append_starting_point)
                         data_set_processed = True
-
+                # Export all current data set results to a single unified CSV file
                 export_specific_data_set_to_csv(result_file, data_to_csv_list)
-
         print()
 
 if __name__ == "__main__":
