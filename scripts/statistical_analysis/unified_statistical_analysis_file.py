@@ -107,6 +107,51 @@ def clear_specific_data_set_to_csv() -> None:
     for file in Path(result_folder).iterdir():
         delete_file(file)
 
+# Export all statistical analysis individual data set results to a single CSV file
+def export_to_csv_all() -> None:
+
+    # The result directory statistical analysis individual data set results
+    csv_path = "results/statistical_analysis/all_specific_data_set_files"
+    # Output CSV file
+    result_file = f"{csv_path}/all_data_set_unified_file.csv"
+
+    # Delete existing result file if exists
+    delete_file(Path(result_file))
+    result_file_exists = False
+
+    # Loop through each statistical analysis individual data set result file and merge them
+    for file in Path(csv_path).iterdir():
+
+        # Access the statistical analysis individual data set result file
+        if file.is_file() and file != result_file and not file.name.startswith("."):
+            # Read the file data and
+            # Append the statistical analysis results to the result file
+            with open(file, "r", encoding="utf-8", newline="") as input_file, open(result_file, "a+", encoding="utf-8", newline="") as output_file:
+                reader = csv.reader(input_file, delimiter=";")
+                writer = csv.writer(output_file, delimiter=";")
+
+                # Add a separation row after the first table
+                if result_file_exists:
+                    writer.writerow('')
+                row_header_index = 0
+                for row in reader:
+                    # No longer write first two rows
+                    if row_header_index == 2:
+                        result_file_exists = True
+                    
+                    # Write the first header row
+                    if not result_file_exists and row_header_index < 1:
+                        writer.writerow(['Data set'] + row)
+                    elif row_header_index == 2:
+                    # Write data set name
+                        writer.writerow([file.stem] + row)
+                    # Ignore headers if result file already exists
+                    elif not result_file_exists or row_header_index >= 2:
+                        writer.writerow([''] + row)
+                    row_header_index += 1
+
+    print(f"Created a CSV file: {str(Path(result_file))}")
+
 # Print results to terminal
 def print_output(data_to_csv: list[list]) -> None:
     for item in data_to_csv:
@@ -196,4 +241,5 @@ def statistical_analysis(
         print()
 
 if __name__ == "__main__":
-    clear_specific_data_set_to_csv()
+    export_to_csv_all()
+    # clear_specific_data_set_to_csv()
