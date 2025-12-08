@@ -107,6 +107,30 @@ def clear_specific_data_set_to_csv() -> None:
     for file in Path(result_folder).iterdir():
         delete_file(file)
 
+# Create a file dictionary for all result export
+def create_file_index_dictionary(file: str) -> dict:
+    file_name_dictionary = {}
+    file_name_dictionary_index = 1
+
+    # Create index to ignore headers
+    row_header_index = 0
+
+    # Read the clean CSV file
+    with open(file, "r", encoding="utf-8", newline="") as input_file:
+        reader = csv.reader(input_file, delimiter=";")
+        # Loop through each row in the data set
+        for row in reader:
+            # Ignore headers
+            if row_header_index >= 2:
+                # Get all clean document names
+                # And add them to the dictionary
+                file_name_dictionary.update({file_name_dictionary_index: row[0]})
+                file_name_dictionary_index += 1
+            row_header_index += 1
+
+    # print(file_name_dictionary)
+    return file_name_dictionary
+
 # Export all statistical analysis individual data set results to a single CSV file
 def export_to_csv_all() -> None:
 
@@ -119,6 +143,9 @@ def export_to_csv_all() -> None:
     delete_file(Path(result_file))
     result_file_exists = False
 
+    # Create a document file dictionary with indexes and document names
+    file_name_dictionary = create_file_index_dictionary(f"{csv_path}/clean.csv")
+    
     # Loop through each statistical analysis individual data set result file and merge them
     for file in Path(csv_path).iterdir():
 
@@ -133,21 +160,30 @@ def export_to_csv_all() -> None:
                 # Add a separation row after the first table
                 if result_file_exists:
                     writer.writerow('')
+                
                 row_header_index = 0
+                file_index = 0
+
+                # Loop through each row in the data set
                 for row in reader:
+
                     # No longer write first two rows
                     if row_header_index == 2:
                         result_file_exists = True
+
+                    # Get file index
+                    if row_header_index >= 2:
+                        file_index = next(key for key, value in file_name_dictionary.items() if value == row[0])
                     
                     # Write the first header row
                     if not result_file_exists and row_header_index < 1:
-                        writer.writerow(['Data set'] + row)
-                    elif row_header_index == 2:
+                        writer.writerow(['Data set'] + ['Document Index'] + row)
                     # Write data set name
-                        writer.writerow([file.stem] + row)
+                    elif row_header_index == 2:
+                        writer.writerow([file.stem] + [file_index] + row)
                     # Ignore headers if result file already exists
                     elif not result_file_exists or row_header_index >= 2:
-                        writer.writerow([''] + row)
+                        writer.writerow([''] + [file_index] + row)
                     row_header_index += 1
 
     print(f"Created a CSV file: {str(Path(result_file))}")
