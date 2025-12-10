@@ -150,7 +150,7 @@ def export_to_csv_all() -> None:
     for file in Path(csv_path).iterdir():
 
         # Access the statistical analysis individual data set result file
-        if file.is_file() and file != result_file and not file.name.startswith("."):
+        if file.is_file() and file != result_file and file.name.endswith('.csv'):
             # Read the file data and
             # Append the statistical analysis results to the result file
             with open(file, "r", encoding="utf-8", newline="") as input_file, open(result_file, "a+", encoding="utf-8", newline="") as output_file:
