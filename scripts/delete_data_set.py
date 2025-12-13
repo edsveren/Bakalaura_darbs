@@ -29,7 +29,7 @@ def delete_results():
     results_folder = "results"
     for directories_analysis_type in Path(results_folder).iterdir():
         # Excel files directory is too difficult to manage, so we skip deleting those files
-        if directories_analysis_type.name != 'excel_files':
+        if directories_analysis_type.name != '0_excel_files':
             for directories_specific_results in directories_analysis_type.iterdir():
                 for file in directories_specific_results.iterdir():
                     delete_file(file, directories_specific_results.name)
