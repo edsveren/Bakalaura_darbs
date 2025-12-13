@@ -28,9 +28,11 @@ def delete_attacked_data_set():
 def delete_results():
     results_folder = "results"
     for directories_analysis_type in Path(results_folder).iterdir():
-        for directories_specific_results in directories_analysis_type.iterdir():
-            for file in directories_specific_results.iterdir():
-                delete_file(file, directories_specific_results.name)
+        # Excel files directory is too difficult to manage, so we skip deleting those files
+        if directories_analysis_type.name != 'excel_files':
+            for directories_specific_results in directories_analysis_type.iterdir():
+                for file in directories_specific_results.iterdir():
+                    delete_file(file, directories_specific_results.name)
 
 if __name__ == "__main__":
     delete_stego_data_set()
