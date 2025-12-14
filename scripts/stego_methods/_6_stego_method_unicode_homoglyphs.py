@@ -38,7 +38,7 @@ unicode_dictionary = {
 
 reverse_unicode_dictionary = {value: key for key, value in unicode_dictionary.items()}
 
-# Count words in paragraphs
+# Count chars in paragraphs
 def count_chars_in_paragraphs(document: DocumentObject, index: int) -> int:
     char_count = 0
     for paragraph in document.paragraphs[index:]:
@@ -87,8 +87,8 @@ def choose_random_paragraph(document: DocumentObject, stegoMessage_toBase64_size
     while True:
         random_paragraph_index = random.randint(0, len(paragraphs) - 1)
         random_paragraph = paragraphs[random_paragraph_index]
-        word_count = count_chars_in_paragraphs(document, random_paragraph_index)
-        is_valid = is_capacity_enough_for_message(word_count, stegoMessage_toBase64_size_bits)
+        char_count = count_chars_in_paragraphs(document, random_paragraph_index)
+        is_valid = is_capacity_enough_for_message(char_count, stegoMessage_toBase64_size_bits)
         if is_valid:
             #print("Random paragraph start:", random_paragraph.text)
             return random_paragraph_index
@@ -180,7 +180,7 @@ def main() -> None:
         print("Beginning the embedding process...")
         document = Document(docPath)
         text = extract_text(document)
-        word_count = count_chars_in_paragraphs(document, 0)
+        char_count = count_chars_in_paragraphs(document, 0)
 
         stego_message_text, stegoMessage_bytes = stego_message()
         stegoMessage_size_bytes = len(stegoMessage_bytes)
@@ -194,7 +194,7 @@ def main() -> None:
         while not embedded:
             # Check if the paragraph has enough runs to embed the message
             print("Checking if the cover object is valid for embedding...")
-            is_valid = is_capacity_enough_for_message(word_count, stegoMessage_size_bits)
+            is_valid = is_capacity_enough_for_message(char_count, stegoMessage_size_bits)
             print("The cover object is valid:", is_valid)
             if not is_valid:
                 print("Not enough capacity in the document to embed the message.")
