@@ -50,7 +50,7 @@ def choose_random_paragraph(
             return random_paragraph_index
 
 # Get stego-message bytes and bits     
-def get_bytes_and_bits(stego_message_bytes: bytes) -> tuple[int, int]:
+def get_bytes_and_bits(stego_message_bytes: bytes|str) -> tuple[int, int]:
     stego_message_size_bytes = len(stego_message_bytes)
     stego_message_size_bits = 8 * stego_message_size_bytes
     
@@ -83,8 +83,11 @@ def stego_method(
             stego_message_text, stego_message_bytes = stego_message()
         else:
             stego_message_text, stego_message_bytes = specialized_stego_message
-            
-        stego_message_size_bytes, stego_message_size_bits = get_bytes_and_bits(stego_message_bytes)
+        
+        if stego_method == 'stego_method_5':
+            stego_message_size_bytes, stego_message_size_bits = get_bytes_and_bits(stego_message_text)
+        else:
+            stego_message_size_bytes, stego_message_size_bits = get_bytes_and_bits(stego_message_bytes)
 
         embedded = False
         while not embedded:
@@ -102,7 +105,7 @@ def stego_method(
             if random_paragraph_index is None:
                 print("No paragraphs available for embedding.")
                 break
-
+            
             payload = stego_message_size_bytes
             stego_index = 0
 
@@ -121,16 +124,19 @@ def stego_method(
                         if run_element.find(qn('w:t')) != None:
                             if stego_index < payload:
                                 stego_index = embedding_algorithm(run, data_to_embed, stego_index, payload)
-                                # next_stego_index = embedding_in_run(run, stego_message_text, stego_index, payload)
-                                # stego_index = next_stego_index
                             else:
                                 break
                 else:
                     break
             
             #print("Extracting stego-message...")
-            stego_message_text, _ = stego_message()
+            if stego_method == 'stego_method_5':
+                stego_message_text = stego_message_text[1:-1]
+            else:
+                stego_message_text, _ = stego_message()
+
             extracted_stego_message = extraction_algorithm(document)
+            print(f"Stego-message: {stego_message_text}")
             print(f"Extracted stego-message: {extracted_stego_message}")
             if stego_message_text != extracted_stego_message:
                 print("Extracted message is not equal to stego-message!")

@@ -6,6 +6,7 @@ from docx.text.run import Run
 from docx.oxml.parser import OxmlElement
 from docx.oxml.ns import qn
 from docx.document import Document as DocumentObject
+import unified_stego_file
 
 zero = '\u2009' # Thin space
 one = '\u200A'  # Hair space
@@ -54,7 +55,7 @@ def count_words_in_paragraphs(document: DocumentObject, index: int) -> int:
     return word_count
 
 # Check if max capacity is enough for the message
-def is_capacity_enough_for_message(word_count: int, stegoMessage_size_bits: int) -> bool:
+def is_capacity_enough_for_message(document: DocumentObject, word_count: int, stegoMessage_size_bits: int, index: int) -> bool:
     cap = 8 * (word_count - 1)
     is_valid = stegoMessage_size_bits <= cap
     return is_valid
@@ -95,7 +96,7 @@ def choose_random_paragraph(document: DocumentObject, stegoMessage_toBase64_size
         random_paragraph_index = random.randint(0, len(paragraphs) - 1)
         random_paragraph = paragraphs[random_paragraph_index]
         word_count = count_words_in_paragraphs(document, random_paragraph_index)
-        is_valid = is_capacity_enough_for_message(word_count, stegoMessage_toBase64_size_bits)
+        is_valid = is_capacity_enough_for_message(document, word_count, stegoMessage_toBase64_size_bits, random_paragraph_index)
         if is_valid:
             #print("Random paragraph start:", random_paragraph.text)
             return random_paragraph_index
@@ -115,7 +116,7 @@ def embedding_in_run(run: Run, stego_message_text: str, stego_index: int, payloa
             break
 
         whitespace = re.search(r'\x20', remaining_text, flags=re.UNICODE)
-        if whitespace is None:
+        if whitespace == None:
             embedded_text += remaining_text
             remaining_text = ''
             break
@@ -124,7 +125,7 @@ def embedding_in_run(run: Run, stego_message_text: str, stego_index: int, payloa
             embedded_text += remaining_text[:cover_whitespace_index]
             remaining_text = remaining_text[cover_whitespace_index + 1:]
 
-            unispace_combination = reverse_unispace_dictionary.get(stego_message_text[stego_index])
+            unispace_combination = reverse_unispace_dictionary.get(stego_message_text[stego_index]) #, ()
             unispace_combination_string = ''.join(unispace_combination)
             embedded_text += unispace_combination_string
             stego_index += 1
@@ -157,7 +158,8 @@ def stego_message_extraction(document: DocumentObject) -> str:
     cover_text_with_stego = text[first_zero_width_space.start():]
 
     first_whitespace = re.search(r'\x20', cover_text_with_stego, flags=re.UNICODE)
-    cover_text_with_stego = cover_text_with_stego[:first_whitespace.start()]
+    if first_whitespace != None:
+        cover_text_with_stego = cover_text_with_stego[:first_whitespace.start()]
 
     unispace_combination_length = 0
     unispace_combination = ''
@@ -174,6 +176,21 @@ def stego_message_extraction(document: DocumentObject) -> str:
     #print(stegoMessage)
     stegoMessage = stegoMessage[1:-1]
     return stegoMessage
+
+def stego_method_unispace() -> None:
+    stego_message_text, stego_message_bytes = unified_stego_file.stego_message()
+    stegoMessageInWhiteSpaceUnicode = stego_message_standarization_to_unispace_method(stego_message_text)
+    stegoMessageInWhiteSpaceUnicode_embedding_ready_format = '\x20' + stegoMessageInWhiteSpaceUnicode + '\x20'
+
+    unified_stego_file.stego_method(
+        'stego_method_5',
+        (stegoMessageInWhiteSpaceUnicode_embedding_ready_format, stego_message_bytes),
+        count_words_in_paragraphs,
+        is_capacity_enough_for_message,
+        embedding_in_run,
+        'string',
+        stego_message_extraction
+    )
             
 ### Main ###   
 def main() -> None:          
@@ -188,8 +205,8 @@ def main() -> None:
         word_count = count_words_in_paragraphs(document, 0)
 
         stego_message_text, stegoMessage_bytes = stego_message()
-        stegoMessage_size_bytes = len(stegoMessage_bytes)
-        stegoMessage_size_bits = 8 * stegoMessage_size_bytes
+        # stegoMessage_size_bytes = len(stegoMessage_bytes)
+        # stegoMessage_size_bits = 8 * stegoMessage_size_bytes
         #print("Regular bytes:", stegoMessage_size_bytes)
         #print("Regular bites:", stegoMessage_size_bits)
 
@@ -203,7 +220,7 @@ def main() -> None:
         while not embedded:
             # Check if the paragraph has enough runs to embed the message
             print("Checking if the cover object is valid for embedding...")
-            is_valid = is_capacity_enough_for_message(word_count, stegoMessageInWhiteSpaceUnicode_size_bits)
+            is_valid = is_capacity_enough_for_message(document, word_count, stegoMessageInWhiteSpaceUnicode_size_bits, 0)
             print("The cover object is valid:", is_valid)
             if not is_valid:
                 print("Not enough capacity in the document to embed the message.")
@@ -250,4 +267,5 @@ def main() -> None:
         print()
 
 if __name__ == "__main__":
-    main()
+    # main()
+    stego_method_unispace()
