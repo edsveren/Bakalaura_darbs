@@ -1,6 +1,6 @@
 import random
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Any
 from docx import Document
 from docx.text.run import Run
 from docx.document import Document as DocumentObject
@@ -46,7 +46,7 @@ def choose_random_paragraph(
         necessary_element_count = necessary_element_count_function(document, random_paragraph_index)
         is_valid = is_capacity_enough_for_message(document, necessary_element_count, stego_message_size_bits, random_paragraph_index)
         if is_valid:
-            # print(f"Random paragraph start: {random_paragraph.text}")
+            print(f"Random paragraph start: {random_paragraph.text}")
             return random_paragraph_index
 
 # Get stego-message bytes and bits     
@@ -59,14 +59,15 @@ def get_bytes_and_bits(stego_message_bytes: bytes) -> tuple[int, int]:
 
     return stego_message_size_bytes, stego_message_size_bits
 
-### Main ###   
+### Main file ###   
 def stego_method(
         stego_method: str,
         specialized_stego_message: tuple[str, bytes]|None,
         necessary_element_count_function: Callable[[DocumentObject, int], int],
         is_capacity_enough_for_message:  Callable[[DocumentObject, int, int, int], bool],
-        embedding_in_run: Callable[[Run, str, int, int], int],
-        stego_message_extraction: Callable[[DocumentObject], str]
+        embedding_algorithm: Callable[[Run, Any, int, int], int], # Any = str|bytes
+        embedding_data_type: str,
+        extraction_algorithm: Callable[[DocumentObject], str]
     ) -> None:
     # DOCX file
     base = "data_set/clean_files"
@@ -104,6 +105,13 @@ def stego_method(
 
             payload = stego_message_size_bytes
             stego_index = 0
+
+            data_to_embed = ''
+            if embedding_data_type == 'bytes':
+                data_to_embed = stego_message_bytes
+            elif embedding_data_type == 'string':
+                data_to_embed = stego_message_text
+
             for paragraph in document.paragraphs [random_paragraph_index:]:
                 if stego_index < payload:
                     original_run_amount = list(paragraph.runs)
@@ -112,8 +120,9 @@ def stego_method(
                         # Only process runs that contain text
                         if run_element.find(qn('w:t')) != None:
                             if stego_index < payload:
-                                next_stego_index = embedding_in_run(run, stego_message_text, stego_index, payload)
-                                stego_index = next_stego_index
+                                stego_index = embedding_algorithm(run, data_to_embed, stego_index, payload)
+                                # next_stego_index = embedding_in_run(run, stego_message_text, stego_index, payload)
+                                # stego_index = next_stego_index
                             else:
                                 break
                 else:
@@ -121,7 +130,7 @@ def stego_method(
             
             #print("Extracting stego-message...")
             stego_message_text, _ = stego_message()
-            extracted_stego_message = stego_message_extraction(document)
+            extracted_stego_message = extraction_algorithm(document)
             print(f"Extracted stego-message: {extracted_stego_message}")
             if stego_message_text != extracted_stego_message:
                 print("Extracted message is not equal to stego-message!")

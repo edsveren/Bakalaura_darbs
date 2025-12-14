@@ -204,7 +204,15 @@ def stego_message_extraction(document: DocumentObject) -> str:
 def stego_method_hide_in_text() -> None:
     _, stegoMessage_bytes = unified_stego_file.stego_message()
 
-    unified_stego_file.stego_method('stego_method_1', stego_message_base64(stegoMessage_bytes), count_words_in_paragraphs, is_capacity_enough_for_message, embedding_in_run, stego_message_extraction)
+    unified_stego_file.stego_method(
+        'stego_method_1',
+        stego_message_base64(stegoMessage_bytes),
+        count_words_in_paragraphs,
+        is_capacity_enough_for_message,
+        embedding_in_run,
+        'string',
+        stego_message_extraction
+    )
 
 ### Main ###   
 def main() -> None:   

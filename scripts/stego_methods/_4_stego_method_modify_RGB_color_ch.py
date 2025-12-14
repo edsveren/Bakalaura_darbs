@@ -7,6 +7,7 @@ from docx.text.run import Run
 from docx.oxml.parser import OxmlElement
 from docx.oxml.ns import qn
 from docx.document import Document as DocumentObject
+import unified_stego_file
 
 # Count (black coloured) chars in paragraphs starting from index
 def count_black_chars_in_paragraphs(document: DocumentObject, index: int) -> int:
@@ -34,7 +35,7 @@ def count_black_chars_in_paragraphs(document: DocumentObject, index: int) -> int
     return black_char_count
 
 # Check if max capacity is enough for the message
-def is_capacity_enough_for_message(black_char_count: int, stegoMessage_size_bits: int) -> bool:
+def is_capacity_enough_for_message(document: DocumentObject, black_char_count: int, stegoMessage_size_bits: int, index: int) -> bool:
     # in theory
     # cap = 8 * char_count
     # in practice
@@ -68,7 +69,7 @@ def choose_random_paragraph(document: DocumentObject, stegoMessage_size_bits: in
         random_paragraph_index = random.randint(0, len(paragraphs) - 1)
         random_paragraph = paragraphs[random_paragraph_index]
         black_char_count = count_black_chars_in_paragraphs(document, random_paragraph_index)
-        is_valid = is_capacity_enough_for_message(black_char_count, stegoMessage_size_bits)
+        is_valid = is_capacity_enough_for_message(document, black_char_count, stegoMessage_size_bits, random_paragraph_index)
         if is_valid:
             #print("Random paragraph start:", random_paragraph.text)
             return random_paragraph_index
@@ -201,6 +202,17 @@ def stego_message_extraction(document: DocumentObject) -> str:
     #print(stegoMessage)
     return stegoMessage
 
+def stego_method_modify_RGB_color_ch() -> None:
+    unified_stego_file.stego_method(
+        'stego_method_4',
+        None,
+        count_black_chars_in_paragraphs,
+        is_capacity_enough_for_message,
+        embedding_in_run,
+        'bytes',
+        stego_message_extraction
+    )
+
 ### Main ###   
 def main() -> None:   
     # DOCX file
@@ -224,7 +236,7 @@ def main() -> None:
         while not embedded:
             # Check if the paragraph has enough runs to embed the message
             print("Checking if the cover object is valid for embedding...")
-            is_valid = is_capacity_enough_for_message(black_char_count, stegoMessage_size_bits)
+            is_valid = is_capacity_enough_for_message(document, black_char_count, stegoMessage_size_bits, 0)
             print("The cover object is valid:", is_valid)
             if not is_valid:
                 print("Not enough capacity in the document to embed the message.")
@@ -273,4 +285,5 @@ def main() -> None:
         print()
 
 if __name__ == "__main__":
-    main()
+    # main()
+    stego_method_modify_RGB_color_ch()
