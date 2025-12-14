@@ -8,6 +8,7 @@ from docx.text.run import Run
 from docx.oxml.parser import OxmlElement
 from docx.oxml.ns import qn
 from docx.document import Document as DocumentObject
+import unified_stego_file
 
 # Count words in paragraphs
 def count_words_in_paragraphs(document: DocumentObject, index: int) -> int:
@@ -20,7 +21,7 @@ def count_words_in_paragraphs(document: DocumentObject, index: int) -> int:
     return word_count
 
 # Check if max capacity is enough for the message
-def is_capacity_enough_for_message(document: DocumentObject, stegoMessage_toBase64_size_bits: int, index: int=0) -> bool:
+def is_capacity_enough_for_message(document: DocumentObject, word_count: int, stegoMessage_toBase64_size_bits: int, index: int) -> bool:
     # in theory
     # equal_mark = "="
     # equal_mark_count = 0
@@ -37,7 +38,7 @@ def is_capacity_enough_for_message(document: DocumentObject, stegoMessage_toBase
     return is_valid
 
 # Extract text from the document
-def extract_text(document: DocumentObject, NBSP: bool, index: int=0) -> str:
+def extract_text(document: DocumentObject, NBSP: bool, index: int) -> str:
     text = []
     for paragraph in document.paragraphs[index:]:
         if NBSP == True:
@@ -71,7 +72,7 @@ def choose_random_paragraph(document: DocumentObject, stegoMessage_toBase64_size
         random_paragraph_index = random.randint(0, len(paragraphs) - 1)
         random_paragraph = paragraphs[random_paragraph_index]
         word_count = count_words_in_paragraphs(document, random_paragraph_index)
-        is_valid = is_capacity_enough_for_message(document, stegoMessage_toBase64_size_bits, random_paragraph_index)
+        is_valid = is_capacity_enough_for_message(document, word_count, stegoMessage_toBase64_size_bits, random_paragraph_index)
         if is_valid:
             #print("Random paragraph start:", random_paragraph.text)
             return random_paragraph_index
@@ -200,6 +201,11 @@ def stego_message_extraction(document: DocumentObject) -> str:
     #print(stegoMessage)
     return stegoMessage
 
+def stego_method_hide_in_text() -> None:
+    _, stegoMessage_bytes = unified_stego_file.stego_message()
+
+    unified_stego_file.stego_method('stego_method_1', stego_message_base64(stegoMessage_bytes), count_words_in_paragraphs, is_capacity_enough_for_message, embedding_in_run, stego_message_extraction)
+
 ### Main ###   
 def main() -> None:   
     # DOCX file
@@ -209,7 +215,7 @@ def main() -> None:
         print(f"DOCX file: {docPath}")
         print("Beginning the embedding process...")
         document = Document(docPath)
-        text = extract_text(document, True)
+        text = extract_text(document, True, 0)
         word_count = count_words_in_paragraphs(document, 0)
 
         stego_message_text, stegoMessage_bytes = stego_message()
@@ -228,7 +234,7 @@ def main() -> None:
         while not embedded:
             # Check if the paragraph has enough runs to embed the message
             print("Checking if the cover object is valid for embedding...")
-            is_valid = is_capacity_enough_for_message(document, stegoMessage_toBase64_size_bits)
+            is_valid = is_capacity_enough_for_message(document, word_count, stegoMessage_toBase64_size_bits, 0)
             print("The cover object is valid:", is_valid)
             if not is_valid:
                 print("Not enough capacity in the document to embed the message.")
@@ -276,4 +282,5 @@ def main() -> None:
         print()
 
 if __name__ == "__main__":
-    main()
+    # main()
+    stego_method_hide_in_text()

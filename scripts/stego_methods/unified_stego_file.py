@@ -6,18 +6,35 @@ from docx.text.run import Run
 from docx.document import Document as DocumentObject
 from docx.oxml.ns import qn
 
-# Stego-message
+# Get stego-message from file
 def stego_message() -> tuple[str, bytes]:
-    stegoMessageText = Path("stego_messages/stego_message.txt").read_text(encoding="utf-8")
-    stegoMessage_bytes = stegoMessageText.encode("utf-8")
-    return stegoMessageText, stegoMessage_bytes
+    stego_message_text = Path("stego_messages/stego_message.txt").read_text(encoding="utf-8")
+    stego_message_bytes = stego_message_text.encode("utf-8")
+    return stego_message_text, stego_message_bytes
 
-# Choose random paragraph
+# Extract text from the document
+def extract_text(
+        document: DocumentObject,
+        NBSP: bool,
+        index: int
+    ) -> str:
+    text = []
+    for paragraph in document.paragraphs[index:]:
+        if NBSP == True:
+            text.append(paragraph.text.replace('\xa0', '\x20')) # NBSP -> space
+        else:
+            text.append(paragraph.text)
+    text = "\n".join(text)
+    text = ''.join(text)
+    # print(f"Document text:\n{text}")
+    return text
+
+# Choose a random paragraph to embed the stego-message into
 def choose_random_paragraph(
         document: DocumentObject,
         necessary_element_count_function: Callable[[DocumentObject, int], int],
-        is_capacity_enough_for_message: Callable[[DocumentObject, int, int|None], bool],
-        stegoMessage_size_bits: int
+        is_capacity_enough_for_message: Callable[[DocumentObject, int, int, int], bool],
+        stego_message_size_bits: int
     ) -> int | None:
 
     paragraphs = document.paragraphs
@@ -27,17 +44,29 @@ def choose_random_paragraph(
         random_paragraph_index = random.randint(0, len(paragraphs) - 1)
         random_paragraph = paragraphs[random_paragraph_index]
         necessary_element_count = necessary_element_count_function(document, random_paragraph_index)
-        is_valid = is_capacity_enough_for_message(document, stegoMessage_size_bits, random_paragraph_index)
+        is_valid = is_capacity_enough_for_message(document, necessary_element_count, stego_message_size_bits, random_paragraph_index)
         if is_valid:
-            #print("Random paragraph start:", random_paragraph.text)
+            # print(f"Random paragraph start: {random_paragraph.text}")
             return random_paragraph_index
 
+# Get stego-message bytes and bits     
+def get_bytes_and_bits(stego_message_bytes: bytes) -> tuple[int, int]:
+    stego_message_size_bytes = len(stego_message_bytes)
+    stego_message_size_bits = 8 * stego_message_size_bytes
+    
+    # print(f"Stego-message bytes: {stego_message_size_bytes}")
+    # print(f"Stego-message bites: {stego_message_size_bits}")
+
+    return stego_message_size_bytes, stego_message_size_bits
+
 ### Main ###   
-def main(
+def stego_method(
         stego_method: str,
+        specialized_stego_message: tuple[str, bytes]|None,
+        necessary_element_count_function: Callable[[DocumentObject, int], int],
+        is_capacity_enough_for_message:  Callable[[DocumentObject, int, int, int], bool],
         embedding_in_run: Callable[[Run, str, int, int], int],
-        is_capacity_enough_for_message:  Callable[[DocumentObject, int, int|None], bool],
-        stego_message_extraction: Callable[[DocumentObject], str],
+        stego_message_extraction: Callable[[DocumentObject], str]
     ) -> None:
     # DOCX file
     base = "data_set/clean_files"
@@ -46,26 +75,21 @@ def main(
         print(f"DOCX file: {docPath}")
         print("Beginning the embedding process...")
         document = Document(docPath)
-        # text = extract_text(document, True)
-        # word_count = count_words_in_paragraphs(document, 0)
+        # text = extract_text(document, True, 0)
+        necessary_element_count = necessary_element_count_function(document, 0)
 
-        stego_message_text, stegoMessage_bytes = stego_message()
-        stegoMessage_size_bytes = len(stegoMessage_bytes)
-        stegoMessage_size_bits = 8 * stegoMessage_size_bytes
-        #print("Regular bytes:", stegoMessage_size_bytes)
-        #print("Regular bites:", stegoMessage_size_bits)
-
-        stegoMessage_toBase64_text, stegoMessage_toBase64_bytes = stego_message_base64(stegoMessage_bytes)
-        stegoMessage_toBase64_size_bytes = len(stegoMessage_toBase64_bytes)
-        stegoMessage_toBase64_size_bits = 8 * stegoMessage_toBase64_size_bytes
-        #print("Stego-message Base64 bytes:", stegoMessage_toBase64_size_bytes)
-        #print("Stego-message Base64 bits:", stegoMessage_toBase64_size_bits)
+        if specialized_stego_message == None:
+            stego_message_text, stego_message_bytes = stego_message()
+        else:
+            stego_message_text, stego_message_bytes = specialized_stego_message
+            
+        stego_message_size_bytes, stego_message_size_bits = get_bytes_and_bits(stego_message_bytes)
 
         embedded = False
         while not embedded:
             # Check if the paragraph has enough runs to embed the message
             print("Checking if the cover object is valid for embedding...")
-            is_valid = is_capacity_enough_for_message(document, stegoMessage_toBase64_size_bits, None)
+            is_valid = is_capacity_enough_for_message(document, necessary_element_count, stego_message_size_bits, 0)
             print("The cover object is valid:", is_valid)
             if not is_valid:
                 print("Not enough capacity in the document to embed the message.")
@@ -73,14 +97,13 @@ def main(
 
             # Embed stego-message in DOCX
             print("Embedding stego-message...")
-            random_paragraph_index = choose_random_paragraph(document, 'TODO', is_capacity_enough_for_message, stegoMessage_toBase64_size_bits)
+            random_paragraph_index = choose_random_paragraph(document, necessary_element_count_function, is_capacity_enough_for_message, stego_message_size_bits)
             if random_paragraph_index is None:
                 print("No paragraphs available for embedding.")
                 break
 
-            payload = stegoMessage_toBase64_size_bytes
+            payload = stego_message_size_bytes
             stego_index = 0
-            #while payload < stego_index:
             for paragraph in document.paragraphs [random_paragraph_index:]:
                 if stego_index < payload:
                     original_run_amount = list(paragraph.runs)
@@ -89,7 +112,7 @@ def main(
                         # Only process runs that contain text
                         if run_element.find(qn('w:t')) != None:
                             if stego_index < payload:
-                                next_stego_index = embedding_in_run(run, stegoMessage_toBase64_text, stego_index, payload)
+                                next_stego_index = embedding_in_run(run, stego_message_text, stego_index, payload)
                                 stego_index = next_stego_index
                             else:
                                 break
@@ -97,7 +120,10 @@ def main(
                     break
             
             #print("Extracting stego-message...")
-            if stego_message_text != stego_message_extraction(document):
+            stego_message_text, _ = stego_message()
+            extracted_stego_message = stego_message_extraction(document)
+            print(f"Extracted stego-message: {extracted_stego_message}")
+            if stego_message_text != extracted_stego_message:
                 print("Extracted message is not equal to stego-message!")
                 break
             #print("Extraction successful!")
