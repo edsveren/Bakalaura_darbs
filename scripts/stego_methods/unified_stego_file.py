@@ -102,11 +102,14 @@ def stego_method(
             # Embed stego-message in DOCX
             print("Embedding stego-message...")
             random_paragraph_index = choose_random_paragraph(document, necessary_element_count_function, is_capacity_enough_for_message, stego_message_size_bits)
-            if random_paragraph_index is None:
+            if random_paragraph_index == None:
                 print("No paragraphs available for embedding.")
                 break
             
-            payload = stego_message_size_bytes
+            if stego_method == 'stego_method_6':
+                payload = stego_message_size_bits + 1
+            else:
+                payload = stego_message_size_bytes
             stego_index = 0
 
             data_to_embed = ''

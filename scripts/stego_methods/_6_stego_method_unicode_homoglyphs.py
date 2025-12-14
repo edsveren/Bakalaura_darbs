@@ -6,6 +6,7 @@ from docx.text.run import Run
 from docx.oxml.parser import OxmlElement
 from docx.oxml.ns import qn
 from docx.document import Document as DocumentObject
+import unified_stego_file
 
 unicode_dictionary = {
     'a': '\u0430',
@@ -49,7 +50,7 @@ def count_chars_in_paragraphs(document: DocumentObject, index: int) -> int:
     return char_count
 
 # Check if max capacity is enough for the message
-def is_capacity_enough_for_message(char_count: int, stegoMessage_size_bits: int) -> bool:
+def is_capacity_enough_for_message(document: DocumentObject, char_count: int, stegoMessage_size_bits: int, index: int) -> bool:
     cap = char_count
     is_valid = stegoMessage_size_bits <= cap
     return is_valid
@@ -88,7 +89,7 @@ def choose_random_paragraph(document: DocumentObject, stegoMessage_toBase64_size
         random_paragraph_index = random.randint(0, len(paragraphs) - 1)
         random_paragraph = paragraphs[random_paragraph_index]
         char_count = count_chars_in_paragraphs(document, random_paragraph_index)
-        is_valid = is_capacity_enough_for_message(char_count, stegoMessage_toBase64_size_bits)
+        is_valid = is_capacity_enough_for_message(document, char_count, stegoMessage_toBase64_size_bits, random_paragraph_index)
         if is_valid:
             #print("Random paragraph start:", random_paragraph.text)
             return random_paragraph_index
@@ -170,6 +171,20 @@ def stego_message_extraction(document: DocumentObject) -> str:
     #print(stegoMessage)
     return stegoMessage
 
+def stego_method_unicode_homoglyphs() -> None:
+    _, stego_message_bytes = unified_stego_file.stego_message()
+    stego_message_bytes_to_binary_string = '1' + stego_message_to_bit_string(stego_message_bytes)
+
+    unified_stego_file.stego_method(
+        'stego_method_6',
+        (stego_message_bytes_to_binary_string, stego_message_bytes),
+        count_chars_in_paragraphs,
+        is_capacity_enough_for_message,
+        embedding_in_run,
+        'string',
+        stego_message_extraction
+    )
+
 ### Main ###
 def main() -> None:
     # DOCX file
@@ -194,7 +209,7 @@ def main() -> None:
         while not embedded:
             # Check if the paragraph has enough runs to embed the message
             print("Checking if the cover object is valid for embedding...")
-            is_valid = is_capacity_enough_for_message(char_count, stegoMessage_size_bits)
+            is_valid = is_capacity_enough_for_message(document, char_count, stegoMessage_size_bits, 0)
             print("The cover object is valid:", is_valid)
             if not is_valid:
                 print("Not enough capacity in the document to embed the message.")
@@ -241,4 +256,5 @@ def main() -> None:
         print()
 
 if __name__ == "__main__":
-    main()
+    # main()
+    stego_method_unicode_homoglyphs()
