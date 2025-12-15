@@ -198,6 +198,7 @@ def stego_method(
             extracted_stego_message = extraction_algorithm(document)
             print(f"Stego-message: {stego_message_text}")
             print(f"Extracted stego-message: {extracted_stego_message}")
+            
             # Compare the extracted stego-message with the one before embedding
             # If they don't match, something went wrong with the embedding process
             # This breaks the loop and moves on to the next file
