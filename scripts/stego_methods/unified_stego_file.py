@@ -116,7 +116,7 @@ def stego_method(
         # Embed stego-message until it is embedded successfully
         embedded = False
         while not embedded:
-            # Check if the paragraph has enough runs to embed the message
+            # Check if the entire document has enough runs to embed the message
             print("Checking if the cover object is valid for embedding...")
             is_valid = is_capacity_enough_for_message(document, necessary_element_count, stego_message_size_bits, 0)
             print("The cover object is valid:", is_valid)

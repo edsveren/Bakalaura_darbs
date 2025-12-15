@@ -100,7 +100,7 @@ def insert_in_run(
         new_text_element.set(qn('xml:space'), 'preserve')
 
     # This stego-method depends on modifying the RGB color values of the run
-    # If stego bits are provided, modify the color property of the new run
+    # If stego-bits are provided, modify the color property of the new run
     if stego_bits != None:
         # Either modify or create the color element in the new run properties
         color_element = new_run_properties.find(qn('w:color'))
@@ -122,7 +122,9 @@ def insert_in_run(
 
             rgb_string = f"{r_bit:02x}{g_bit:02x}{b_bit:02x}"
             color_element.set(qn('w:val'), rgb_string)
-        # If that's not possible, exit completely
+        # If that's not possible, signal None to the embedding algorithm
+        # So that it knows the current run is exhausted for embedding
+        # And avoid endlessly looping on it
         else:
             return None
     
@@ -162,6 +164,7 @@ def slipt_run_for_embedding(
     stego_char_run = insert_in_run(run, run, single_cover_char, stego_byte_to_binary_string)
     # And if the run could not be created,
     # It means that its color properties were not suitable for embedding
+    # By signaling None, the embedding algorithm can avoid endlessly looping on the same run
     if stego_char_run == None:
         return None
     
@@ -208,7 +211,7 @@ def embedding_in_run(
     non_whitespace_chars = re.findall(r'\S', run.text, flags=re.UNICODE)
     nr_of_non_whitespace_chars = len(non_whitespace_chars)
 
-    # For each unused non-whitespace char, embed the next stego byte from the stego-message
+    # For each unused non-whitespace char, embed the next stego-byte from the stego-message
     # Increasing the stego_index until the run is exhausted or the payload is reached
     for _ in range(nr_of_non_whitespace_chars):
         if stego_index < payload:
@@ -244,9 +247,9 @@ def stego_message_extraction(document: DocumentObject) -> str:
                     # In theory, any coloured text can be used
                     # But in practice, it requires some kind of stego-key
                     # Because it's difficult to extract the stego-message deterministically
-                    # Without said key which provides original base values of non-stego data
+                    # Without said key which provides original base values of non-stego-data
                     if color_element_value.lower() not in ('000000', 'auto'):
-                        # Get each color channel's bits from the RGB hex value
+                        # Get bits from each RGB color channel's hex value
                         r_bit = int(color_element_value[0:2], 16)
                         g_bit = int(color_element_value[2:4], 16)
                         b_bit = int(color_element_value[4:6], 16)

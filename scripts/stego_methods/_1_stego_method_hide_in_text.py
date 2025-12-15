@@ -94,7 +94,7 @@ def insert_in_run(
     new_run_element.append(new_text_element)
 
     # Insert character in the new text element
-    # Based on type (whitespace, stego character or simply the remaining text)
+    # Based on type (whitespace, stego-character or simply the remaining text)
     match type:
         case 'whitespace':
             new_text_element.text = char
@@ -105,7 +105,7 @@ def insert_in_run(
             new_text_element.text = char
 
             # This stego-method depends on modifying the font color, size and visibility (hidden function)
-            # So these run properties are set specifically for the stego character run
+            # So these run properties are set specifically for the stego-character run
             # All three properties are either modified or created anew if not present
 
             # Run color gets set to white (FFFFFF)
@@ -160,14 +160,14 @@ def slipt_run_for_embedding(
     # Replace current run text with left-side text
     run.text = left_text
 
-    # Create 4 new run elements for each part: left whitespace, stego character, right whitespace, remaining text
-    # Insert whitespace left of the stego character in a new run
+    # Create 4 new run elements for each part: left whitespace, stego-character, right whitespace, remaining text
+    # Insert whitespace left of the stego-character in a new run
     left_whitespace = insert_in_run(run, run, '\x20', 'whitespace')
 
-    # Insert the stego character in a new run
+    # Insert the stego-character in a new run
     stego_char_run = insert_in_run(left_whitespace, run, stego_char, 'stego_char')
 
-    # Insert whitespace right of the stego character in a new run
+    # Insert whitespace right of the stego-character in a new run
     right_whitespace = insert_in_run(stego_char_run, run, '\x20', 'whitespace')
 
     # Replace the remaining run text with the right-side text
@@ -186,7 +186,7 @@ def embedding_in_run(
     text_whitespaces = re.findall(r'\x20', run.text, flags=re.UNICODE)
     nr_of_unused_whitespace = len(text_whitespaces)
 
-    # For each unused whitespace, embed the next stego character from the stego-message in Base64
+    # For each unused whitespace, embed the next stego-character from the stego-message in Base64
     # Increasing the stego_index until the run is exhausted or the payload is reached
     for _ in range(nr_of_unused_whitespace):
         if stego_index < payload:
@@ -224,10 +224,10 @@ def stego_message_extraction(document: DocumentObject) -> str:
                         # Get their values
                         color_element_value = color_element.get(qn('w:val'))
                         font_size_value = font_size_element.get(qn('w:val'))
-                        # And check if said values match the stego embedding criteria
-                        # Color = white (FFFFFF), size = 2 (1px), hidden = true
+                        # And check if said values match the stego-embedding criteria
+                        # Color = white (FFFFFF), size = 2 (1px), hidden = true (exists)
                         if color_element_value.upper() == 'FFFFFF' and font_size_value == '2':
-                            # The run contains a stego character
+                            # The run contains a stego-character
                             # Append it to the stego-message in Base64
                             stego_message_as_base64 += run.text
 
