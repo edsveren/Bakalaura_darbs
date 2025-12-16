@@ -7,22 +7,7 @@ from typing import Callable
 from itertools import zip_longest
 from docx import Document
 from docx.document import Document as DocumentObject
-
-# Extract the text from the document
-def extract_text(document: DocumentObject) -> str:
-    text = []
-    for paragraph in document.paragraphs:
-        text.append(paragraph.text.replace('\xa0', '\x20')) # NBSP -> space
-    # text = "\n".join(text)
-    text = ''.join(text)
-    #print(f"Text from document:'\n' {text}")
-    return text
-
-# Stego-message
-def stego_message() -> str:
-    stegoMessageText = Path("stego_messages/stego_message.txt").read_text(encoding="utf-8")
-    #print(f"Stego-message: {stegoMessageText}")
-    return stegoMessageText
+from scripts.stego_methods import unified_stego_file
 
 # Perform an individual document check
 def check_for_stego_message(
@@ -251,7 +236,7 @@ def passive_attack(
     # Stego-message
     # Can sometimes be provided immediately for specific stego-methods
     if stego_message_text == None:
-        stego_message_text = stego_message()
+        stego_message_text, _ = unified_stego_file.stego_message()
 
     print()
     # Loop through 10 active steganalysis directories
