@@ -4,7 +4,7 @@ from docx import Document
 from docx.document import Document as DocumentObject
 from docx.oxml.ns import qn
 from docx.oxml.styles import CT_Styles
-import unified_statistical_analysis_file
+import scripts.statistical_analysis.unified_statistical_analysis_file as unified_statistical_analysis_file
 
 # Find the default font size in a paragraph element
 def paragraph_default_font_size_value(styles_element: CT_Styles) -> float | None:

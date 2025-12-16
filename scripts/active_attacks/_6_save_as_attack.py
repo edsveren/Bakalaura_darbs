@@ -1,6 +1,6 @@
 from pathlib import Path
 from win32com.client.dynamic import CDispatch as dynamic_CDispatch
-import unified_active_attack_file
+import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
 
 def save_as_attack(
         word: dynamic_CDispatch, 

@@ -4,7 +4,7 @@ from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Pt, RGBColor
 from docx.styles.style import CharacterStyle
-import unified_active_attack_file
+import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
 
 # def change_text_style_for_auto_text(document: DocumentObject) -> DocumentObject:
 #     styles = document.styles

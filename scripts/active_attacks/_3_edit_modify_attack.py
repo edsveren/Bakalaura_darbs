@@ -3,7 +3,7 @@ from pathlib import Path
 from docx import Document
 from docx.text.run import Run
 from docx.oxml.ns import qn
-import unified_active_attack_file
+import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
 
 def change_every_nth_word(
         run: Run, 

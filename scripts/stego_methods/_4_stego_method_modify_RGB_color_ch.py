@@ -4,7 +4,7 @@ from docx.text.run import Run
 from docx.oxml.parser import OxmlElement
 from docx.oxml.ns import qn
 from docx.document import Document as DocumentObject
-import unified_stego_file
+import scripts.stego_methods.unified_stego_file as unified_stego_file
 
 # Count (black coloured) chars in paragraphs starting from index
 def count_black_chars_in_paragraphs(

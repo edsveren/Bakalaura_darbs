@@ -1,6 +1,6 @@
 from pathlib import Path
 import shutil
-import unified_active_attack_file
+import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
 
 def copy_attack(
         stegoDocPath: str, 

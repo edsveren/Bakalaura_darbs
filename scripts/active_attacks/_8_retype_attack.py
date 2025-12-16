@@ -2,7 +2,7 @@ from pathlib import Path
 from copy import deepcopy
 from docx import Document
 from docx.oxml.parser import OxmlElement
-import unified_active_attack_file
+import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
 
 # def retype_in_new_document(document: DocumentObject) -> DocumentObject:
 #     new_document = Document()

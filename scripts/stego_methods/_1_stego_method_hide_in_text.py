@@ -5,7 +5,7 @@ from docx.text.run import Run
 from docx.oxml.parser import OxmlElement
 from docx.oxml.ns import qn
 from docx.document import Document as DocumentObject
-import unified_stego_file
+import scripts.stego_methods.unified_stego_file as unified_stego_file
 
 # Count words in paragraphs
 def count_words_in_paragraphs(

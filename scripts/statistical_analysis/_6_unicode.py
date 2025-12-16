@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 from docx import Document
 from docx.document import Document as DocumentObject
-import unified_statistical_analysis_file
+import scripts.statistical_analysis.unified_statistical_analysis_file as unified_statistical_analysis_file
 
 # Count the amount of individual characters in each paragraph element
 def count_chars_in_each_paragraph(document: DocumentObject) -> int:

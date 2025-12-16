@@ -2,7 +2,7 @@ from pathlib import Path
 from collections import Counter
 from docx import Document
 from docx.document import Document as DocumentObject
-import unified_statistical_analysis_file
+import scripts.statistical_analysis.unified_statistical_analysis_file as unified_statistical_analysis_file
 
 # Get the font RGB colour values from each run element
 def get_RGB_value_from_each_run(document: DocumentObject) -> list:

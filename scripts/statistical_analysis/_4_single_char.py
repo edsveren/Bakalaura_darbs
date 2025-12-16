@@ -2,8 +2,8 @@ from pathlib import Path
 from collections import Counter
 from docx import Document
 from docx.document import Document as DocumentObject
-import _1_element_count
-import unified_statistical_analysis_file
+import scripts.statistical_analysis._1_element_count as _1_element_count
+import scripts.statistical_analysis.unified_statistical_analysis_file as unified_statistical_analysis_file
 
 # Count the number of run elements which contain only a single character
 def number_of_runs_with_a_single_character(document: DocumentObject) -> int:

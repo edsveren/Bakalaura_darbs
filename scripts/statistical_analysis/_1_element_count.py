@@ -2,7 +2,7 @@ from pathlib import Path
 from docx import Document
 from docx.oxml.ns import qn
 from docx.document import Document as DocumentObject
-import unified_statistical_analysis_file
+import scripts.statistical_analysis.unified_statistical_analysis_file as unified_statistical_analysis_file
 
 # Count the number of all paragraph elements in the document
 def count_total_paragraphs(document: DocumentObject) -> int:
