@@ -21,5 +21,5 @@ The following libraries are required:
 ## Steps
 1. Clone via SSH
 2. Install necessary libraries
-3. Uninstall if exists C:\Users\user\AppData\Local\Programs\Python\Python313\python.exe -m pip uninstall Bakalaura_darbs
-4. Run C:\Users\user\AppData\Local\Programs\Python\Python313\python.exe -m pip install -e .
+3. Uninstall if exists py -3.13 -m pip uninstall Bakalaura_darbs
+4. Run py -3.13 -m pip install -e .
