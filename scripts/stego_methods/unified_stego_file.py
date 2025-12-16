@@ -207,16 +207,22 @@ def stego_method(
             if stego_message_text != extracted_stego_message:
                 print("Extracted message is not equal to stego-message!")
                 break
-            #print("Extraction successful!")
+            # print("Extraction successful!")
             print("Embedding successful!")
             # If everything went well, set embedded to True to exit the loop
             embedded = True
 
         # If everything was embedded successfully, save the modified document
         if embedded:
+            # In the stego-file directory
             stegoDocPath = str(Path(f"data_set/stego_files/{stego_method}/{file.name}"))
             document.save(stegoDocPath)
             print(f"Saved: {stegoDocPath}")
+            # And if the DOCX file is TEST_0, then also in its own directory
+            if file.name == 'TEST_0.docx':
+                stegoDocPath_TEST_0 = str(Path(f"data_set/TEST_0/{stego_method}_{file.name}"))
+                document.save(stegoDocPath_TEST_0)
+                print(f"Saved: {stegoDocPath_TEST_0}")
         # If, for some reason, embedding was not successful
         # Let the user know
         else:
