@@ -2,10 +2,13 @@ import os
 from pathlib import Path
 
 # Delete file
-def delete_file(file: Path, directory: str) -> None:
+def delete_file(file: Path, directory: str='') -> None:
     if file.is_file() and not file.name.startswith("."):
         os.remove(file)
-        print(f"Deleted: {file} in {directory}")
+        if directory == '':
+            print(f"Deleted: {file}")
+        else:
+            print(f"Deleted: {file} in {directory}")
 
 # Deletes all DOCX files in the STEGO data set directory
 def delete_stego_data_set():

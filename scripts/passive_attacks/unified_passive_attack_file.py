@@ -1,4 +1,3 @@
-import os
 import csv
 import difflib
 from pathlib import Path
@@ -8,6 +7,7 @@ from itertools import zip_longest
 from docx import Document
 from docx.document import Document as DocumentObject
 from scripts.stego_methods import unified_stego_file
+from scripts.delete_data_set import delete_file
 
 # Perform an individual document check
 def check_for_stego_message(
@@ -200,12 +200,6 @@ def export_to_csv_all(desired_file: str|None) -> None:
                     j += 1
 
     print(f"Created a CSV file: {str(Path(result_file))}")
-
-# Delete file
-def delete_file(file: Path) -> None:
-    if file.is_file() and not file.name.startswith("."):
-        os.remove(file)
-        print(f"Deleted: {str(file)}")
 
 # Clean individual passive steganalysis attack results or specific file results
 def clean_results_individual(attack_type_or_file: str) -> None:

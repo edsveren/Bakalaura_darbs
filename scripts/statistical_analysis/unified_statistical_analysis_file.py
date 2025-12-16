@@ -1,13 +1,7 @@
-import os
 import csv
 from pathlib import Path
 from typing import Callable
-
-# Delete file
-def delete_file(file: Path) -> None:
-    if file.is_file() and not file.name.startswith("."):
-        os.remove(file)
-        print(f"Deleted: {str(file)}")
+from scripts.delete_data_set import delete_file
 
 # Export results to a CSV file
 def export_to_csv(

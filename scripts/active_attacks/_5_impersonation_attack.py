@@ -1,7 +1,7 @@
-import os
 from pathlib import Path
 from win32com.client.dynamic import CDispatch as dynamic_CDispatch
 import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
+from scripts.delete_data_set import delete_file
 
 def impersonation_attack(
         word: dynamic_CDispatch, 
@@ -27,8 +27,7 @@ def impersonation_attack(
     document.Close()
 
     # Remove any leftover PDF files
-    if Path(stegoPDFPath).exists():
-        os.remove(stegoPDFPath)
+    delete_file(Path(stegoPDFPath))
 
 if __name__ == "__main__":
     unified_active_attack_file.unified_attack("05_impersonation_attack", impersonation_attack, True)

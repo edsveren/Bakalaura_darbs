@@ -1,10 +1,10 @@
-import os
 import csv
 import time
 from pathlib import Path
 from typing import Callable
 from itertools import zip_longest
 import win32com.client as win32
+from scripts.delete_data_set import delete_file
 
 # Export time of each active steganalysis attack to CSV
 def export_attack_time_to_csv_individual(
@@ -71,12 +71,6 @@ def export_attack_time_to_csv_all(transposed_state: str, transposed_or_not_type:
                 writer.writerow('')  # Add an empty line between different attack results
     
     print(f"Created a CSV file: {str(Path(result_file))}")
-
-# Delete file
-def delete_file(file: Path) -> None:
-    if file.is_file() and not file.name.startswith("."):
-        os.remove(file)
-        print(f"Deleted: {file}")
 
 # Clean individual active steganalysis attack results CSV file
 def clean_results_individual(attack_type: str) -> None:
