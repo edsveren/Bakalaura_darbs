@@ -138,13 +138,13 @@ def export_to_csv_all() -> None:
     result_file_exists = False
 
     # Create a document file dictionary with indexes and document names
-    file_name_dictionary = create_file_index_dictionary(f"{csv_path}/clean.csv")
+    file_name_dictionary = create_file_index_dictionary(f"{csv_path}/0_clean.csv")
     
     # Loop through each statistical analysis individual data set result file and merge them
     for file in Path(csv_path).iterdir():
 
         # Access the statistical analysis individual data set result file
-        if file.is_file() and file != result_file and file.name.endswith('.csv'):
+        if file.is_file() and file != Path(result_file):
             # Read the file data and
             # Append the statistical analysis results to the result file
             with open(file, "r", encoding="utf-8", newline="") as input_file, open(result_file, "a+", encoding="utf-8", newline="") as output_file:
@@ -247,7 +247,7 @@ def statistical_analysis(
                 print(f"{str(Path(base_directory))} is empty!")
             else:
                 # The result file containing all individual data set results
-                result_file = f"results/statistical_analysis/all_specific_data_set_files/{data_set}.csv"
+                result_file = f"results/statistical_analysis/all_specific_data_set_files/{data_set_index}_{data_set}.csv"
                 # Create an empty list to add each data set row to export a specific data set statistical analysis results
                 data_to_csv_list = []
 
