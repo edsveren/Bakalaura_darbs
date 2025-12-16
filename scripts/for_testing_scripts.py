@@ -201,5 +201,14 @@ from docx.enum.style import WD_STYLE_TYPE
 #     ["Document Name", 'XXXXX'],
 #     ["Document Type", 'YYYYY']
 # ]
-import lxml.etree as ET
-print(ET)
+
+import os
+# Get current file byte size
+def size(path: Path):
+    file_size = os.path.getsize(path)
+    print("File Size is :", file_size, "bytes")
+    print("File Size is :", round(file_size/1024, 2), "kilobytes")
+
+path = Path("data_set/TEST_0/stego_method_1_TEST_0.docx")
+
+size(path)

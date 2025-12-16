@@ -154,7 +154,8 @@ def export_to_csv_all() -> None:
                 # Add a separation row after the first table
                 if result_file_exists:
                     writer.writerow('')
-                
+
+                # Initialize indexes
                 row_header_index = 0
                 file_index = 0
 
