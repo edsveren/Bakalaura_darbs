@@ -150,6 +150,9 @@ def export_to_csv_all(desired_file: str|None) -> None:
         result_name = f'_{desired_file}'
         file_name = f'{desired_file}_'
 
+    # Temporary file to store all individual passive attack results
+    temporary_file = f"results/passive_attacks/transposed/temporary.csv"
+
     # The result file containing all individual passive attack results
     result_file = f"results/passive_attacks/transposed/unified_passive_attack_file{result_name}.csv"
 
@@ -169,35 +172,50 @@ def export_to_csv_all(desired_file: str|None) -> None:
                 reader = csv.reader(input_file, delimiter=";")
                 individual_stego_rows = list(reader)
             
-            # Read existing unified passive attack result file data if it exists
-            if Path(result_file).is_file():
-                with open(result_file, "r", encoding="utf-8", newline="") as input_file:
+            # Read the temporary file data if it exists
+            if Path(temporary_file).is_file():
+                with open(temporary_file, "r", encoding="utf-8", newline="") as input_file:
                     reader = csv.reader(input_file, delimiter=";")
                     existing_individual_stego_rows = list(reader)
             # Otherwise, create an empty list
             else:
                 existing_individual_stego_rows = []
 
-            # Append individual passive attack results to the unified passive attack result file
-            with open(result_file, "w", encoding="utf-8", newline="") as output_file:
+            # Append individual passive attack results to the temporary file
+            with open(temporary_file, "w", encoding="utf-8", newline="") as output_file:
                 writer = csv.writer(output_file, delimiter=";")
                 # Create an index to track rows
                 j = 0
                 # Loop through each row in the individual passive attack result file
                 for row in individual_stego_rows:
-                    # If existing unified passive attack result file has data, merge them
+                    # If the temporary file has data, merge them
                     if existing_individual_stego_rows:
                         # For the first row, add spacer columns for better readability
                         if j == 0:
                             number_of_columns = 4
                             spacer = [''] * number_of_columns
                             writer.writerow(existing_individual_stego_rows[j] + spacer + row[1:])
+                        # Ignore header rows if the second header row is written
+                        elif j != 1 and ((desired_file == None and j % 7 == 1) or (desired_file != None and j % 3 == 1)):
+                            writer.writerow([])
                         else:
                             writer.writerow(existing_individual_stego_rows[j] + row[1:])
                     # Otherwise, just write the individual passive attack result file data        
                     else:
                         writer.writerow(row)
                     j += 1
+
+    # Read the temporary file and write non-empty rows to the unified passive attack result file
+    with open(temporary_file, "r", encoding="utf-8", newline="") as input_file, open(result_file, "w", encoding="utf-8", newline="") as output_file:
+        reader = csv.reader(input_file, delimiter=";")
+        writer = csv.writer(output_file, delimiter=";")
+        rows = list(reader)
+        for row in rows:
+            if row:
+                writer.writerow(row)
+
+    # Delete the temporary file
+    delete_file(Path(temporary_file))
 
     print(f"Created a CSV file: {str(Path(result_file))}")
 
