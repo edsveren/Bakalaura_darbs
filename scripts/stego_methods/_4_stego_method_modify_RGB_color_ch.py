@@ -173,8 +173,7 @@ def slipt_run_for_embedding(
     # Otherwise, this would corrupt the document content and make it unusable
     
     # Only process the left-side text if there remains any
-    # Otherwise, this would create empty runs and leave artifacts in the document
-    # That can lead to easy discovery during steganalysis
+    # Otherwise, this would leave run with empty text
     if left_text != '':
         # Ensure the text element exists
         # To be able to set xml:space property if needed
@@ -183,7 +182,7 @@ def slipt_run_for_embedding(
             text_element = OxmlElement('w:t')
             run._r.append(text_element)
         # If the left-side text starts or ends with a whitespace, preserve it
-        if left_text.startswith(' ') or left_text.endswith(' '):
+        if left_text.startswith('\x20') or left_text.endswith('\x20'):
             text_element.set(qn('xml:space'), 'preserve')
         # Replace current run text with left-side text
         run.text = left_text
@@ -192,6 +191,8 @@ def slipt_run_for_embedding(
     remaining_run = insert_in_run(stego_char_run, run, right_text, None)
 
     # If left-side text is empty, cleanup the original run
+    # Because empty runs are left as artifacts in the document
+    # That can lead to easier discovery during steganalysis
     # Leaving only the stego-byte run and the remaining run
     if left_text == '':
         left_parent = run._r.getparent()
