@@ -7,32 +7,32 @@ import scripts.stego_methods.unified_stego_file as unified_stego_file
 
 # Unicode homoglyph dictionary
 unicode_dictionary = {
-    'a': '\u0430',
-    'b': '\u042C',
-    'c': '\u03F2',
-    'd': '\u0501',
-    'e': '\u0435',
-    'f': '\uAB35',
-    'g': '\u0261',
-    'h': '\u04BB',
-    'i': '\u0456',
-    'j': '\u03F3',
-    'k': '\u043A',
-    'l': '\u04CF',
-    'm': '\u043C',
-    'n': '\u0578',
-    'o': '\u03BF',
-    'p': '\u0440',
-    'q': '\u051B',
-    'r': '\u1D26',
-    's': '\u0455',
-    't': '\u03C4',
-    'u': '\u057D',
-    'v': '\u1D20',
-    'w': '\u051D',
-    'x': '\u0445',
-    'y': '\u0443',
-    'z': '\u1D22'
+    'a': '\u0430',  # а
+    'b': '\u042C',  # Ь
+    'c': '\u03F2',  # ϲ
+    'd': '\u0501',  # ԁ
+    'e': '\u0435',  # е
+    'f': '\uAB35',  # ꬵ
+    'g': '\u0261',  # ɡ
+    'h': '\u04BB',  # һ
+    'i': '\u0456',  # і
+    'j': '\u03F3',  # ϳ
+    'k': '\u043A',  # к
+    'l': '\u04CF',  # ӏ
+    'm': '\u043C',  # м
+    'n': '\u0578',  # ո
+    'o': '\u03BF',  # ο
+    'p': '\u0440',  # р
+    'q': '\u051B',  # ԛ
+    'r': '\u1D26',  # ᴦ
+    's': '\u0455',  # ѕ
+    't': '\u03C4',  # τ
+    'u': '\u057D',  # ս
+    'v': '\u1D20',  # ᴠ
+    'w': '\u051D',  # ԝ
+    'x': '\u0445',  # х
+    'y': '\u0443',  # у
+    'z': '\u1D22'   # ᴢ
 }
 
 # Reverse unicode homoglyph dictionary for the purposes of extraction
