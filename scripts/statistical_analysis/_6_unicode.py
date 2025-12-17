@@ -23,12 +23,6 @@ def count_non_ascii_chars_in_each_paragraph(document: DocumentObject) -> tuple[i
         paragraph_chars_count = len(paragraph_chars)
         char_count_paragraph.append(paragraph_chars_count)
         char_count_total += paragraph_chars_count
-        # for run in paragraph.runs:
-        #     run_text = run.text.replace('\xa0', '\x20')  # NBSP -> space
-        #     run_chars = re.findall(r'[^\x00-\x7F]', run_text, flags=re.UNICODE)
-        #     run_chars_count = len(run_chars)
-        #     char_count_paragraph.append(run_chars_count)
-        #     char_count_total += run_chars_count
     return char_count_total, char_count_paragraph
 
 # Count the amount of individual non-ASCII characters in each run element

@@ -6,34 +6,6 @@ from docx.shared import Pt, RGBColor
 from docx.styles.style import CharacterStyle
 import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
 
-# def change_text_style_for_auto_text(document: DocumentObject) -> DocumentObject:
-#     styles = document.styles
-#     base_style = styles.add_style('stego_style', WD_STYLE_TYPE.CHARACTER)
-#     new_style = cast(CharacterStyle, base_style) # the same as CharacterStyle(base_style)
-
-#     new_style_font = new_style.font
-#     new_style_font.name = 'Britannic Bold'
-#     new_style_font.size = Pt(16)
-#     new_style_font.color.rgb = RGBColor(0x23, 0x23, 0x23)
-
-#     for paragraph in document.paragraphs:
-#         paragraph_element = paragraph._p
-#         paragraph_properties = paragraph_element.pPr
-#         if paragraph_properties != None:
-#             pStyle = paragraph_properties.pStyle
-#         else:
-#             pStyle = None
-#         for run in paragraph.runs:
-#             run_element = run._r
-#             run_properties = run_element.rPr
-#             if run_properties != None:
-#                 rStyle = run_properties.rStyle
-#             else:
-#                 rStyle = None
-#             if pStyle == None and rStyle == None:
-#                 run.style = new_style
-#     return document
-
 def formatting_attack(
         stegoDocPath: str, 
         attackedStegoDocPath: str
@@ -41,7 +13,6 @@ def formatting_attack(
     
     # Open the stego-file
     document = Document(stegoDocPath)
-    # document = change_text_style_for_auto_text(document)
 
     # Access the document's styles
     styles = document.styles

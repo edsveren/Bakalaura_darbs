@@ -68,7 +68,8 @@ def export_attack_time_to_csv_all(transposed_state: str, transposed_or_not_type:
                     reader = csv.reader(input_file, delimiter=";")
                     for row in reader:
                         writer.writerow(row)
-                writer.writerow('')  # Add an empty line between different attack results
+                # Add an empty line between different attack results
+                writer.writerow('')
     
     print(f"Created a CSV file: {str(Path(result_file))}")
 

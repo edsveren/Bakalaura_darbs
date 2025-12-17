@@ -4,19 +4,6 @@ from docx import Document
 from docx.oxml.parser import OxmlElement
 import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
 
-# def retype_in_new_document(document: DocumentObject) -> DocumentObject:
-#     new_document = Document()
-#     for paragraph in document.paragraphs:
-#         new_paragraph_element = OxmlElement('w:p')
-#         for run in paragraph.runs:
-#             current_run_element = run._r
-#             new_run_element = OxmlElement('w:r')
-#             for child_element in current_run_element:
-#                 new_run_element.append(deepcopy(child_element))
-#             new_paragraph_element.append(new_run_element)
-#         new_document._element.body.append(new_paragraph_element)
-#     return new_document
-
 def retype_attack(
         stegoDocPath: str, 
         attackedStegoDocPath: str
@@ -24,7 +11,6 @@ def retype_attack(
     
     # Open the stego-file
     document = Document(stegoDocPath)
-    #new_document = retype_in_new_document(document)
 
     # Create a new document
     new_document = Document()

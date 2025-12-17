@@ -6,8 +6,9 @@ from scripts.passive_attacks import unified_passive_attack_file
 
 # Main
 def main() -> None:
-    desired_file = "TEST_0.docx"
     # Choose stego-method to attack
+    desired_file = "TEST_0.docx"
+    
     # stego_method_1
     _1_passive_attack_hide_in_text.main(desired_file)
 

@@ -40,8 +40,8 @@ def RGB_value_analysis(path: Path, data_set: str, chosen_file: bool) -> tuple[li
 
     # print("Color RGB values for each run element:")
     # print(rgb_values)
-    #print(list(Counter(rgb_values).keys()))
-    #print(list(Counter(rgb_values).values()))
+    # print(list(Counter(rgb_values).keys()))
+    # print(list(Counter(rgb_values).values()))
 
     # print(f"Amount of different run RGB values: {rgb_value_amount}")
     for color, frequency in rgb_bins.items():
