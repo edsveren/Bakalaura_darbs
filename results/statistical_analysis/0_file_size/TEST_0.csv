@@ -1,0 +1,34 @@
+Document Name;TEST_0
+Data set;clean
+Data set document amount;21
+Document file size (B);15352
+Document file size (KB);14.99
+Document file size (MB);0.01
+
+Document Name;TEST_0
+Data set;hide_in_text
+Data set document amount;16
+Document file size (B);16785
+Document file size (KB);16.39
+Document file size (MB);0.02
+
+Document Name;TEST_0
+Data set;modify_RGB_color_ch
+Data set document amount;18
+Document file size (B);16194
+Document file size (KB);15.81
+Document file size (MB);0.02
+
+Document Name;TEST_0
+Data set;unispace
+Data set document amount;16
+Document file size (B);15772
+Document file size (KB);15.4
+Document file size (MB);0.02
+
+Document Name;TEST_0
+Data set;unicode_homoglyphs
+Data set document amount;15
+Document file size (B);16138
+Document file size (KB);15.76
+Document file size (MB);0.02

@@ -20,8 +20,8 @@ Number of such states (%);100.0;0.0;0.0;0.0;0.0
 Attack type;04_format_attack
 Number of documents attacked;18
 Stego-message state;SAFE;ALMOST SAFE (Less than 5% corruption);SIGNIFICANTLY CORRUPTED (Up to 50% corruption);HEAVILY CORRUPTED (Over 50% corruption);MISSING
-Number of such states;18;0;0;0;0
-Number of such states (%);100.0;0.0;0.0;0.0;0.0
+Number of such states;0;0;0;0;18
+Number of such states (%);0.0;0.0;0.0;0.0;100.0
 
 Attack type;05_impersonation_attack
 Number of documents attacked;18

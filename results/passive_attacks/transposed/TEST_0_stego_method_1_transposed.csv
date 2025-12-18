@@ -1,15 +1,15 @@
 Stego-method;TEST_0_stego_method_1
 Attack type;Stego-message;Extracted stego-message;Stego-message state;Stego-message integrity level;
-01_insert_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;"App\�[��WWG&��́��test i�ܛVv�ǒ�͍�չed andYۛܙB��6ָ���ɐhit. B���Y�Ք����cts pY]^&�""V�ɝ����by-prYX��V�V7E����Քs and-�Y�]V�R��̸";HEAVILY CORRUPTED (Over 50% corruption);22.57;
+01_insert_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;TOO CORRUPT;HEAVILY CORRUPTED (Over 50% corruption);1.07;
 
 Attack type;Stego-message;Extracted stego-message;Stego-message state;Stego-message integrity level;
-02_delete_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;"App\�[��WWG&��́��test i�ܛVv�ǒ�͍�չed andYۛܙB��6ָ���ɐhit. B���Y�Ք����cts pY]^&�""V�ɝ����by-prYX��V�V7E����Քs and-�Y�]V�R��̸";HEAVILY CORRUPTED (Over 50% corruption);22.57;
+02_delete_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;TOO CORRUPT;HEAVILY CORRUPTED (Over 50% corruption);1.07;
 
 Attack type;Stego-message;Extracted stego-message;Stego-message state;Stego-message integrity level;
-03_edit_modify_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;"App\�[��WWG&��́��test i�ܛVv�ǒ�͍�չed andYۛܙB��6ָ���ɐhit. B���Y�Ք����cts pY]^&�""V�ɝ����by-prYX��V�V7E����Քs and-�Y�]V�R��̸";HEAVILY CORRUPTED (Over 50% corruption);22.57;
+03_edit_modify_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;TOO CORRUPT;HEAVILY CORRUPTED (Over 50% corruption);1.07;
 
 Attack type;Stego-message;Extracted stego-message;Stego-message state;Stego-message integrity level;
-04_format_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;SAFE;100.0;
+04_format_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;;MISSING;0.0;
 
 Attack type;Stego-message;Extracted stego-message;Stego-message state;Stego-message integrity level;
 05_impersonation_attack;Apparently neutral's protest is thoroughly discounted and ignored. Isman hard hit. Blockade issue affects pretext for embargo on by-products, ejecting suets and vegetable oils.;;MISSING;0.0;
