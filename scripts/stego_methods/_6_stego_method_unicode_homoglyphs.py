@@ -99,7 +99,7 @@ def embedding_in_run(
     # Since many homoglyphs are characters from other languages 
     # The proofing engine can draw attention to them via user-visible warnings etc.
     # It's best to explicitly tell the document to ignore any spelling errors produced by it
-    # In order to minimize detection during steganalyis
+    # In order to minimize detection during steganalysis
     if run_properties.find(qn("w:noProof")) == None:
         run_properties.append(OxmlElement("w:noProof"))
 
