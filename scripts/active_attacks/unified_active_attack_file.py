@@ -1,5 +1,6 @@
 import csv
 import time
+import shutil
 from pathlib import Path
 from typing import Callable
 from itertools import zip_longest
@@ -183,6 +184,12 @@ def unified_attack(
             fileTimeLapse = end - start
             directoryTimeLapse += fileTimeLapse
             print(f"Time taken (s): {int(fileTimeLapse * 100) / 100}")
+            
+            # If the attacked DOCX stego-file is TEST_0,
+            # Copy it to the TEST_0 directory as well 
+            if file.name == "TEST_0.docx":
+                attackedStegoTEST_0DocPath = str(Path(f"data_set/TEST_0/attacked_stego_files/{directories.name}_{attack_type}_{file.name}").resolve())
+                shutil.copy(attackedStegoDocPath, attackedStegoTEST_0DocPath)
             print()
 
         directoryTimeLapseFloat = time_display(f"{directories.name} directory", directoryTimeLapse)
