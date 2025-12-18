@@ -5,10 +5,10 @@ import scripts.statistical_analysis.unified_statistical_analysis_file as unified
 # Count number of documents in the data set
 def count_number_of_documents_in_data_set(path: Path) -> int:
     data_set_directory = path.parent
-    print(data_set_directory)
     count = 0
-    for _ in data_set_directory.iterdir():
-        count += 1
+    for file in data_set_directory.iterdir():
+        if file.is_file() and file.suffix == '.docx':
+            count += 1
     return count
 
 # Get current file sizes
