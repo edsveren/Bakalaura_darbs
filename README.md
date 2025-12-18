@@ -18,7 +18,7 @@ In the project, steganalysis is performed in three parts:
     * Insert attack. Insert a word after nth (10th) word
     * Delete attack. Delete every nth (10th) word
     * Edit/modify attack. Change every nth (10th) word
-    * Formatting attack. Change the default format of the DOCX file
+    * Formatting attack. Change the text font format
     * Impersonation attack. Save the DOCX as PDF and back
     * Save As attack. Save the DOCX file anew
     * Copy attack. Copy the DOCX file
