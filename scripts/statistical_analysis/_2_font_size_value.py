@@ -21,7 +21,7 @@ def paragraph_default_font_size_value(styles_element: CT_Styles) -> float | None
     return None
 
 # Find the default font size in the entire document
-def document_default_font_size_value(styles_element) -> float | None:
+def document_default_font_size_value(styles_element: CT_Styles) -> float | None:
     run_properties_default_element = styles_element.find(f".//{qn('w:docDefaults')}/{qn('w:rPrDefault')}/{qn('w:rPr')}")
     if run_properties_default_element != None:
         font_size = run_properties_default_element.find(qn('w:sz'))
