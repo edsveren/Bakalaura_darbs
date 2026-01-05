@@ -1,4 +1,4 @@
-# Bakalaura_darbs
+# Steganalysis_research_for_DOCX_format
 
 ## Description
 DOCX files are Office Open XML (OOXML) format word processing document files developed by Microsoft. Unlike older DOC files, which are binary files, DOCX files are zipped packages made up of several XML and multimedia files. Most of the visible content in DOCX files is saved in the package file called document.xml.
