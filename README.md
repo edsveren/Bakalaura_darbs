@@ -1,7 +1,7 @@
 # Bakalaura_darbs
 
 ## Description
-DOCX files are Office Open XML (OOXML) format word processing document files developed by Microsoft. Unlike older DOC files, which are binary files, DOCX files are zipped package made up of several XML and multimedia files. Most of the visible content in DOCX files is saved in the package file called document.xml.
+DOCX files are Office Open XML (OOXML) format word processing document files developed by Microsoft. Unlike older DOC files, which are binary files, DOCX files are zipped packages made up of several XML and multimedia files. Most of the visible content in DOCX files is saved in the package file called document.xml.
 
 This project is focused on studying the detection of secret messages and information embedded in DOCX file content that is located in document.xml. The process of embedding secret information into files, also known as cover medium or cover objects, is called steganography, while the analysis and detection of this secret data in the files containing them, also known as stego-files, is done in a process called steganalysis.
 
@@ -25,11 +25,11 @@ In the project, steganalysis is performed in three parts:
     * Retype attack. Retype all DOCX file content to a new DOCX file
     * Clear Format attack. Use the MS Word 'Clear All Formatting' function on the entire DOCX file content
     * Document Inspect attack. Use every option in the MS Word Document Inspect tool on the DOCX file
-2. Passive steganalysis. Scanning the DOCX file using the stego-method extraction algorithms to extract the secret message. 5 levels of corruption were classified using Ratcliff/Obershelp pattern recognition algorithm:
+2. Attacked file analysis. Scanning the DOCX file using the stego-method extraction algorithms to extract the secret message. 5 levels of corruption were classified using Ratcliff/Obershelp pattern recognition algorithm:
     * Safe (completely unaffected)
-    * Almost safe (still very readable, less than 5% corruption)
-    * Significantly corrupted (barely readable, up to 50% corruption)
-    * Heavily corrupted (unreadable, more than 50% corruption)
+    * Almost safe (still very readable, only up 5% missing original content)
+    * Significantly corrupted (barely readable, up to 50% missing original content)
+    * Heavily corrupted (unreadable, more than 50% missing original content)
     * Missing (completely destroyed)
 3. Statistic analysis. Scanning and extracting file features that can help indicate whether the DOCX file contains any unusual data, as well as analyzing the effects of the stego-methods on file make-up. Analysis was performed from 7 categories:
     * File Size
@@ -42,7 +42,7 @@ In the project, steganalysis is performed in three parts:
 
 The code for the steganography and steganalysis is located in the scripts folder.
 
-The data set used was 21 DOCX files (20 from the Internet, 1 created during the testing of the code). The 21 DOCX files were scanned for validity of embedding of the secret message. Those that were valid had 178 byte sized stego-message embedded into them and each file was saved. Each stego-DOCX file was then attacked using the active attacks and saved. The attacked stego-DOCX files were then scanned for the stego-message. The data set for the clean, TEST_0, stego- and attacked DOCX files is located in the data_set folder.
+The data set used was 21 DOCX files (20 from this [Dataset for Doc & Docx](https://www.kaggle.com/datasets/manisha717/dataset-for-doc-and-docx), 1 created during the testing of the code). The 21 DOCX files were scanned for validity of embedding of the secret message. Those that were valid had 178 byte sized stego-message embedded into them and each file was saved. Each stego-DOCX file was then attacked using the active attacks and saved. The attacked stego-DOCX files were then scanned for the stego-message. The data set for the clean, TEST_0, stego- and attacked DOCX files is located in the data_set folder.
 
 The results from the steganalysis are located in the results folder, as complete XLSX files and as individual CSV files.
 
@@ -76,9 +76,9 @@ The code works only on Windows 10 and Windows 11 operating systems.
 ## Steps to set up
 1. Have Python version 3.13 or newer installed
 2. Ensure you have pip installed
-3. ~Clone repo via SSH~
+3. Download the repo in any location on the PC
 4. Open the terminal (CMD)
 5. Navigate to the location the repo was downloaded in
 6. Navigate to the root folder
-7. Uninstall project data if it exists ```py -3.13 -m pip uninstall Bakalaura_darbs```
+7. Uninstall project data if it exists ```py -3.13 -m pip uninstall Steganalysis_research_for_DOCX_format```
 8. Run this line in CMD which installs all necessary libraries ```py -3.13 -m pip install -e .```
