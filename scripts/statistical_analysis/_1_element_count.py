@@ -21,12 +21,11 @@ def count_total_runs_elements(document: DocumentObject) -> int:
 
 # Count the number of all text elements in the document
 def count_total_text_elements(document: DocumentObject) -> int:
-    # Same principle as document.part.element.xpath("//w:document/w:body/w:p/w:r/w:t")
     text_element_count = 0
     text_element = f".//{qn('w:t')}"
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
-            text_element_in_run_count = len(run._r.findall(text_element)) # ElementPath findall() function - returns a list of matching Elements
+            text_element_in_run_count = len(run._r.findall(text_element))
             text_element_count += text_element_in_run_count
     return text_element_count
 

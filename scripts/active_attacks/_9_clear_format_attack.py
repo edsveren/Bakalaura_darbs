@@ -9,19 +9,15 @@ def clear_format_attack(
         wdFormatDocumentDefault: int
         ) -> None:
     
-    # Open the stego-file
     print(f"Clearing all formatting of: {Path(stegoDocPath).name}")
     document = word.Documents.Open(stegoDocPath, ReadOnly=1, AddToRecentFiles=False)
 
     # Press CTRL + A
-    #document.Content.Select()
     word.Selection.WholeStory()
 
     # Click Clear All Formatting button
-    #word.CommandBars.ExecuteMso("ClearFormatting")
     word.Selection.ClearFormatting()
 
-    # Save and Close
     document.SaveAs2(attackedStegoDocPath, FileFormat=wdFormatDocumentDefault)
     document.Close()
 

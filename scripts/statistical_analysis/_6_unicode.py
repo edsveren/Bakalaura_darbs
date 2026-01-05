@@ -8,7 +8,7 @@ import scripts.statistical_analysis.unified_statistical_analysis_file as unified
 def count_chars_in_each_paragraph(document: DocumentObject) -> int:
     char_count = 0
     for paragraph in document.paragraphs:
-        text = paragraph.text.replace('\xa0', '\x20')  # NBSP -> space
+        text = paragraph.text.replace('\xa0', '\x20')
         chars = re.findall(r'[\s\S]', text, flags=re.UNICODE)
         char_count += len(chars)
     return char_count
@@ -18,7 +18,7 @@ def count_non_ascii_chars_in_each_paragraph(document: DocumentObject) -> tuple[i
     char_count_total = 0
     char_count_paragraph = []
     for paragraph in document.paragraphs:
-        paragraph_text = paragraph.text.replace('\xa0', '\x20')  # NBSP -> space
+        paragraph_text = paragraph.text.replace('\xa0', '\x20')
         paragraph_chars = re.findall(r'[^\x00-\x7F]', paragraph_text, flags=re.UNICODE)
         paragraph_chars_count = len(paragraph_chars)
         char_count_paragraph.append(paragraph_chars_count)
@@ -30,7 +30,7 @@ def count_non_ascii_chars_in_runs(document: DocumentObject) -> list[int]:
     char_count_run = []
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
-            run_text = run.text.replace('\xa0', '\x20')  # NBSP -> space
+            run_text = run.text.replace('\xa0', '\x20')
             run_chars = re.findall(r'[^\x00-\x7F]', run_text, flags=re.UNICODE)
             char_count_run.append(len(run_chars))
     return char_count_run

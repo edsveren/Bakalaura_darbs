@@ -17,7 +17,6 @@ def paragraph_default_font_size_value(styles_element: CT_Styles) -> float | None
                 if font_size_value != None:
                     font_size_value = int(font_size_value) / 2.0
                     return font_size_value
-    # If no default paragraph style found
     return None
 
 # Find the default font size in the entire document
@@ -30,7 +29,7 @@ def document_default_font_size_value(styles_element: CT_Styles) -> float | None:
             if font_size_value != None:
                 font_size_value = int(font_size_value) / 2.0
                 return font_size_value
-    else: # If no default document style found
+    else:
         return None
 
 # Find the default font size value
@@ -38,20 +37,15 @@ def document_default_font_size_pt(document: DocumentObject) -> float:
     styles_element = document.styles.element
 
     font_size_value_pt = 11.0
-    # paragraph_font_size_value_pt = styles_element.xpath(".//w:style[@w:type='paragraph' and @w:default='1']//w:rPr/w:sz/@w:val")
-    # default_font_size_value_pt = styles_element.xpath(".//w:docDefaults/w:rPrDefault/w:rPr/w:sz/@w:val")
-
     paragraph_font_size_value_pt = paragraph_default_font_size_value(styles_element)
     default_font_size_value_pt = document_default_font_size_value(styles_element)
     
     # If there is a universal default font size
     if paragraph_font_size_value_pt:
-        # font_size_value_pt = int(paragraph_font_size_value_pt[0]) / 2.0
         font_size_value_pt = paragraph_font_size_value_pt
         return font_size_value_pt
     # If there is a default font size in a paragraph element
     elif default_font_size_value_pt:
-        # font_size_value_pt = int(default_font_size_value_pt[0]) / 2.0
         font_size_value_pt = default_font_size_value_pt
         return font_size_value_pt
     # Otherwise, the default font size is always set as 11

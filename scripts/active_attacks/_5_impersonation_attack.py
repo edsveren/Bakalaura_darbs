@@ -15,14 +15,12 @@ def impersonation_attack(
     # Convert DOCX to PDF
     print(f"Converting: {Path(stegoDocPath).name} to: {Path(stegoPDFPath).name}")
     document = word.Documents.Open(stegoDocPath, ReadOnly=1, AddToRecentFiles=False)
-    # Save PDF and close
     document.SaveAs2(stegoPDFPath, FileFormat=wdFormatPDF)
     document.Close()
 
     # Convert PDF back to DOCX
     print(f"Converting: {Path(stegoPDFPath).name} to: {Path(attackedStegoDocPath).name}")
     document = word.Documents.Open(stegoPDFPath, ReadOnly=1, AddToRecentFiles=False)
-    # Save and Close
     document.SaveAs2(attackedStegoDocPath, FileFormat=wdFormatDocumentDefault)
     document.Close()
 

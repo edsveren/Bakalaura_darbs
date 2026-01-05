@@ -5,44 +5,31 @@ from docx.text.run import Run
 from docx.oxml.ns import qn
 import scripts.active_attacks.unified_active_attack_file as unified_active_attack_file
 
+# Splits text into words, changes every 10th
 def change_every_nth_word(
         run: Run, 
         n: int, 
         word_index: int
         ) -> int:
     
-    # Get the entire run text
     text = run.text
-    # A ReGex that finds blocks of whitespace and preserves them as individual tokens
     text_pattern = re.compile(r'(\s+)')
-    # Split text into words and whitespaces
     tokens = text_pattern.split(text)
-    # A list that will be used to reform the text
     text_list = []
 
-    # Loop through each word and whitespace
     for token in tokens:
-        # If the current text token is whitespace, just add it to the list
         if token.strip() == "":
             text_list.append(token)
             continue
         else:
-            # Increase index after each found word token
             word_index += 1
-            # When the index is equal to the index for insertion
             if word_index == (n - 1):
-                # Changes a word by adding a new word token to the list in its place
                 text_list.append("[[[CHANGED]]]")
-                # Reset the index
                 word_index = 0
-            # Otherwise, just add word the list
             else:
                 text_list.append(token)
 
-    # Replace the current run text with the created list
     run.text = "".join(text_list)
-
-    # Return current index
     return word_index
 
 def edit_modify_attack(
@@ -50,18 +37,13 @@ def edit_modify_attack(
         attackedStegoDocPath: str
         ) -> None:
     
-    # Open the stego-file
     document = Document(stegoDocPath)
-    # Index of when to insert a word
     every_nth_word = 10
-    # Index to follow when to insert a word
     word_index = 0
 
     print(f"Changing every {every_nth_word}th word in the {Path(stegoDocPath).name}")
-    # Go through each run in each paragraph
     for paragraph in document.paragraphs:
         for run in paragraph.runs:
-            # Get the run element and attack it if it has at least one text element 
             run_element = run._r
             if run_element.find(qn('w:t')) != None:
                 word_index = change_every_nth_word(run, every_nth_word, word_index)

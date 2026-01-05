@@ -16,7 +16,6 @@ def check_for_stego_message(
         desired_file: str|None
     ) -> tuple[str, float]:
 
-    # Make non-printable characters visible for analysis
     stego_message_extracted_readable = ''
     # Line feeds and carriage returns break the output format, so replace them with '?'
     for char in stego_message_extracted:
@@ -25,19 +24,16 @@ def check_for_stego_message(
         else:
             stego_message_extracted_readable += '�'
 
-    # Print the original stego-message if desired file is specified
     if desired_file != None:
         print(f"Stego-message: [ {stego_message_text} ]")
     
     # Calculate the difference percentage between the original and extracted stego-message
     # Using difflib library which uses Ratcliff/Obershelp algorithm
     stego_message_difference = difflib.SequenceMatcher(None, stego_message_text, stego_message_extracted_readable)
-    # Make it a percentage
     stego_message_difference_percentage = round(stego_message_difference.ratio() * 100, 2)
 
     # Determine the state of the stego-message based on the difference percentage
     if stego_message_difference_percentage != 0.0:
-        # Print the extracted stego-message if desired file is specified
         if desired_file != None:
             print(f"Extracted message: [ {stego_message_extracted_readable} ]!")
             
@@ -251,7 +247,6 @@ def passive_attack(
         stego_message_text, _ = unified_stego_file.stego_message()
 
     print()
-    # Loop through 10 active steganalysis directories
     for attack_directories in Path(attacked_stego_files).iterdir():
         
         # Current steganalysis attack directory
@@ -267,20 +262,17 @@ def passive_attack(
         print(f"Stego-method: {stego_method}")
         print("Extracting stego-messages...")
 
-        # Loop through each stego-method data set in attack directories
         for stego_directories in attack_directories.iterdir():
 
             # Choose only the attacked data sets for the specific stego-method
             if stego_directories.name == stego_method:
                 desired_file_found = False
 
-                # Loop through each individual file in the select stego-method data set
                 for file in stego_directories.iterdir():
 
                     # Ignore temporary and git files
                     if file.is_file() and not file.name.startswith("."):
 
-                        # Process either all files in the data set or only the desired file if specified
                         if desired_file == None or file.name == desired_file:
                             # Process only the desired file if specified
                             if desired_file != None and file.name == desired_file:
@@ -303,7 +295,7 @@ def passive_attack(
                                 break
 
         if desired_file == None:
-            # Count frequencies of each of three states
+            # Count frequencies of each of 5 states
             counter = {key: Counter(stego_message_states_list).get(key, 0) for key in ['SAFE', 'ALMOST SAFE (Less than 5% corruption)', 'SIGNIFICANTLY CORRUPTED (Up to 50% corruption)', 'HEAVILY CORRUPTED (Over 50% corruption)', 'MISSING']}
             
             stego_message_states_list = list(counter.keys())
@@ -311,7 +303,7 @@ def passive_attack(
             frequency_percentages = []
             # Print results to terminal for the viewer
             for size, frequency in counter.items():
-                frequency_percent = str(round((frequency / nr_of_files) * 100, 2)) #.replace(".", ",")
+                frequency_percent = str(round((frequency / nr_of_files) * 100, 2))
                 print(f"State: {size}! Amount: {frequency} out of {nr_of_files} ({frequency_percent}%).")
                 frequency_percentages.append(frequency_percent)
 

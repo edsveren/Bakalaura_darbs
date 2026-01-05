@@ -69,7 +69,6 @@ def export_attack_time_to_csv_all(transposed_state: str, transposed_or_not_type:
                     reader = csv.reader(input_file, delimiter=";")
                     for row in reader:
                         writer.writerow(row)
-                # Add an empty line between different attack results
                 writer.writerow('')
     
     print(f"Created a CSV file: {str(Path(result_file))}")
@@ -117,9 +116,7 @@ def unified_attack(
         attack: Callable[..., None],
         UsingWin: bool
         ) -> None:
-    # Stego-files' location
     stego_base = "data_set/stego_files"
-    # Attacked stego-files' saving location
     attacked_base = "data_set/attacked_stego_files"
 
     # Setup time logging variables
@@ -148,11 +145,9 @@ def unified_attack(
         while word.Documents.Count > 0:
             word.Documents(1).Close(SaveChanges=0)
 
-    # Looping through each stego-method file folder
     for directories in Path(stego_base).iterdir():
         directoryTimeLapse = 0
 
-        # Looping through each stego-file
         for file in directories.iterdir():
             print()
             # Ignore temporary and git files
@@ -185,8 +180,6 @@ def unified_attack(
             directoryTimeLapse += fileTimeLapse
             print(f"Time taken (s): {int(fileTimeLapse * 100) / 100}")
             
-            # If the attacked DOCX stego-file is TEST_0,
-            # Copy it to the TEST_0 directory as well 
             if file.name == "TEST_0.docx":
                 attackedStegoTEST_0DocPath = str(Path(f"data_set/TEST_0/attacked_stego_files/{directories.name}_{attack_type}_{file.name}").resolve())
                 shutil.copy(attackedStegoDocPath, attackedStegoTEST_0DocPath)

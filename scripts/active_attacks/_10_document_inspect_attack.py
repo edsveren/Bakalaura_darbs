@@ -26,7 +26,6 @@ def document_inspect_attack(
         if status == 1: 
             document.DocumentInspectors.Item(i).Fix()
 
-    # Save and Close
     document.SaveAs2(attackedStegoDocPath, FileFormat=wdFormatDocumentDefault)
     document.Close()
 
