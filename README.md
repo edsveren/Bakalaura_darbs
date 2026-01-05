@@ -76,9 +76,15 @@ The code works only on Windows 10 and Windows 11 operating systems.
 ## Steps to set up
 1. Have Python version 3.13 or newer installed
 2. Ensure you have pip installed
-3. Download the repo in any location on the PC
+3. Download the repo ZIP and extract it in any location on the PC
 4. Open the terminal (CMD)
 5. Navigate to the location the repo was downloaded in
 6. Navigate to the root folder
-7. Uninstall project data if it exists ```py -3.13 -m pip uninstall Steganalysis_research_for_DOCX_format```
-8. Run this line in CMD which installs all necessary libraries ```py -3.13 -m pip install -e .```
+7. Run one of theses lines in CMD which installs all necessary libraries ```py -3.13 -m pip install -e .``` or ```pip install -e .```
+
+## Uninstallation
+1. Open the terminal (CMD)
+2. Navigate to the location the repo was downloaded in
+3. Navigate to the root folder
+4. Run one of theses lines to delete the project data if it exists ```py -3.13 -m pip uninstall Steganalysis_research_for_DOCX_format``` or ```pip uninstall Steganalysis_research_for_DOCX_format```
+5. Delete the folder
