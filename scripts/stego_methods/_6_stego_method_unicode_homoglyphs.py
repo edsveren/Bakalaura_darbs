@@ -39,7 +39,7 @@ unicode_dictionary = {
 # Instead of regular characters, it looks up their homoglyphs
 reverse_unicode_dictionary = {value: key for key, value in unicode_dictionary.items()}
 
-# Count non-whitespace lowercase characters in paragraphs
+# Count non-whitespace lowercase ASCII characters in paragraphs
 def count_chars_in_paragraphs(
         document: DocumentObject,
         index: int
@@ -146,8 +146,10 @@ def stego_message_extraction(document: DocumentObject) -> str:
                 first_stego_char_found = True
             continue
         else:
+            # homoglyph (1)
             if stego_char != None:
                 stego_8_bit_string += '1'
+            # non-homoglyph (0)
             elif 'a' <= char <= 'z':
                 stego_8_bit_string += '0'
             else:

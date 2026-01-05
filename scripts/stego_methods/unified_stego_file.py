@@ -151,7 +151,7 @@ def stego_method(
                 else:
                     break
             
-            # Get the original stego-message for comparison
+            # When getting the original stego-message for comparison
             # Unispace method is different
             # It compromises the original stego-message for embedding purposes
             # First off, it can only use uppercase ASCII characters

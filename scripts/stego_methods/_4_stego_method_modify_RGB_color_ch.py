@@ -93,7 +93,6 @@ def insert_in_run(
         # The theory states to use any coloured text
         # But in practice, it's difficult to extract the stego-message
         # Without knowing a baseline, like black which has clean, consistent RGB(0,0,0) values
-        # To do so would require some kind of stego-key
         if color_element_value == None or color_element_value.lower() in ('auto', '000000'):
             # Transform stego-bits into RGB values
             # Set 3 bits for Red, 3 bits for Green, 2 bits for Blue
@@ -119,10 +118,9 @@ def slipt_run_for_embedding(
         byte: int
     ) -> Run | None:
 
-    # Find the first non-whitespace character in the run
     text = run.text
     cover_chars = re.search(r'\S', text, flags=re.UNICODE)
-    # And if there are no non-whitespace characters, run is exhausted
+    # If there are no non-whitespace characters, run is exhausted
     if cover_chars == None:
         return None
 
@@ -196,9 +194,8 @@ def stego_message_extraction(document: DocumentObject) -> str:
                 if color_element != None:
                     color_element_value = color_element.get(qn('w:val'))
                     # In theory, any coloured text can be used
-                    # But in practice, it requires some kind of stego-key
-                    # Because it's difficult to extract the stego-message deterministically
-                    # Without said key which provides original base values of non-stego-data
+                    # But in practice, it's difficult to extract the stego-message deterministically
+                    # Without additional info which provides original base values of non-stego-data
                     if color_element_value.lower() not in ('000000', 'auto'):
                         r_bit = int(color_element_value[0:2], 16)
                         g_bit = int(color_element_value[2:4], 16)
